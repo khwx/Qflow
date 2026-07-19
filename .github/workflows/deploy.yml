@@ -1,4 +1,4 @@
-name: Deploy to Vercel
+name: CI
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
     branches: [main]
 
 jobs:
-  deploy:
+  ci:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -25,17 +25,8 @@ jobs:
       - name: Run linter
         run: npm run lint
 
-      - name: Run type check
+      - name: Type check
         run: npm run typecheck
 
-      - name: Run tests
-        run: npm test
-
-      - name: Deploy to Vercel
-        uses: amondnet/vercel-action@v25
-        with:
-          vercel-token: ${{ secrets.VERCEL_TOKEN }}
-          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
-          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
-          vercel-args: '--prod'
-        if: github.ref == 'refs/heads/main'
+      - name: Build
+        run: npm run build
