@@ -79,7 +79,9 @@
     "no_games": "Nenhum jogo disponível",
     "no_games_desc": "Volte mais tarde para ver novidades",
     "no_polls": "Nenhuma enquete disponível",
-    "no_polls_desc": "Participe e ganhe pontos!"
+    "no_polls_desc": "Participe e ganhe pontos!",
+    "ticket_not_found": "Senha não encontrada",
+    "ticket_not_found_desc": "Por favor, tente novamente"
   },
   "called": {
     "title": "É a sua vez!",
@@ -205,7 +207,8 @@
     "serving": "Em atendimento",
     "next_tickets": "Próximas senhas",
     "no_queue": "Nenhuma senha na fila",
-    "updated": "Atualizado em tempo real"
+    "updated": "Atualizado em tempo real",
+    "now": "Agora"
   },
   "establishment": {
     "title": "Criar Estabelecimento",

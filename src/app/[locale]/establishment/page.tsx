@@ -35,7 +35,7 @@ export default function CreateEstablishmentPage() {
       return
     }
 
-    router.push(`/admin/dashboard?est=${data.id}`)
+    window.location.href = `/admin/dashboard?est=${data.id}`
   }
 
   return (

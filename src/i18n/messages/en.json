@@ -79,7 +79,9 @@
     "no_games": "No games available",
     "no_games_desc": "Check back later for new games",
     "no_polls": "No polls available",
-    "no_polls_desc": "Participate and earn points!"
+    "no_polls_desc": "Participate and earn points!",
+    "ticket_not_found": "Ticket not found",
+    "ticket_not_found_desc": "Please try again"
   },
   "called": {
     "title": "It's your turn!",
@@ -205,7 +207,8 @@
     "serving": "Now serving",
     "next_tickets": "Next tickets",
     "no_queue": "No tickets in queue",
-    "updated": "Updated in real-time"
+    "updated": "Updated in real-time",
+    "now": "Now"
   },
   "establishment": {
     "title": "Create Establishment",

@@ -79,7 +79,9 @@
     "no_games": "Nessun gioco disponibile",
     "no_games_desc": "Torna più tardi per scoprire le novità",
     "no_polls": "Nessun sondaggio disponibile",
-    "no_polls_desc": "Partecipa e guadagna punti!"
+    "no_polls_desc": "Partecipa e guadagna punti!",
+    "ticket_not_found": "Biglietto non trovato",
+    "ticket_not_found_desc": "Per favore riprova"
   },
   "called": {
     "title": "È il tuo turno!",
@@ -205,7 +207,8 @@
     "serving": "In servizio",
     "next_tickets": "Prossimi ticket",
     "no_queue": "Nessun ticket in coda",
-    "updated": "Aggiornato in tempo reale"
+    "updated": "Aggiornato in tempo reale",
+    "now": "Adesso"
   },
   "establishment": {
     "title": "Crea Struttura",

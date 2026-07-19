@@ -79,7 +79,9 @@
     "no_games": "暂无可用游戏",
     "no_games_desc": "请稍后再来查看新游戏",
     "no_polls": "暂无可用投票",
-    "no_polls_desc": "参与投票赢取积分！"
+    "no_polls_desc": "参与投票赢取积分！",
+    "ticket_not_found": "未找到票",
+    "ticket_not_found_desc": "请重试"
   },
   "called": {
     "title": "轮到您了！",
@@ -205,7 +207,8 @@
     "serving": "正在服务",
     "next_tickets": "下一个号码",
     "no_queue": "当前无排队号码",
-    "updated": "实时更新"
+    "updated": "实时更新",
+    "now": "现在"
   },
   "establishment": {
     "title": "创建商户",

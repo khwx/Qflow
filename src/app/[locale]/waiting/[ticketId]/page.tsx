@@ -96,7 +96,7 @@ export default function WaitingPage({ params }: { params: Promise<{ locale: stri
   if (!ticket) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <p className="text-gray-600">Senha não encontrada</p>
+        <p className="text-gray-600">{t('ticket_not_found')}</p>
       </div>
     )
   }

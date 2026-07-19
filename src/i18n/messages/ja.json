@@ -79,7 +79,9 @@
     "no_games": "利用可能なゲームなし",
     "no_games_desc": "新しいゲームは後でもう一度ご確認ください",
     "no_polls": "利用可能なアンケートなし",
-    "no_polls_desc": "参加してポイントを獲得しましょう！"
+    "no_polls_desc": "参加してポイントを獲得しましょう！",
+    "ticket_not_found": "チケットが見つかりません",
+    "ticket_not_found_desc": "もう一度お試しください"
   },
   "called": {
     "title": "あなたの番です！",
@@ -205,7 +207,8 @@
     "serving": "サービス中",
     "next_tickets": "次の番号",
     "no_queue": "キューに番号がありません",
-    "updated": "リアルタイムで更新"
+    "updated": "リアルタイムで更新",
+    "now": "今"
   },
   "establishment": {
     "title": "店舗を作成",

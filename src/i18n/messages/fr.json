@@ -79,7 +79,9 @@
     "no_games": "Aucun jeu disponible",
     "no_games_desc": "Revenez plus tard pour découvrir les nouveautés",
     "no_polls": "Aucun sondage disponible",
-    "no_polls_desc": "Participez et gagnez des points !"
+    "no_polls_desc": "Participez et gagnez des points !",
+    "ticket_not_found": "Ticket non trouvé",
+    "ticket_not_found_desc": "Veuillez réessayer"
   },
   "called": {
     "title": "C'est votre tour !",
@@ -205,7 +207,8 @@
     "serving": "En service",
     "next_tickets": "Prochains tickets",
     "no_queue": "Aucun ticket en file",
-    "updated": "Mis à jour en temps réel"
+    "updated": "Mis à jour en temps réel",
+    "now": "Maintenant"
   },
   "establishment": {
     "title": "Créer un Établissement",

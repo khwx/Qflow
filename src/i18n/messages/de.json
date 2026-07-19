@@ -79,7 +79,9 @@
     "no_games": "Keine Spiele verfügbar",
     "no_games_desc": "Schauen Sie später wieder vorbei für Neuigkeiten",
     "no_polls": "Keine Umfragen verfügbar",
-    "no_polls_desc": "Nehmen Sie teil und verdienen Sie Punkte!"
+    "no_polls_desc": "Nehmen Sie teil und verdienen Sie Punkte!",
+    "ticket_not_found": "Ticket nicht gefunden",
+    "ticket_not_found_desc": "Bitte versuchen Sie es erneut"
   },
   "called": {
     "title": "Sie sind dran!",
@@ -205,7 +207,8 @@
     "serving": "Wird bedient",
     "next_tickets": "Nächste Tickets",
     "no_queue": "Keine Tickets in der Schlange",
-    "updated": "In Echtzeit aktualisiert"
+    "updated": "In Echtzeit aktualisiert",
+    "now": "Jetzt"
   },
   "establishment": {
     "title": "Betrieb Erstellen",

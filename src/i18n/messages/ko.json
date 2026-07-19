@@ -79,7 +79,9 @@
     "no_games": "사용 가능한 게임 없음",
     "no_games_desc": "나중에 새로운 게임을 확인하세요",
     "no_polls": "사용 가능한 설문 없음",
-    "no_polls_desc": "참여하여 포인트를 획득하세요!"
+    "no_polls_desc": "참여하여 포인트를 획득하세요!",
+    "ticket_not_found": "티켓을 찾을 수 없습니다",
+    "ticket_not_found_desc": "다시 시도해 주세요"
   },
   "called": {
     "title": "차례입니다!",
@@ -205,7 +207,8 @@
     "serving": "서비스 중",
     "next_tickets": "다음 번호",
     "no_queue": "줄에 번호가 없습니다",
-    "updated": "실시간 업데이트"
+    "updated": "실시간 업데이트",
+    "now": "지금"
   },
   "establishment": {
     "title": "매장 만들기",

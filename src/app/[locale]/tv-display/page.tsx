@@ -118,10 +118,10 @@ export default function TVDisplayPage() {
         ) : (
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {queues.map((queue) => {
-              const queueTickets = tickets.filter(t => t.queue_id === queue.id)
-              const waiting = queueTickets.filter(t => t.status === 'waiting')
-              const called = queueTickets.filter(t => t.status === 'called')
-              const serving = queueTickets.filter(t => t.status === 'serving')
+              const queueTickets = tickets.filter(ticket => ticket.queue_id === queue.id)
+              const waiting = queueTickets.filter(ticket => ticket.status === 'waiting')
+              const called = queueTickets.filter(ticket => ticket.status === 'called')
+              const serving = queueTickets.filter(ticket => ticket.status === 'serving')
 
               return (
                 <div key={queue.id} className="bg-white/10 backdrop-blur rounded-2xl p-6">
@@ -130,9 +130,9 @@ export default function TVDisplayPage() {
                   {called.length > 0 && (
                     <div className="bg-green-500/20 border-2 border-green-400 rounded-xl p-6 mb-6 animate-pulse">
                       <p className="text-green-300 text-lg mb-2">🚨 {t('call')}</p>
-                      {called.map(t => (
-                        <p key={t.id} className="text-5xl font-bold text-green-400">
-                          {t.ticket_number}
+                      {called.map(ticket => (
+                        <p key={ticket.id} className="text-5xl font-bold text-green-400">
+                          {ticket.ticket_number}
                         </p>
                       ))}
                     </div>
@@ -141,9 +141,9 @@ export default function TVDisplayPage() {
                   {serving.length > 0 && (
                     <div className="bg-yellow-500/20 border-2 border-yellow-400 rounded-xl p-4 mb-6">
                       <p className="text-yellow-300 text-lg mb-2">{t('serving')}</p>
-                      {serving.map(t => (
-                        <p key={t.id} className="text-3xl font-bold text-yellow-400">
-                          {t.ticket_number}
+                      {serving.map(ticket => (
+                        <p key={ticket.id} className="text-3xl font-bold text-yellow-400">
+                          {ticket.ticket_number}
                         </p>
                       ))}
                     </div>
@@ -152,14 +152,14 @@ export default function TVDisplayPage() {
                   <div className="bg-white/5 rounded-xl p-4">
                     <p className="text-white/80 mb-3">{t('next_tickets')}</p>
                     <div className="space-y-2">
-                      {waiting.slice(0, 5).map((t, i) => (
+                      {waiting.slice(0, 5).map((ticket, i) => (
                         <div
-                          key={t.id}
+                          key={ticket.id}
                           className="flex justify-between items-center py-2 border-b border-white/10 last:border-0"
                         >
-                          <span className="text-2xl font-mono">{t.ticket_number}</span>
+                          <span className="text-2xl font-mono">{ticket.ticket_number}</span>
                           <span className="text-white/60">
-                            {i === 0 ? 'Agora' : `+${i + 1}`}
+                            {i === 0 ? t('now') : `+${i + 1}`}
                           </span>
                         </div>
                       ))}

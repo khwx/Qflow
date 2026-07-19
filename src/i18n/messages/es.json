@@ -79,7 +79,9 @@
     "no_games": "No hay juegos disponibles",
     "no_games_desc": "Vuelve más tarde para ver novedades",
     "no_polls": "No hay encuestas disponibles",
-    "no_polls_desc": "¡Participa y gana puntos!"
+    "no_polls_desc": "¡Participa y gana puntos!",
+    "ticket_not_found": "Entrada no encontrada",
+    "ticket_not_found_desc": "Por favor, inténtalo de nuevo"
   },
   "called": {
     "title": "¡Es tu turno!",
@@ -205,7 +207,8 @@
     "serving": "Atendiendo",
     "next_tickets": "Próximos turnos",
     "no_queue": "No hay turnos en la cola",
-    "updated": "Actualizado en tiempo real"
+    "updated": "Actualizado en tiempo real",
+    "now": "Ahora"
   },
   "establishment": {
     "title": "Crear Establecimiento",
