@@ -1,8 +1,7 @@
 'use client'
 
 import { useTranslations } from 'next-intl'
-import { useRouter, usePathname } from '@/i18n/navigation'
-import Link from 'next/link'
+import { useRouter, usePathname, Link } from '@/i18n/navigation'
 import { QrCode, Smartphone, Clock, Gamepad2, BarChart3 } from 'lucide-react'
 
 export default function Home() {
