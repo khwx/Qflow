@@ -1,16 +1,18 @@
 'use client'
 
-import { useState, useEffect } from 'react'
-import { useSearchParams } from 'next/navigation'
+import { useState, useEffect, use } from 'react'
+import { useTranslations } from 'next-intl'
+import { useRouter } from '@/i18n/navigation'
 import { createClientComponentClient } from '@/lib/supabase'
 import { Establishment, Queue, Ticket } from '@/types'
 import { cn, generateTicketNumber, getEstimatedWait } from '@/lib/utils'
 import { QrCode, Clock, Users, AlertCircle, CheckCircle2 } from 'lucide-react'
-import { useRouter } from 'next/navigation'
 
-export default function QueuePage() {
-  const searchParams = useSearchParams()
-  const code = searchParams.get('code') || ''
+export default function QueuePage({ params }: { params: Promise<{ locale: string; code: string }> }) {
+  const { locale, code } = use(params)
+  const t = useTranslations('queue')
+  const tTicket = useTranslations('ticket')
+  const tEnter = useTranslations('enter')
   const [establishment, setEstablishment] = useState<Establishment | null>(null)
   const [queues, setQueues] = useState<Queue[]>([])
   const [selectedQueue, setSelectedQueue] = useState<Queue | null>(null)
@@ -27,7 +29,6 @@ export default function QueuePage() {
       router.push('/enter')
       return
     }
-
     loadData()
   }, [code])
 
@@ -108,8 +109,8 @@ export default function QueuePage() {
       <div className="min-h-screen flex items-center justify-center p-6">
         <div className="text-center">
           <AlertCircle className="h-16 w-16 text-red-500 mx-auto mb-4" />
-          <h1 className="text-2xl font-bold text-gray-900 mb-2">Estabelecimento não encontrado</h1>
-          <p className="text-gray-600">Verifique o código e tente novamente</p>
+          <h1 className="text-2xl font-bold text-gray-900 mb-2">{tEnter('not_found')}</h1>
+          <p className="text-gray-600">{tEnter('not_found_desc')}</p>
         </div>
       </div>
     )
@@ -121,22 +122,22 @@ export default function QueuePage() {
         <div className="max-w-lg mx-auto pt-20">
           <div className="bg-white rounded-2xl shadow-xl p-8 text-center">
             <CheckCircle2 className="h-16 w-16 text-green-500 mx-auto mb-4" />
-            <h2 className="text-2xl font-bold text-gray-900 mb-2">Senha Confirmada!</h2>
+            <h2 className="text-2xl font-bold text-gray-900 mb-2">{tTicket('confirmed')}</h2>
             <p className="text-gray-600 mb-6">{establishment.name}</p>
             
             <div className="bg-indigo-50 rounded-xl p-6 mb-6">
-              <p className="text-sm text-gray-600 mb-1">Sua senha</p>
+              <p className="text-sm text-gray-600 mb-1">{tTicket('your_ticket')}</p>
               <p className="text-4xl font-bold text-indigo-600">{ticket.ticket_number}</p>
             </div>
 
             <div className="space-y-3 text-left mb-8">
               <div className="flex items-center gap-3 text-gray-700">
                 <Clock className="h-5 w-5 text-indigo-500" />
-                <span>Tempo estimado: {getEstimatedWait(queues[0]?.current_number || 0, ticket.ticket_number)} min</span>
+                <span>{tTicket('estimated_wait')}: {getEstimatedWait(queues[0]?.current_number || 0, ticket.ticket_number)} {tTicket('min')}</span>
               </div>
               <div className="flex items-center gap-3 text-gray-700">
                 <Users className="h-5 w-5 text-indigo-500" />
-                <span>Posição: {queues[0]?.current_number || 0} na fila</span>
+                <span>{tTicket('queue_position')}: {queues[0]?.current_number || 0}</span>
               </div>
             </div>
 
@@ -144,7 +145,7 @@ export default function QueuePage() {
               onClick={() => router.push(`/waiting/${ticket.id}`)}
               className="w-full bg-indigo-600 text-white py-3 rounded-lg font-semibold hover:bg-indigo-700 transition"
             >
-              Entrar na Sala de Espera
+              {tTicket('waiting_room')}
             </button>
           </div>
         </div>
@@ -164,11 +165,11 @@ export default function QueuePage() {
             )}
           </div>
           <h1 className="text-2xl font-bold text-white mb-2">{establishment.name}</h1>
-          <p className="text-white/80">{establishment.description || 'Selecione uma fila para entrar'}</p>
+          <p className="text-white/80">{establishment.description || t('select_queue')}</p>
         </div>
 
         <div className="bg-white rounded-2xl shadow-xl p-6 mb-6">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">Selecione a Fila</h2>
+          <h2 className="text-lg font-semibold text-gray-900 mb-4">{t('select_queue')}</h2>
           
           <div className="space-y-3">
             {queues.map((queue) => (
@@ -192,7 +193,7 @@ export default function QueuePage() {
                   <div className="text-right">
                     <div className="flex items-center gap-1 text-gray-500">
                       <Clock className="h-4 w-4" />
-                      <span className="text-sm">~{queue.estimated_wait_minutes || 5} min</span>
+                      <span className="text-sm">~{queue.estimated_wait_minutes || 5} {t('minutes')}</span>
                     </div>
                   </div>
                 </div>
@@ -203,31 +204,31 @@ export default function QueuePage() {
 
         {selectedQueue && (
           <div className="bg-white rounded-2xl shadow-xl p-6">
-            <h3 className="font-semibold text-gray-900 mb-4">Informações (opcional)</h3>
+            <h3 className="font-semibold text-gray-900 mb-4">{t('optional_info')}</h3>
             
             <div className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Nome
+                  {t('name')}
                 </label>
                 <input
                   type="text"
                   value={customerName}
                   onChange={(e) => setCustomerName(e.target.value)}
-                  placeholder="Seu nome"
+                  placeholder={t('name_placeholder')}
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500"
                 />
               </div>
               
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Telefone (para notificações)
+                  {t('phone')}
                 </label>
                 <input
                   type="tel"
                   value={customerPhone}
                   onChange={(e) => setCustomerPhone(e.target.value)}
-                  placeholder="(00) 00000-0000"
+                  placeholder={t('phone_placeholder')}
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500"
                 />
               </div>
@@ -237,7 +238,7 @@ export default function QueuePage() {
                 disabled={takingTicket}
                 className="w-full bg-indigo-600 text-white py-3 rounded-lg font-semibold hover:bg-indigo-700 disabled:opacity-50 transition"
               >
-                {takingTicket ? 'Gerando senha...' : 'Pegar Senha'}
+                {takingTicket ? t('taking') : t('take_ticket')}
               </button>
             </div>
           </div>

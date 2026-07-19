@@ -1,0 +1,231 @@
+{
+  "metadata": {
+    "title": "QFlow - Elimina le Code",
+    "description": "Sistema di coda virtuale con QR Code, gamification e display intelligenti."
+  },
+  "home": {
+    "title": "Elimina le Code. Coinvolgi i Clienti.",
+    "subtitle": "Sistema di coda virtuale con QR Code, gamification e display intelligenti. Trasforma il tempo di attesa in un'esperienza positiva.",
+    "cta_enter": "Entra in Coda",
+    "cta_create": "Crea Struttura",
+    "admin": "Admin",
+    "tv_display": "Display TV"
+  },
+  "features": {
+    "qr_title": "QR Code Istantaneo",
+    "qr_desc": "I clienti scansionano e entrano in coda senza bisogno di scaricare app o creare account complicati.",
+    "realtime_title": "In Tempo Reale",
+    "ricealtime_desc": "Segui la tua posizione nella coda in tempo reale e ricevi notifiche quando sei chiamato.",
+    "games_title": "Gamification",
+    "games_desc": "Mentre aspetti, gioca, rispondi ai sondaggi e guadagna ricompense. Trasforma l'attesa in divertimento.",
+    "mobile_title": "Mobile-First",
+    "mobile_desc": "Interfaccia ottimizzata per mobile. Funziona su qualsiasi smartphone senza installazione.",
+    "tv_title": "Display TV",
+    "tv_desc": "Mostra la coda in tempo reale sugli schermi del negozio. I clienti vedono la loro posizione senza chiedere.",
+    "multi_title": "Multi-Struttura",
+    "multi_desc": "Gestisci più code per categoria. Ideale per centri commerciali, cliniche ed eventi."
+  },
+  "steps": {
+    "title": "Come Funziona",
+    "scan": "Scansiona",
+    "scan_desc": "Scansiona il QR Code all'ingresso o al tavolo",
+    "wait": "Aspetta",
+    "wait_desc": "Ricevi il tuo ticket e segui la coda dal telefono",
+    "called": "Vieni Chiamato",
+    "called_desc": "Ricevi una notifica quando è il tuo turno"
+  },
+  "enter": {
+    "title": "TiraSenha",
+    "subtitle": "Inserisci il codice della struttura per entrare in coda",
+    "code_label": "Codice Struttura",
+    "code_placeholder": "ES: NEGOZIO01",
+    "button": "Entra in Coda",
+    "searching": "Ricerca...",
+    "not_found": "Struttura non trovata",
+    "not_found_desc": "Verifica il codice e riprova"
+  },
+  "queue": {
+    "select_queue": "Seleziona la Coda",
+    "optional_info": "Informazioni (opzionale)",
+    "name": "Nome",
+    "name_placeholder": "Il tuo nome",
+    "phone": "Telefono (per le notifiche)",
+    "phone_placeholder": "+39 000 000000",
+    "take_ticket": "Prendi Ticket",
+    "taking": "Generazione ticket...",
+    "estimated": "Tempo stimato",
+    "minutes": "min",
+    "position": "Posizione"
+  },
+  "ticket": {
+    "confirmed": "Ticket Confermato!",
+    "your_ticket": "Il tuo ticket",
+    "estimated_wait": "Tempo di attesa stimato",
+    "queue_position": "Posizione nella coda",
+    "waiting_room": "Entra nella Sala d'Attesa",
+    "min": "min"
+  },
+  "waiting": {
+    "status": "Stato della Coda",
+    "current_ticket": "Ticket Attuale",
+    "position": "Posizione",
+    "status_label": "Stato",
+    "waiting": "In attesa",
+    "earn_points": "Guadagna Punti",
+    "earn_points_desc": "Gioca, rispondi ai sondaggi e fai ordini per guadagnare punti e riscattare ricompense!",
+    "games": "Giochi",
+    "polls": "Sondaggi",
+    "orders": "Ordini",
+    "no_games": "Nessun gioco disponibile",
+    "no_games_desc": "Torna più tardi per scoprire le novità",
+    "no_polls": "Nessun sondaggio disponibile",
+    "no_polls_desc": "Partecipa e guadagna punti!"
+  },
+  "called": {
+    "title": "È il tuo turno!",
+    "subtitle": "Recati al punto di servizio"
+  },
+  "games": {
+    "play": "Gioca",
+    "moves": "Mosse",
+    "question": "Domanda",
+    "points": "Punti",
+    "spin": "Gira!",
+    "spinning": "Girando..."
+  },
+  "polls": {
+    "vote": "Vota",
+    "voted": "Grazie per aver partecipato!",
+    "points_earned": "+10 punti per la partecipazione!"
+  },
+  "orders": {
+    "menu": "Menu",
+    "your_order": "Il Tuo Ordine",
+    "empty": "Aggiungi articoli dal menu",
+    "notes": "Note",
+    "notes_placeholder": "Richieste speciali?",
+    "total": "Totale",
+    "send": "Invia Ordine",
+    "sending": "Invio in corso...",
+    "sent": "Ordine Inviato!",
+    "preparing": "Il tuo ordine è in preparazione"
+  },
+  "admin": {
+    "dashboard": "Pannello di Controllo",
+    "queues": "Code",
+    "tickets": "Ticket",
+    "games": "Giochi",
+    "settings": "Impostazioni",
+    "logout": "Esci"
+  },
+  "dashboard": {
+    "today_tickets": "Ticket Oggi",
+    "waiting": "In attesa",
+    "completed": "Completati",
+    "avg_wait": "Tempo Medio",
+    "hourly": "Passaggi Orari",
+    "recent": "Attività Recente"
+  },
+  "queues_admin": {
+    "title": "Code",
+    "description": "Gestisci le code della struttura",
+    "new_queue": "Nuova Coda",
+    "queue_name": "Nome della Coda",
+    "queue_name_placeholder": "ES: Cassa Veloce",
+    "description_label": "Descrizione",
+    "description_placeholder": "Descrizione opzionale",
+    "avg_time": "Tempo Medio (min)",
+    "create": "Crea Coda",
+    "cancel": "Annulla",
+    "call_next": "Chiama il Prossimo",
+    "waiting_count": "In attesa",
+    "called_count": "Chiamati",
+    "last_ticket": "Ultimo Ticket",
+    "queue_tickets": "Ticket in coda:"
+  },
+  "tickets_admin": {
+    "title": "Ticket",
+    "description": "Gestisci tutti i ticket",
+    "search_placeholder": "Cerca per ticket o nome...",
+    "all_status": "Tutti gli stati",
+    "filter_waiting": "In attesa",
+    "filter_called": "Chiamati",
+    "filter_completed": "Completati",
+    "password": "Ticket",
+    "queue": "Coda",
+    "customer": "Cliente",
+    "status": "Stato",
+    "created": "Creato il",
+    "actions": "Azioni"
+  },
+  "games_admin": {
+    "title": "Giochi",
+    "description": "Gestisci i giochi disponibili per i clienti",
+    "new_game": "Nuovo Gioco",
+    "game_name": "Nome del Gioco",
+    "game_name_placeholder": "ES: Quiz del Marchio",
+    "type": "Tipo",
+    "type_quiz": "Quiz",
+    "type_memory": "Memoria",
+    "type_spin": "Roulette",
+    "description_label": "Descrizione",
+    "description_placeholder": "Descrizione del gioco",
+    "points_reward": "Punti Ricompensa",
+    "create": "Crea Gioco",
+    "no_games": "Nessun gioco creato ancora"
+  },
+  "settings_admin": {
+    "title": "Impostazioni",
+    "description": "Personalizza il tuo sistema",
+    "basic_info": "Informazioni Base",
+    "establishment_name": "Nome Struttura",
+    "primary_color": "Colore Primario",
+    "features": "Funzionalità",
+    "notification_sound": "Suono di Notifica",
+    "notification_sound_desc": "Riproduci suono quando viene chiamato un ticket",
+    "auto_call": "Chiamata Automatica",
+    "auto_call_desc": "Chiama automaticamente quando il ticket è pronto",
+    "qr_code": "QR Code",
+    "qr_code_desc": "Abilita l'ingresso tramite QR Code",
+    "gamification": "Gamification",
+    "gamification_desc": "Abilita giochi e punti",
+    "enabled": "Abilitato",
+    "disabled": "Disabilitato",
+    "integrations": "Integrazioni",
+    "whatsapp": "WhatsApp Business API",
+    "whatsapp_placeholder": "Numero WhatsApp",
+    "sms": "SMS (Twilio)",
+    "sms_placeholder": "Account SID"
+  },
+  "tv_display": {
+    "title": "QFlow TV",
+    "subtitle": "Pannello di visualizzazione ticket",
+    "code_label": "Codice Struttura",
+    "call": "IN SERVIZIO",
+    "serving": "In servizio",
+    "next_tickets": "Prossimi ticket",
+    "no_queue": "Nessun ticket in coda",
+    "updated": "Aggiornato in tempo reale"
+  },
+  "establishment": {
+    "title": "Crea Struttura",
+    "subtitle": "Configura il tuo spazio per iniziare a usare QFlow",
+    "name_label": "Nome Struttura",
+    "name_placeholder": "ES: Negozio di Quartiere",
+    "slug_label": "Slug (URL amichevole)",
+    "slug_placeholder": "la-mia-struttura",
+    "slug_hint": "Questo sarà il codice che i clienti useranno per accedere alla tua coda",
+    "category": "Categoria",
+    "cat_general": "Generale",
+    "cat_restaurant": "Ristorante",
+    "cat_clinic": "Clinica",
+    "cat_retail": "Retail",
+    "cat_bank": "Banca",
+    "cat_government": "Governo",
+    "create": "Crea Struttura",
+    "creating": "Creazione..."
+  },
+  "footer": {
+    "made_with": "Fatto con ❤️ per eliminare le code nel mondo"
+  }
+}

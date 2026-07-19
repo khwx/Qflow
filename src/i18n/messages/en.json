@@ -1,0 +1,231 @@
+{
+  "metadata": {
+    "title": "QFlow - Eliminate Lines",
+    "description": "Virtual queue system with QR Code, gamification, and smart displays."
+  },
+  "home": {
+    "title": "Eliminate Lines. Engage Customers.",
+    "subtitle": "Virtual queue system with QR Code, gamification, and smart displays. Turn wait time into a positive experience.",
+    "cta_enter": "Join the Queue",
+    "cta_create": "Create Establishment",
+    "admin": "Admin",
+    "tv_display": "TV Display"
+  },
+  "features": {
+    "qr_title": "Instant QR Code",
+    "qr_desc": "Customers scan and join the queue without downloading apps or creating complicated accounts.",
+    "realtime_title": "Real-Time",
+    "realtime_desc": "Track your position in the queue in real-time and receive notifications when called.",
+    "games_title": "Gamification",
+    "games_desc": "While waiting, play games, answer polls, and earn rewards. Turn waiting into fun.",
+    "mobile_title": "Mobile-First",
+    "mobile_desc": "Optimized mobile interface. Works on any smartphone without installation.",
+    "tv_title": "TV Display",
+    "tv_desc": "Display the queue in real-time on store screens. Customers see their position without asking.",
+    "multi_title": "Multi-Establishment",
+    "multi_desc": "Manage multiple queues by category. Ideal for malls, clinics, and events."
+  },
+  "steps": {
+    "title": "How It Works",
+    "scan": "Scan",
+    "scan_desc": "Scan the QR Code at the entrance or at the table",
+    "wait": "Wait",
+    "wait_desc": "Receive your ticket and follow the queue on your phone",
+    "called": "Get Called",
+    "called_desc": "Receive a notification when it's your turn"
+  },
+  "enter": {
+    "title": "TiraSenha",
+    "subtitle": "Enter the establishment code to join the queue",
+    "code_label": "Establishment Code",
+    "code_placeholder": "E.G.: STORE01",
+    "button": "Join the Queue",
+    "searching": "Searching...",
+    "not_found": "Establishment not found",
+    "not_found_desc": "Check the code and try again"
+  },
+  "queue": {
+    "select_queue": "Select Queue",
+    "optional_info": "Information (optional)",
+    "name": "Name",
+    "name_placeholder": "Your name",
+    "phone": "Phone (for notifications)",
+    "phone_placeholder": "(00) 00000-0000",
+    "take_ticket": "Get Ticket",
+    "taking": "Generating ticket...",
+    "estimated": "Estimated time",
+    "minutes": "min",
+    "position": "Position"
+  },
+  "ticket": {
+    "confirmed": "Ticket Confirmed!",
+    "your_ticket": "Your ticket",
+    "estimated_wait": "Estimated wait",
+    "queue_position": "Queue position",
+    "waiting_room": "Enter Waiting Room",
+    "min": "min"
+  },
+  "waiting": {
+    "status": "Queue Status",
+    "current_ticket": "Current Ticket",
+    "position": "Position",
+    "status_label": "Status",
+    "waiting": "Waiting",
+    "earn_points": "Earn Points",
+    "earn_points_desc": "Play games, answer polls, and place orders to earn points and redeem rewards!",
+    "games": "Games",
+    "polls": "Polls",
+    "orders": "Orders",
+    "no_games": "No games available",
+    "no_games_desc": "Check back later for new games",
+    "no_polls": "No polls available",
+    "no_polls_desc": "Participate and earn points!"
+  },
+  "called": {
+    "title": "It's your turn!",
+    "subtitle": "Please proceed to the service counter"
+  },
+  "games": {
+    "play": "Play",
+    "moves": "Moves",
+    "question": "Question",
+    "points": "Points",
+    "spin": "Spin!",
+    "spinning": "Spinning..."
+  },
+  "polls": {
+    "vote": "Vote",
+    "voted": "Thank you for participating!",
+    "points_earned": "+10 points for participating!"
+  },
+  "orders": {
+    "menu": "Menu",
+    "your_order": "Your Order",
+    "empty": "Add items from the menu",
+    "notes": "Notes",
+    "notes_placeholder": "Any special requests?",
+    "total": "Total",
+    "send": "Send Order",
+    "sending": "Sending...",
+    "sent": "Order Sent!",
+    "preparing": "Your order is being prepared"
+  },
+  "admin": {
+    "dashboard": "Dashboard",
+    "queues": "Queues",
+    "tickets": "Tickets",
+    "games": "Games",
+    "settings": "Settings",
+    "logout": "Logout"
+  },
+  "dashboard": {
+    "today_tickets": "Today's Tickets",
+    "waiting": "Waiting",
+    "completed": "Completed",
+    "avg_wait": "Average Wait",
+    "hourly": "Hourly Traffic",
+    "recent": "Recent Activity"
+  },
+  "queues_admin": {
+    "title": "Queues",
+    "description": "Manage establishment queues",
+    "new_queue": "New Queue",
+    "queue_name": "Queue Name",
+    "queue_name_placeholder": "E.G.: Express Checkout",
+    "description_label": "Description",
+    "description_placeholder": "Optional description",
+    "avg_time": "Average Time (min)",
+    "create": "Create Queue",
+    "cancel": "Cancel",
+    "call_next": "Call Next",
+    "waiting_count": "Waiting",
+    "called_count": "Called",
+    "last_ticket": "Last Ticket",
+    "queue_tickets": "Tickets in queue:"
+  },
+  "tickets_admin": {
+    "title": "Tickets",
+    "description": "Manage all tickets",
+    "search_placeholder": "Search by ticket or name...",
+    "all_status": "All statuses",
+    "filter_waiting": "Waiting",
+    "filter_called": "Called",
+    "filter_completed": "Completed",
+    "password": "Ticket",
+    "queue": "Queue",
+    "customer": "Customer",
+    "status": "Status",
+    "created": "Created at",
+    "actions": "Actions"
+  },
+  "games_admin": {
+    "title": "Games",
+    "description": "Manage games available to customers",
+    "new_game": "New Game",
+    "game_name": "Game Name",
+    "game_name_placeholder": "E.G.: Brand Quiz",
+    "type": "Type",
+    "type_quiz": "Quiz",
+    "type_memory": "Memory",
+    "type_spin": "Spin Wheel",
+    "description_label": "Description",
+    "description_placeholder": "Game description",
+    "points_reward": "Reward Points",
+    "create": "Create Game",
+    "no_games": "No games created yet"
+  },
+  "settings_admin": {
+    "title": "Settings",
+    "description": "Customize your system",
+    "basic_info": "Basic Information",
+    "establishment_name": "Establishment Name",
+    "primary_color": "Primary Color",
+    "features": "Features",
+    "notification_sound": "Notification Sound",
+    "notification_sound_desc": "Play sound when calling a ticket",
+    "auto_call": "Auto Call",
+    "auto_call_desc": "Automatically call when the ticket is ready",
+    "qr_code": "QR Code",
+    "qr_code_desc": "Enable entry via QR Code",
+    "gamification": "Gamification",
+    "gamification_desc": "Enable games and points",
+    "enabled": "Enabled",
+    "disabled": "Disabled",
+    "integrations": "Integrations",
+    "whatsapp": "WhatsApp Business API",
+    "whatsapp_placeholder": "WhatsApp number",
+    "sms": "SMS (Twilio)",
+    "sms_placeholder": "Account SID"
+  },
+  "tv_display": {
+    "title": "QFlow TV",
+    "subtitle": "Ticket display panel",
+    "code_label": "Establishment Code",
+    "call": "NOW SERVING",
+    "serving": "Now serving",
+    "next_tickets": "Next tickets",
+    "no_queue": "No tickets in queue",
+    "updated": "Updated in real-time"
+  },
+  "establishment": {
+    "title": "Create Establishment",
+    "subtitle": "Set up your space to start using QFlow",
+    "name_label": "Establishment Name",
+    "name_placeholder": "E.G.: Neighborhood Store",
+    "slug_label": "Slug (friendly URL)",
+    "slug_placeholder": "my-establishment",
+    "slug_hint": "This will be the code customers use to access your queue",
+    "category": "Category",
+    "cat_general": "General",
+    "cat_restaurant": "Restaurant",
+    "cat_clinic": "Clinic",
+    "cat_retail": "Retail",
+    "cat_bank": "Bank",
+    "cat_government": "Government",
+    "create": "Create Establishment",
+    "creating": "Creating..."
+  },
+  "footer": {
+    "made_with": "Made with ❤️ to eliminate lines worldwide"
+  }
+}

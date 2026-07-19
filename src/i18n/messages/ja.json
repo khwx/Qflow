@@ -1,0 +1,231 @@
+{
+  "metadata": {
+    "title": "QFlow - 列をなくす",
+    "description": "QRコード、ゲーミフィケーション、スマートディスプレイによるバーチャルキューシステム。"
+  },
+  "home": {
+    "title": "列をなくす。顧客を惹きつける。",
+    "subtitle": "QRコード、ゲーミフィケーション、スマートディスプレイによるバーチャルキューシステム。待ち時間をポジティブな体験に変換します。",
+    "cta_enter": "キューに入る",
+    "cta_create": "店舗を作成",
+    "admin": "管理",
+    "tv_display": "TVディスプレイ"
+  },
+  "features": {
+    "qr_title": "即時QRコード",
+    "qr_desc": "顧客はアプリをダウンロードしたり複雑なアカウントを作成したりせずに、スキャンしてキューに参加できます。",
+    "realtime_title": "リアルタイム",
+    "realtime_desc": "キューでの位置をリアルタイムで追跡し、呼び出されたら通知を受け取ります。",
+    "games_title": "ゲーミフィケーション",
+    "games_desc": "待っている間にゲームをプレイし、アンケートに答え、報酬を獲得します。待ち時間を楽しみに変えましょう。",
+    "mobile_title": "モバイルファースト",
+    "mobile_desc": "モバイルに最適化されたインターフェース。インストール不要でどのスマートフォンでも動作します。",
+    "tv_title": "TVディスプレイ",
+    "tv_desc": "店舗の画面にリアルタイムでキューを表示。顧客は自分の位置を確認でき、聞く必要がありません。",
+    "multi_title": "マルチ店舗",
+    "multi_desc": "カテゴリごとに複数のキューを管理。ショッピングモール、クリニック、イベントに最適。"
+  },
+  "steps": {
+    "title": "使い方",
+    "scan": "スキャン",
+    "scan_desc": "入口またはテーブルのQRコードをスキャン",
+    "wait": "待つ",
+    "wait_desc": "チケットを受け取り、スマートフォンでキューを追跡",
+    "called": "呼び出し",
+    "called_desc": "番が来たら通知を受け取る"
+  },
+  "enter": {
+    "title": "TiraSenha",
+    "subtitle": "店舗コードを入力してキューに参加",
+    "code_label": "店舗コード",
+    "code_placeholder": "例：SHOP01",
+    "button": "キューに入る",
+    "searching": "検索中...",
+    "not_found": "店舗が見つかりません",
+    "not_found_desc": "コードを確認して、もう一度お試しください"
+  },
+  "queue": {
+    "select_queue": "キューを選択",
+    "optional_info": "情報（任意）",
+    "name": "名前",
+    "name_placeholder": "お名前",
+    "phone": "電話番号（通知用）",
+    "phone_placeholder": "090-0000-0000",
+    "take_ticket": "番号券を受け取る",
+    "taking": "番号券を生成中...",
+    "estimated": "予想待ち時間",
+    "minutes": "分",
+    "position": "現在地"
+  },
+  "ticket": {
+    "confirmed": "番号券確認済み！",
+    "your_ticket": "あなたの番号",
+    "estimated_wait": "予想待ち時間",
+    "queue_position": "キューの位置",
+    "waiting_room": "待合室に入る",
+    "min": "分"
+  },
+  "waiting": {
+    "status": "キューの状態",
+    "current_ticket": "現在の番号",
+    "position": "位置",
+    "status_label": "ステータス",
+    "waiting": "待機中",
+    "earn_points": "ポイントを獲得",
+    "earn_points_desc": "ゲームをプレイし、アンケートに答え、注文してポイントを獲得、報酬と交換しましょう！",
+    "games": "ゲーム",
+    "polls": "アンケート",
+    "orders": "注文",
+    "no_games": "利用可能なゲームなし",
+    "no_games_desc": "新しいゲームは後でもう一度ご確認ください",
+    "no_polls": "利用可能なアンケートなし",
+    "no_polls_desc": "参加してポイントを獲得しましょう！"
+  },
+  "called": {
+    "title": "あなたの番です！",
+    "subtitle": "カウンターにお越しください"
+  },
+  "games": {
+    "play": "プレイ",
+    "moves": "手数",
+    "question": "質問",
+    "points": "ポイント",
+    "spin": "スピン！",
+    "spinning": "回転中..."
+  },
+  "polls": {
+    "vote": "投票",
+    "voted": "ご参加ありがとうございます！",
+    "points_earned": "+10ポイント獲得！"
+  },
+  "orders": {
+    "menu": "メニュー",
+    "your_order": "ご注文",
+    "empty": "メニューから商品を追加",
+    "notes": "備考",
+    "notes_placeholder": "ご要望はありますか？",
+    "total": "合計",
+    "send": "注文を送信",
+    "sending": "送信中...",
+    "sent": "注文送信完了！",
+    "preparing": "ご注文を準備中です"
+  },
+  "admin": {
+    "dashboard": "ダッシュボード",
+    "queues": "キュー管理",
+    "tickets": "番号券管理",
+    "games": "ゲーム管理",
+    "settings": "設定",
+    "logout": "ログアウト"
+  },
+  "dashboard": {
+    "today_tickets": "本日の番号券",
+    "waiting": "待機中",
+    "completed": "完了",
+    "avg_wait": "平均待ち時間",
+    "hourly": "時間別来客数",
+    "recent": "最近のアクティビティ"
+  },
+  "queues_admin": {
+    "title": "キュー管理",
+    "description": "店舗のキューを管理",
+    "new_queue": "新しいキュー",
+    "queue_name": "キュー名",
+    "queue_name_placeholder": "例：快速レジ",
+    "description_label": "説明",
+    "description_placeholder": "説明（任意）",
+    "avg_time": "平均時間（分）",
+    "create": "キューを作成",
+    "cancel": "キャンセル",
+    "call_next": "次を呼ぶ",
+    "waiting_count": "待機中",
+    "called_count": "呼び出し済み",
+    "last_ticket": "最後の番号",
+    "queue_tickets": "キュー内の番号："
+  },
+  "tickets_admin": {
+    "title": "番号券管理",
+    "description": "すべての番号券を管理",
+    "search_placeholder": "番号または名前で検索...",
+    "all_status": "すべてのステータス",
+    "filter_waiting": "待機中",
+    "filter_called": "呼び出し済み",
+    "filter_completed": "完了",
+    "password": "番号券",
+    "queue": "キュー",
+    "customer": "顧客",
+    "status": "ステータス",
+    "created": "作成日時",
+    "actions": "操作"
+  },
+  "games_admin": {
+    "title": "ゲーム管理",
+    "description": "顧客向けゲームを管理",
+    "new_game": "新しいゲーム",
+    "game_name": "ゲーム名",
+    "game_name_placeholder": "例：ブランドクイズ",
+    "type": "タイプ",
+    "type_quiz": "クイズ",
+    "type_memory": "メモリー",
+    "type_spin": "ルーレット",
+    "description_label": "説明",
+    "description_placeholder": "ゲームの説明",
+    "points_reward": "報酬ポイント",
+    "create": "ゲームを作成",
+    "no_games": "まだゲームが作成されていません"
+  },
+  "settings_admin": {
+    "title": "設定",
+    "description": "システムをカスタマイズ",
+    "basic_info": "基本情報",
+    "establishment_name": "店舗名",
+    "primary_color": "プライマリカラー",
+    "features": "機能",
+    "notification_sound": "通知音",
+    "notification_sound_desc": "番号を呼んだらサウンドを再生",
+    "auto_call": "自動呼び出し",
+    "auto_call_desc": "番号が来たら自動的に呼び出す",
+    "qr_code": "QRコード",
+    "qr_code_desc": "QRコード経由の入場を有効にする",
+    "gamification": "ゲーミフィケーション",
+    "gamification_desc": "ゲームとポイントを有効にする",
+    "enabled": "有効",
+    "disabled": "無効",
+    "integrations": "インテグレーション",
+    "whatsapp": "WhatsApp Business API",
+    "whatsapp_placeholder": "WhatsApp番号",
+    "sms": "SMS (Twilio)",
+    "sms_placeholder": "Account SID"
+  },
+  "tv_display": {
+    "title": "QFlow TV",
+    "subtitle": "番号表示パネル",
+    "code_label": "店舗コード",
+    "call": "ただいま呼び出し中",
+    "serving": "サービス中",
+    "next_tickets": "次の番号",
+    "no_queue": "キューに番号がありません",
+    "updated": "リアルタイムで更新"
+  },
+  "establishment": {
+    "title": "店舗を作成",
+    "subtitle": "QFlowを使い始めるためにスペースを設定",
+    "name_label": "店舗名",
+    "name_placeholder": "例：近所のお店",
+    "slug_label": "スラグ（フレンドリーURL）",
+    "slug_placeholder": "my-store",
+    "slug_hint": "これが顧客がキューにアクセスするために使うコードになります",
+    "category": "カテゴリ",
+    "cat_general": "一般",
+    "cat_restaurant": "レストラン",
+    "cat_clinic": "クリニック",
+    "cat_retail": "小売",
+    "cat_bank": "銀行",
+    "cat_government": "官公庁",
+    "create": "店舗を作成",
+    "creating": "作成中..."
+  },
+  "footer": {
+    "made_with": "世界中の列をなくすために ❤️ で作成"
+  }
+}

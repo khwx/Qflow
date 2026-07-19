@@ -1,0 +1,231 @@
+{
+  "metadata": {
+    "title": "QFlow - Schlangen Beseitigen",
+    "description": "Virtuelles Warteschlangensystem mit QR-Code, Gamification und intelligenten Displays."
+  },
+  "home": {
+    "title": "Schlangen Beseitigen. Kunden Binden.",
+    "subtitle": "Virtuelles Warteschlangensystem mit QR-Code, Gamification und intelligenten Displays. Verwandeln Sie Wartezeit in ein positives Erlebnis.",
+    "cta_enter": "Schlange Anstehen",
+    "cta_create": "Betrieb Erstellen",
+    "admin": "Admin",
+    "tv_display": "TV-Anzeige"
+  },
+  "features": {
+    "qr_title": "Sofortiger QR-Code",
+    "qr_desc": "Kunden scannen und treten der Schlange bei, ohne Apps herunterladen oder komplizierte Konten erstellen zu müssen.",
+    "realtime_title": "Echtzeit",
+    "realtime_desc": "Verfolgen Sie Ihre Position in der Schlange in Echtzeit und erhalten Sie Benachrichtigungen, wenn Sie aufgerufen werden.",
+    "games_title": "Gamification",
+    "games_desc": "Während des Wartens spielen Sie, beantworten Umfragen und verdienen Belohnungen. Verwandeln Sie Warten in Spaß.",
+    "mobile_title": "Mobile-First",
+    "mobile_desc": "Optimierte mobile Benutzeroberfläche. Funktioniert auf jedem Smartphone ohne Installation.",
+    "tv_title": "TV-Anzeige",
+    "tv_desc": "Zeigen Sie die Schlange in Echtzeit auf Ladenschirmen an. Kunden sehen ihre Position ohne zu fragen.",
+    "multi_title": "Mehrere Betriebe",
+    "multi_desc": "Verwalten Sie mehrere Schlangen nach Kategorie. Ideal für Einkaufszentren, Kliniken und Veranstaltungen."
+  },
+  "steps": {
+    "title": "So Funktioniert Es",
+    "scan": "Scannen",
+    "scan_desc": "Scannen Sie den QR-Code am Eingang oder am Tisch",
+    "wait": "Warten",
+    "wait_desc": "Erhalten Sie Ihr Ticket und verfolgen Sie die Schlange auf Ihrem Handy",
+    "called": "Aufgerufen Werden",
+    "called_desc": "Erhalten Sie eine Benachrichtigung, wenn Sie an der Reihe sind"
+  },
+  "enter": {
+    "title": "TiraSenha",
+    "subtitle": "Geben Sie den Code des Betriebs ein, um der Schlange beizutreten",
+    "code_label": "Betriebscode",
+    "code_placeholder": "Z.B.: LADEN01",
+    "button": "Schlange Beitreten",
+    "searching": "Suchen...",
+    "not_found": "Betrieb nicht gefunden",
+    "not_found_desc": "Überprüfen Sie den Code und versuchen Sie es erneut"
+  },
+  "queue": {
+    "select_queue": "Schlange Wählen",
+    "optional_info": "Informationen (optional)",
+    "name": "Name",
+    "name_placeholder": "Ihr Name",
+    "phone": "Telefon (für Benachrichtigungen)",
+    "phone_placeholder": "+49 000 000000",
+    "take_ticket": "Ticket Nehmen",
+    "taking": "Ticket wird generiert...",
+    "estimated": "Geschätzte Zeit",
+    "minutes": "Min",
+    "position": "Position"
+  },
+  "ticket": {
+    "confirmed": "Ticket Bestätigt!",
+    "your_ticket": "Ihr Ticket",
+    "estimated_wait": "Geschätzte Wartezeit",
+    "queue_position": "Position in der Schlange",
+    "waiting_room": "Wartebetreten",
+    "min": "Min"
+  },
+  "waiting": {
+    "status": "Schlangen-Status",
+    "current_ticket": "Aktuelles Ticket",
+    "position": "Position",
+    "status_label": "Status",
+    "waiting": "Wartend",
+    "earn_points": "Punkte Verdienen",
+    "earn_points_desc": "Spielen Sie, beantworten Umfragen und bestellen Sie, um Punkte zu verdienen und Belohnungen einzulösen!",
+    "games": "Spiele",
+    "polls": "Umfragen",
+    "orders": "Bestellungen",
+    "no_games": "Keine Spiele verfügbar",
+    "no_games_desc": "Schauen Sie später wieder vorbei für Neuigkeiten",
+    "no_polls": "Keine Umfragen verfügbar",
+    "no_polls_desc": "Nehmen Sie teil und verdienen Sie Punkte!"
+  },
+  "called": {
+    "title": "Sie sind dran!",
+    "subtitle": "Bitte begeben Sie sich zum Service"
+  },
+  "games": {
+    "play": "Spielen",
+    "moves": "Züge",
+    "question": "Frage",
+    "points": "Punkte",
+    "spin": "Drehen!",
+    "spinning": "Dreht sich..."
+  },
+  "polls": {
+    "vote": "Abstimmen",
+    "voted": "Vielen Dank für Ihre Teilnahme!",
+    "points_earned": "+10 Punkte für die Teilnahme!"
+  },
+  "orders": {
+    "menu": "Speisekarte",
+    "your_order": "Ihre Bestellung",
+    "empty": "Fügen Sie Artikel aus der Speisekarte hinzu",
+    "notes": "Anmerkungen",
+    "notes_placeholder": "Besondere Wünsche?",
+    "total": "Gesamt",
+    "send": "Bestellung Senden",
+    "sending": "Wird gesendet...",
+    "sent": "Bestellung Gesendet!",
+    "preparing": "Ihre Bestellung wird zubereitet"
+  },
+  "admin": {
+    "dashboard": "Dashboard",
+    "queues": "Schlangen",
+    "tickets": "Tickets",
+    "games": "Spiele",
+    "settings": "Einstellungen",
+    "logout": "Abmelden"
+  },
+  "dashboard": {
+    "today_tickets": "Heutige Tickets",
+    "waiting": "Wartend",
+    "completed": "Abgeschlossen",
+    "avg_wait": "Durchschnittliche Wartezeit",
+    "hourly": "Stündlicher Verkehr",
+    "recent": "Letzte Aktivität"
+  },
+  "queues_admin": {
+    "title": "Schlangen",
+    "description": "Verwalten Sie die Schlangen des Betriebs",
+    "new_queue": "Neue Schlange",
+    "queue_name": "Schlangenname",
+    "queue_name_placeholder": "Z.B.: Express-Kasse",
+    "description_label": "Beschreibung",
+    "description_placeholder": "Optionale Beschreibung",
+    "avg_time": "Durchschnittliche Zeit (Min)",
+    "create": "Schlange Erstellen",
+    "cancel": "Abbrechen",
+    "call_next": "Nächsten Aufrufen",
+    "waiting_count": "Wartend",
+    "called_count": "Aufgerufen",
+    "last_ticket": "Letztes Ticket",
+    "queue_tickets": "Tickets in der Schlange:"
+  },
+  "tickets_admin": {
+    "title": "Tickets",
+    "description": "Verwalten Sie alle Tickets",
+    "search_placeholder": "Nach Ticket oder Name suchen...",
+    "all_status": "Alle Status",
+    "filter_waiting": "Wartend",
+    "filter_called": "Aufgerufen",
+    "filter_completed": "Abgeschlossen",
+    "password": "Ticket",
+    "queue": "Schlange",
+    "customer": "Kunde",
+    "status": "Status",
+    "created": "Erstellt am",
+    "actions": "Aktionen"
+  },
+  "games_admin": {
+    "title": "Spiele",
+    "description": "Verwalten Sie die für Kunden verfügbaren Spiele",
+    "new_game": "Neues Spiel",
+    "game_name": "Spielname",
+    "game_name_placeholder": "Z.B.: Marken-Quiz",
+    "type": "Typ",
+    "type_quiz": "Quiz",
+    "type_memory": "Gedächtnis",
+    "type_spin": "Glücksrad",
+    "description_label": "Beschreibung",
+    "description_placeholder": "Spielbeschreibung",
+    "points_reward": "Belohnungspunkte",
+    "create": "Spiel Erstellen",
+    "no_games": "Noch keine Spiele erstellt"
+  },
+  "settings_admin": {
+    "title": "Einstellungen",
+    "description": "Passen Sie Ihr System an",
+    "basic_info": "Grundlegende Informationen",
+    "establishment_name": "Betriebsname",
+    "primary_color": "Primärfarbe",
+    "features": "Funktionen",
+    "notification_sound": "Benachrichtigungston",
+    "notification_sound_desc": "Ton abspielen, wenn ein Ticket aufgerufen wird",
+    "auto_call": "Automatischer Aufruf",
+    "auto_call_desc": "Automatisch aufrufen, wenn das Ticket bereit ist",
+    "qr_code": "QR-Code",
+    "qr_code_desc": "Eingang über QR-Code aktivieren",
+    "gamification": "Gamification",
+    "gamification_desc": "Spiele und Punkte aktivieren",
+    "enabled": "Aktiviert",
+    "disabled": "Deaktiviert",
+    "integrations": "Integrationen",
+    "whatsapp": "WhatsApp Business API",
+    "whatsapp_placeholder": "WhatsApp-Nummer",
+    "sms": "SMS (Twilio)",
+    "sms_placeholder": "Account SID"
+  },
+  "tv_display": {
+    "title": "QFlow TV",
+    "subtitle": "Ticket-Anzeigetafel",
+    "code_label": "Betriebscode",
+    "call": "JETZT DRAN",
+    "serving": "Wird bedient",
+    "next_tickets": "Nächste Tickets",
+    "no_queue": "Keine Tickets in der Schlange",
+    "updated": "In Echtzeit aktualisiert"
+  },
+  "establishment": {
+    "title": "Betrieb Erstellen",
+    "subtitle": "Richten Sie Ihren Bereich ein, um QFlow zu nutzen",
+    "name_label": "Betriebsname",
+    "name_placeholder": "Z.B.: Nachbarschaftsladen",
+    "slug_label": "Slug (freundliche URL)",
+    "slug_placeholder": "mein-betrieb",
+    "slug_hint": "Dies wird der Code sein, den Kunden verwenden, um auf Ihre Schlange zuzugreifen",
+    "category": "Kategorie",
+    "cat_general": "Allgemein",
+    "cat_restaurant": "Restaurant",
+    "cat_clinic": "Klinik",
+    "cat_retail": "Einzelhandel",
+    "cat_bank": "Bank",
+    "cat_government": "Regierung",
+    "create": "Betrieb Erstellen",
+    "creating": "Wird erstellt..."
+  },
+  "footer": {
+    "made_with": "Mit ❤️ gemacht, um Schlangen weltweit zu beseitigen"
+  }
+}

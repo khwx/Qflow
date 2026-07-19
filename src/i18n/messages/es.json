@@ -1,0 +1,231 @@
+{
+  "metadata": {
+    "title": "QFlow - Elimina Filas",
+    "description": "Sistema de cola virtual con QR Code, gamificación y pantallas inteligentes."
+  },
+  "home": {
+    "title": "Elimina Filas. Engancha Clientes.",
+    "subtitle": "Sistema de cola virtual con QR Code, gamificación y pantallas inteligentes. Convierte el tiempo de espera en una experiencia positiva.",
+    "cta_enter": "Entrar en la Cola",
+    "cta_create": "Crear Establecimiento",
+    "admin": "Admin",
+    "tv_display": "Pantalla TV"
+  },
+  "features": {
+    "qr_title": "QR Code Instantáneo",
+    "qr_desc": "Los clientes escanean y entran en la cola sin necesidad de descargar apps o hacer registros complicados.",
+    "realtime_title": "Tiempo Real",
+    "realtime_desc": "Sigue tu posición en la cola en tiempo real y recibe notificaciones cuando sea tu turno.",
+    "games_title": "Gamificación",
+    "games_desc": "Mientras espera, juega, responde encuestas y gana recompensas. Convierte la espera en diversión.",
+    "mobile_title": "Mobile-First",
+    "mobile_desc": "Interfaz optimizada para celular. Funciona en cualquier smartphone sin instalación.",
+    "tv_title": "Pantalla TV",
+    "tv_desc": "Muestra la cola en tiempo real en pantallas de la tienda. Los clientes ven su posición sin preguntar.",
+    "multi_title": "Multi-Establecimiento",
+    "multi_desc": "Gestiona múltiples filas por categoría. Ideal para centros comerciales, clínicas y eventos."
+  },
+  "steps": {
+    "title": "Cómo Funciona",
+    "scan": "Escanea",
+    "scan_desc": "Escanea el QR Code en la entrada o en la mesa",
+    "wait": "Espera",
+    "wait_desc": "Recibe tu turno y sigue la cola desde tu celular",
+    "called": "Sé Llamado",
+    "called_desc": "Recibe una notificación cuando sea tu turno"
+  },
+  "enter": {
+    "title": "TiraSenha",
+    "subtitle": "Ingresa el código del establecimiento para entrar en la cola",
+    "code_label": "Código del Establecimiento",
+    "code_placeholder": "EJ: TIENDA01",
+    "button": "Entrar en la Cola",
+    "searching": "Buscando...",
+    "not_found": "Establecimiento no encontrado",
+    "not_found_desc": "Verifica el código e intenta de nuevo"
+  },
+  "queue": {
+    "select_queue": "Selecciona la Cola",
+    "optional_info": "Información (opcional)",
+    "name": "Nombre",
+    "name_placeholder": "Tu nombre",
+    "phone": "Teléfono (para notificaciones)",
+    "phone_placeholder": "(00) 00000-0000",
+    "take_ticket": "Tomar Turno",
+    "taking": "Generando turno...",
+    "estimated": "Tiempo estimado",
+    "minutes": "min",
+    "position": "Posición"
+  },
+  "ticket": {
+    "confirmed": "¡Turno Confirmado!",
+    "your_ticket": "Tu turno",
+    "estimated_wait": "Tiempo estimado de espera",
+    "queue_position": "Posición en la cola",
+    "waiting_room": "Entrar a la Sala de Espera",
+    "min": "min"
+  },
+  "waiting": {
+    "status": "Estado de la Cola",
+    "current_ticket": "Turno Actual",
+    "position": "Posición",
+    "status_label": "Estado",
+    "waiting": "Esperando",
+    "earn_points": "Gana Puntos",
+    "earn_points_desc": "¡Juega, responde encuestas y haz pedidos para ganar puntos y canjear recompensas!",
+    "games": "Juegos",
+    "polls": "Encuestas",
+    "orders": "Pedidos",
+    "no_games": "No hay juegos disponibles",
+    "no_games_desc": "Vuelve más tarde para ver novedades",
+    "no_polls": "No hay encuestas disponibles",
+    "no_polls_desc": "¡Participa y gana puntos!"
+  },
+  "called": {
+    "title": "¡Es tu turno!",
+    "subtitle": "Dirígete al punto de atención"
+  },
+  "games": {
+    "play": "Jugar",
+    "moves": "Movimientos",
+    "question": "Pregunta",
+    "points": "Puntos",
+    "spin": "¡Girar!",
+    "spinning": "Girando..."
+  },
+  "polls": {
+    "vote": "Votar",
+    "voted": "¡Gracias por participar!",
+    "points_earned": "+10 puntos por participar"
+  },
+  "orders": {
+    "menu": "Menú",
+    "your_order": "Tu Pedido",
+    "empty": "Agrega artículos del menú",
+    "notes": "Notas",
+    "notes_placeholder": "¿Algún pedido especial?",
+    "total": "Total",
+    "send": "Enviar Pedido",
+    "sending": "Enviando...",
+    "sent": "¡Pedido Enviado!",
+    "preparing": "Tu pedido está siendo preparado"
+  },
+  "admin": {
+    "dashboard": "Panel",
+    "queues": "Filas",
+    "tickets": "Turnos",
+    "games": "Juegos",
+    "settings": "Configuración",
+    "logout": "Cerrar Sesión"
+  },
+  "dashboard": {
+    "today_tickets": "Turnos Hoy",
+    "waiting": "Esperando",
+    "completed": "Atendidos",
+    "avg_wait": "Tiempo Promedio",
+    "hourly": "Atenciones por Hora",
+    "recent": "Actividad Reciente"
+  },
+  "queues_admin": {
+    "title": "Filas",
+    "description": "Gestiona las filas del establecimiento",
+    "new_queue": "Nueva Fila",
+    "queue_name": "Nombre de la Fila",
+    "queue_name_placeholder": "EJ: Caja Rápida",
+    "description_label": "Descripción",
+    "description_placeholder": "Descripción opcional",
+    "avg_time": "Tiempo Promedio (min)",
+    "create": "Crear Fila",
+    "cancel": "Cancelar",
+    "call_next": "Llamar Siguiente",
+    "waiting_count": "Esperando",
+    "called_count": "Llamados",
+    "last_ticket": "Último Turno",
+    "queue_tickets": "Turnos en la fila:"
+  },
+  "tickets_admin": {
+    "title": "Turnos",
+    "description": "Gestiona todos los turnos",
+    "search_placeholder": "Buscar por turno o nombre...",
+    "all_status": "Todos los estados",
+    "filter_waiting": "Esperando",
+    "filter_called": "Llamados",
+    "filter_completed": "Completados",
+    "password": "Turno",
+    "queue": "Cola",
+    "customer": "Cliente",
+    "status": "Estado",
+    "created": "Creado el",
+    "actions": "Acciones"
+  },
+  "games_admin": {
+    "title": "Juegos",
+    "description": "Gestiona los juegos disponibles para los clientes",
+    "new_game": "Nuevo Juego",
+    "game_name": "Nombre del Juego",
+    "game_name_placeholder": "EJ: Quiz de Marca",
+    "type": "Tipo",
+    "type_quiz": "Quiz",
+    "type_memory": "Memoria",
+    "type_spin": "Ruleta",
+    "description_label": "Descripción",
+    "description_placeholder": "Descripción del juego",
+    "points_reward": "Puntos de Recompensa",
+    "create": "Crear Juego",
+    "no_games": "Aún no hay juegos creados"
+  },
+  "settings_admin": {
+    "title": "Configuración",
+    "description": "Personaliza tu sistema",
+    "basic_info": "Información Básica",
+    "establishment_name": "Nombre del Establecimiento",
+    "primary_color": "Color Primario",
+    "features": "Funcionalidades",
+    "notification_sound": "Sonido de Notificación",
+    "notification_sound_desc": "Reproducir sonido al llamar un turno",
+    "auto_call": "Llamada Automática",
+    "auto_call_desc": "Llamar automáticamente cuando el turno esté listo",
+    "qr_code": "QR Code",
+    "qr_code_desc": "Habilitar entrada vía QR Code",
+    "gamification": "Gamificación",
+    "gamification_desc": "Habilitar juegos y puntos",
+    "enabled": "Activado",
+    "disabled": "Desactivado",
+    "integrations": "Integraciones",
+    "whatsapp": "WhatsApp Business API",
+    "whatsapp_placeholder": "Número de WhatsApp",
+    "sms": "SMS (Twilio)",
+    "sms_placeholder": "Account SID"
+  },
+  "tv_display": {
+    "title": "QFlow TV",
+    "subtitle": "Panel de visualización de turnos",
+    "code_label": "Código del Establecimiento",
+    "call": "ATENDIENDO AHORA",
+    "serving": "Atendiendo",
+    "next_tickets": "Próximos turnos",
+    "no_queue": "No hay turnos en la cola",
+    "updated": "Actualizado en tiempo real"
+  },
+  "establishment": {
+    "title": "Crear Establecimiento",
+    "subtitle": "Configura tu espacio para comenzar a usar QFlow",
+    "name_label": "Nombre del Establecimiento",
+    "name_placeholder": "EJ: Tienda de la Esquina",
+    "slug_label": "Slug (URL amigable)",
+    "slug_placeholder": "mi-establecimiento",
+    "slug_hint": "Este será el código que los clientes usarán para acceder a tu cola",
+    "category": "Categoría",
+    "cat_general": "General",
+    "cat_restaurant": "Restaurante",
+    "cat_clinic": "Clínica",
+    "cat_retail": "Retail",
+    "cat_bank": "Banco",
+    "cat_government": "Gobierno",
+    "create": "Crear Establecimiento",
+    "creating": "Creando..."
+  },
+  "footer": {
+    "made_with": "Hecho con ❤️ para eliminar filas en el mundo"
+  }
+}

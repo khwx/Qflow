@@ -1,0 +1,231 @@
+{
+  "metadata": {
+    "title": "QFlow - 줄을 없애세요",
+    "description": "QR 코드, 게이미피케이션, 스마트 디스플레이를 활용한 가상 대기 시스템입니다."
+  },
+  "home": {
+    "title": "줄을 없애세요. 고객을 끌어모으세요.",
+    "subtitle": "QR 코드, 게이미피케이션, 스마트 디스플레이를 활용한 가상 대기 시스템입니다. 대기 시간을 긍정적인 경험으로 바꿔보세요.",
+    "cta_enter": "줄에 서기",
+    "cta_create": "매장 만들기",
+    "admin": "관리자",
+    "tv_display": "TV 디스플레이"
+  },
+  "features": {
+    "qr_title": "즉시 QR 코드",
+    "qr_desc": "앱을 다운로드하거나 복잡한 계정을 만들 필요 없이 QR 코드를 스캔하면 줄에 참여할 수 있습니다.",
+    "realtime_title": "실시간",
+    "realtime_desc": "줄에서의 위치를 실시간으로 추적하고, 호출되면 알림을 받습니다.",
+    "games_title": "게이미피케이션",
+    "games_desc": "대기 중에 게임을 플레이하고, 설문에 참여하고, 보상을 받으세요. 대기를 재미로 바꾸세요.",
+    "mobile_title": "모바일 퍼스트",
+    "mobile_desc": "모바일에 최적화된 인터페이스. 설치 없이 모든 스마트폰에서 작동합니다.",
+    "tv_title": "TV 디스플레이",
+    "tv_desc": "매장 화면에 실시간으로 줄을 표시합니다. 고객이 물어보지 않아도 자신의 위치를 확인할 수 있습니다.",
+    "multi_title": "다중 매장",
+    "multi_desc": "카테고리별로 여러 줄을 관리합니다. 쇼핑몰, 병원, 행사에 적합합니다."
+  },
+  "steps": {
+    "title": "사용 방법",
+    "scan": "스캔",
+    "scan_desc": "입구나 테이블의 QR 코드를 스캔하세요",
+    "wait": "대기",
+    "wait_desc": "번호표를 받고 휴대폰으로 줄을 추적하세요",
+    "called": "호출",
+    "called_desc": "차례가 되면 알림을 받으세요"
+  },
+  "enter": {
+    "title": "TiraSenha",
+    "subtitle": "매장 코드를 입력하여 줄에 참여하세요",
+    "code_label": "매장 코드",
+    "code_placeholder": "예: STORE01",
+    "button": "줄에 서기",
+    "searching": "검색 중...",
+    "not_found": "매장을 찾을 수 없습니다",
+    "not_found_desc": "코드를 확인하고 다시 시도하세요"
+  },
+  "queue": {
+    "select_queue": "줄 선택",
+    "optional_info": "정보 (선택사항)",
+    "name": "이름",
+    "name_placeholder": "이름",
+    "phone": "전화번호 (알림용)",
+    "phone_placeholder": "010-0000-0000",
+    "take_ticket": "번호표 받기",
+    "taking": "번호표 생성 중...",
+    "estimated": "예상 대기 시간",
+    "minutes": "분",
+    "position": "현재 위치"
+  },
+  "ticket": {
+    "confirmed": "번호표 확인!",
+    "your_ticket": "내 번호표",
+    "estimated_wait": "예상 대기 시간",
+    "queue_position": "줄에서의 위치",
+    "waiting_room": "대기실 입장",
+    "min": "분"
+  },
+  "waiting": {
+    "status": "줄 상태",
+    "current_ticket": "현재 번호",
+    "position": "위치",
+    "status_label": "상태",
+    "waiting": "대기 중",
+    "earn_points": "포인트 획득",
+    "earn_points_desc": "게임을 플레이하고, 설문에 참여하고, 주문하여 포인트를 획득하고 보상과 교환하세요!",
+    "games": "게임",
+    "polls": "설문",
+    "orders": "주문",
+    "no_games": "사용 가능한 게임 없음",
+    "no_games_desc": "나중에 새로운 게임을 확인하세요",
+    "no_polls": "사용 가능한 설문 없음",
+    "no_polls_desc": "참여하여 포인트를 획득하세요!"
+  },
+  "called": {
+    "title": "차례입니다!",
+    "subtitle": "서비스 카운터로 와주세요"
+  },
+  "games": {
+    "play": "플레이",
+    "moves": "이동",
+    "question": "질문",
+    "points": "포인트",
+    "spin": "스핀!",
+    "spinning": "스핀 중..."
+  },
+  "polls": {
+    "vote": "투표",
+    "voted": "참여해 주셔서 감사합니다!",
+    "points_earned": "+10 포인트 획득!"
+  },
+  "orders": {
+    "menu": "메뉴",
+    "your_order": "내 주문",
+    "empty": "메뉴에서 항목을 추가하세요",
+    "notes": "요청 사항",
+    "notes_placeholder": "특별한 요청이 있나요?",
+    "total": "합계",
+    "send": "주문하기",
+    "sending": "전송 중...",
+    "sent": "주문 완료!",
+    "preparing": "주문을 준비 중입니다"
+  },
+  "admin": {
+    "dashboard": "대시보드",
+    "queues": "줄 관리",
+    "tickets": "번호표 관리",
+    "games": "게임 관리",
+    "settings": "설정",
+    "logout": "로그아웃"
+  },
+  "dashboard": {
+    "today_tickets": "오늘의 번호표",
+    "waiting": "대기 중",
+    "completed": "완료",
+    "avg_wait": "평균 대기 시간",
+    "hourly": "시간별 처리량",
+    "recent": "최근 활동"
+  },
+  "queues_admin": {
+    "title": "줄 관리",
+    "description": "매장의 줄을 관리합니다",
+    "new_queue": "새 줄",
+    "queue_name": "줄 이름",
+    "queue_name_placeholder": "예: 빠른 계산대",
+    "description_label": "설명",
+    "description_placeholder": "선택적 설명",
+    "avg_time": "평균 시간 (분)",
+    "create": "줄 만들기",
+    "cancel": "취소",
+    "call_next": "다음 호출",
+    "waiting_count": "대기 중",
+    "called_count": "호출됨",
+    "last_ticket": "마지막 번호",
+    "queue_tickets": "줄에 있는 번호:"
+  },
+  "tickets_admin": {
+    "title": "번호표 관리",
+    "description": "모든 번호표를 관리합니다",
+    "search_placeholder": "번호표 또는 이름으로 검색...",
+    "all_status": "모든 상태",
+    "filter_waiting": "대기 중",
+    "filter_called": "호출됨",
+    "filter_completed": "완료",
+    "password": "번호표",
+    "queue": "줄",
+    "customer": "고객",
+    "status": "상태",
+    "created": "생성일",
+    "actions": "작업"
+  },
+  "games_admin": {
+    "title": "게임 관리",
+    "description": "고객에게 제공되는 게임을 관리합니다",
+    "new_game": "새 게임",
+    "game_name": "게임 이름",
+    "game_name_placeholder": "예: 브랜드 퀴즈",
+    "type": "유형",
+    "type_quiz": "퀴즈",
+    "type_memory": "메모리",
+    "type_spin": "룰렛",
+    "description_label": "설명",
+    "description_placeholder": "게임 설명",
+    "points_reward": "보상 포인트",
+    "create": "게임 만들기",
+    "no_games": "아직 생성된 게임이 없습니다"
+  },
+  "settings_admin": {
+    "title": "설정",
+    "description": "시스템을 사용자 정의합니다",
+    "basic_info": "기본 정보",
+    "establishment_name": "매장 이름",
+    "primary_color": "메인 색상",
+    "features": "기능",
+    "notification_sound": "알림 소리",
+    "notification_sound_desc": "번호를 호출할 때 소리 재생",
+    "auto_call": "자동 호출",
+    "auto_call_desc": "번호가 준비되면 자동으로 호출",
+    "qr_code": "QR 코드",
+    "qr_code_desc": "QR 코드를 통한 입장 활성화",
+    "gamification": "게이미피케이션",
+    "gamification_desc": "게임과 포인트 활성화",
+    "enabled": "활성화",
+    "disabled": "비활성화",
+    "integrations": "연동",
+    "whatsapp": "WhatsApp Business API",
+    "whatsapp_placeholder": "WhatsApp 번호",
+    "sms": "SMS (Twilio)",
+    "sms_placeholder": "Account SID"
+  },
+  "tv_display": {
+    "title": "QFlow TV",
+    "subtitle": "번호표 표시 패널",
+    "code_label": "매장 코드",
+    "call": "지금 호출",
+    "serving": "서비스 중",
+    "next_tickets": "다음 번호",
+    "no_queue": "줄에 번호가 없습니다",
+    "updated": "실시간 업데이트"
+  },
+  "establishment": {
+    "title": "매장 만들기",
+    "subtitle": "QFlow를 사용하기 위한 공간을 설정하세요",
+    "name_label": "매장 이름",
+    "name_placeholder": "예: 동네 슈퍼",
+    "slug_label": "슬러그 (친화적 URL)",
+    "slug_placeholder": "my-store",
+    "slug_hint": "고객이 줄에 접근하기 위해 사용할 코드입니다",
+    "category": "카테고리",
+    "cat_general": "일반",
+    "cat_restaurant": "음식점",
+    "cat_clinic": "병원",
+    "cat_retail": "소매",
+    "cat_bank": "은행",
+    "cat_government": "관공서",
+    "create": "매장 만들기",
+    "creating": "생성 중..."
+  },
+  "footer": {
+    "made_with": "전 세계의 줄을 없애기 위해 ❤️로 제작"
+  }
+}

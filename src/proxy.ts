@@ -1,5 +1,13 @@
 import { createServerClient } from '@supabase/ssr'
+import createMiddleware from 'next-intl/middleware'
 import { NextResponse, type NextRequest } from 'next/server'
+import { locales, defaultLocale } from './i18n/config'
+
+const handleI18nRouting = createMiddleware({
+  locales,
+  defaultLocale,
+  localeDetection: true,
+})
 
 export async function proxy(request: NextRequest) {
   let response = NextResponse.next({
@@ -30,18 +38,19 @@ export async function proxy(request: NextRequest) {
 
   const { data: { session } } = await supabase.auth.getSession()
 
-  const isAdminRoute = request.nextUrl.pathname.startsWith('/admin')
-  const isPublicRoute =
-    request.nextUrl.pathname === '/' ||
-    request.nextUrl.pathname.startsWith('/enter') ||
-    request.nextUrl.pathname.startsWith('/queue') ||
-    request.nextUrl.pathname.startsWith('/waiting') ||
-    request.nextUrl.pathname.startsWith('/tv-display') ||
-    request.nextUrl.pathname.startsWith('/establishment') ||
-    request.nextUrl.pathname.startsWith('/api')
+  const pathname = request.nextUrl.pathname
+
+  const isAdminRoute = pathname.startsWith('/admin')
+  const isApiRoute = pathname.startsWith('/api')
+  const isTvDisplay = pathname.startsWith('/tv-display')
+  const hasLocale = locales.some((locale) => pathname.startsWith(`/${locale}/`) || pathname === `/${locale}`)
 
   if (isAdminRoute && !session) {
-    return NextResponse.redirect(new URL('/enter', request.url))
+    return NextResponse.redirect(new URL('/pt/enter', request.url))
+  }
+
+  if (!isApiRoute && !isTvDisplay && !isAdminRoute && !hasLocale) {
+    return handleI18nRouting(request)
   }
 
   return response
@@ -49,6 +58,6 @@ export async function proxy(request: NextRequest) {
 
 export const config = {
   matcher: [
-    '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
+    '/((?!_next/static|_next/image|favicon.ico|api|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
   ],
 }

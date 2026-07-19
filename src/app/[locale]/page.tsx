@@ -1,7 +1,18 @@
+'use client'
+
+import { useTranslations } from 'next-intl'
+import { useRouter, usePathname } from '@/i18n/navigation'
 import Link from 'next/link'
 import { QrCode, Smartphone, Clock, Gamepad2, BarChart3 } from 'lucide-react'
 
 export default function Home() {
+  const t = useTranslations('home')
+  const tFeatures = useTranslations('features')
+  const tSteps = useTranslations('steps')
+  const tFooter = useTranslations('footer')
+  const router = useRouter()
+  const pathname = usePathname()
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-500">
       <nav className="flex items-center justify-between p-6">
@@ -14,13 +25,13 @@ export default function Home() {
             href="/admin"
             className="rounded-lg bg-white/10 px-4 py-2 text-white hover:bg-white/20 transition"
           >
-            Admin
+            {t('admin')}
           </Link>
           <Link
             href="/tv-display"
             className="rounded-lg bg-white/10 px-4 py-2 text-white hover:bg-white/20 transition"
           >
-            TV Display
+            {t('tv_display')}
           </Link>
         </div>
       </nav>
@@ -28,11 +39,10 @@ export default function Home() {
       <main className="container mx-auto px-6 py-20">
         <div className="text-center">
           <h1 className="text-5xl font-bold text-white mb-6">
-            Elimine Filas. Engaje Clientes.
+            {t('title')}
           </h1>
           <p className="text-xl text-white/80 mb-12 max-w-2xl mx-auto">
-            Sistema de fila virtual com QR Code, gamificação e painéis inteligentes.
-            Transforme o tempo de espera em uma experiência positiva.
+            {t('subtitle')}
           </p>
 
           <div className="flex flex-wrap justify-center gap-4 mb-20">
@@ -40,13 +50,13 @@ export default function Home() {
               href="/enter"
               className="rounded-xl bg-white px-8 py-4 text-lg font-semibold text-indigo-600 hover:bg-gray-100 transition shadow-lg"
             >
-              Entrar na Fila
+              {t('cta_enter')}
             </Link>
             <Link
               href="/establishment"
               className="rounded-xl bg-white/20 px-8 py-4 text-lg font-semibold text-white hover:bg-white/30 transition backdrop-blur"
             >
-              Criar Estabelecimento
+              {t('cta_create')}
             </Link>
           </div>
         </div>
@@ -54,50 +64,50 @@ export default function Home() {
         <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
           <FeatureCard
             icon={<QrCode className="h-12 w-12" />}
-            title="QR Code Instantâneo"
-            description="Clientes escaneiam e entram na fila sem precisar baixar apps ou fazer cadastros complicados."
+            title={tFeatures('qr_title')}
+            description={tFeatures('qr_desc')}
           />
           <FeatureCard
             icon={<Clock className="h-12 w-12" />}
-            title="Tempo Real"
-            description="Acompanhe sua posição na fila em tempo real e receba notificações quando for chamado."
+            title={tFeatures('realtime_title')}
+            description={tFeatures('realtime_desc')}
           />
           <FeatureCard
             icon={<Gamepad2 className="h-12 w-12" />}
-            title="Gamificação"
-            description="Enquanto espera, jogue, responda enquetes e ganhe recompensas. Transforme espera em diversão."
+            title={tFeatures('games_title')}
+            description={tFeatures('games_desc')}
           />
           <FeatureCard
             icon={<Smartphone className="h-12 w-12" />}
-            title="Mobile-First"
-            description="Interface otimizada para celular. Funciona em qualquer smartphone sem instalação."
+            title={tFeatures('mobile_title')}
+            description={tFeatures('mobile_desc')}
           />
           <FeatureCard
             icon={<BarChart3 className="h-12 w-12" />}
-            title="Painel TV"
-            description="Exiba a fila em tempo real em telas da loja. Clientes veem sua posição sem perguntar."
+            title={tFeatures('tv_title')}
+            description={tFeatures('tv_desc')}
           />
           <FeatureCard
             icon={<QrCode className="h-12 w-12" />}
-            title="Multi-Estabelecimento"
-            description="Gerencie múltiplas filas por categoria. Ideal para shoppings, clínicas e eventos."
+            title={tFeatures('multi_title')}
+            description={tFeatures('multi_desc')}
           />
         </div>
 
         <div className="text-center mt-20">
           <h2 className="text-3xl font-bold text-white mb-4">
-            Como Funciona
+            {tSteps('title')}
           </h2>
           <div className="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto">
-            <StepCard number={1} title="Escaneie" description="Escaneie o QR Code na entrada ou na mesa" />
-            <StepCard number={2} title="Aguarde" description="Receba sua senha e acompanhe a fila pelo celular" />
-            <StepCard number={3} title="Seja Chamado" description="Receba uma notificação quando for sua vez" />
+            <StepCard number={1} title={tSteps('scan')} description={tSteps('scan_desc')} />
+            <StepCard number={2} title={tSteps('wait')} description={tSteps('wait_desc')} />
+            <StepCard number={3} title={tSteps('called')} description={tSteps('called_desc')} />
           </div>
         </div>
 
         <footer className="text-center mt-20 pb-8">
           <p className="text-white/60">
-            Feito com ❤️ para eliminar filas no Brasil
+            {tFooter('made_with')}
           </p>
         </footer>
       </main>

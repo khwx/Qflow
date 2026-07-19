@@ -1,0 +1,231 @@
+{
+  "metadata": {
+    "title": "QFlow - Éliminez les Files d'Attente",
+    "description": "Système de file d'attente virtuelle avec QR Code, ludification et écrans intelligents."
+  },
+  "home": {
+    "title": "Éliminez les Files. Engagez les Clients.",
+    "subtitle": "Système de file d'attente virtuelle avec QR Code, ludification et écrans intelligents. Transformez le temps d'attente en une expérience positive.",
+    "cta_enter": "Rejoindre la File",
+    "cta_create": "Créer un Établissement",
+    "admin": "Admin",
+    "tv_display": "Écran TV"
+  },
+  "features": {
+    "qr_title": "QR Code Instantané",
+    "qr_desc": "Les clients scannent et rejoignent la file sans avoir à télécharger des apps ou créer des comptes compliqués.",
+    "realtime_title": "En Temps Réel",
+    "realtime_desc": "Suivez votre position dans la file en temps réel et recevez des notifications quand vous êtes appelé.",
+    "games_title": "Ludification",
+    "games_desc": "Pendant l'attente, jouez, répondez aux sondages et gagnez des récompenses. Transformez l'attente en divertissement.",
+    "mobile_title": "Mobile-First",
+    "mobile_desc": "Interface optimisée pour mobile. Fonctionne sur tout smartphone sans installation.",
+    "tv_title": "Écran TV",
+    "tv_desc": "Affichez la file en temps réel sur les écrans du magasin. Les clients voient leur position sans demander.",
+    "multi_title": "Multi-Établissement",
+    "multi_desc": "Gérez plusieurs files par catégorie. Idéal pour les centres commerciaux, cliniques et événements."
+  },
+  "steps": {
+    "title": "Comment Ça Marche",
+    "scan": "Scannez",
+    "scan_desc": "Scannez le QR Code à l'entrée ou à la table",
+    "wait": "Attendez",
+    "wait_desc": "Recevez votre ticket et suivez la file depuis votre téléphone",
+    "called": "Soyez Appelé",
+    "called_desc": "Recevez une notification quand c'est votre tour"
+  },
+  "enter": {
+    "title": "TiraSenha",
+    "subtitle": "Entrez le code de l'établissement pour rejoindre la file",
+    "code_label": "Code de l'Établissement",
+    "code_placeholder": "EX : MAGASIN01",
+    "button": "Rejoindre la File",
+    "searching": "Recherche...",
+    "not_found": "Établissement non trouvé",
+    "not_found_desc": "Vérifiez le code et réessayez"
+  },
+  "queue": {
+    "select_queue": "Sélectionnez la File",
+    "optional_info": "Informations (facultatif)",
+    "name": "Nom",
+    "name_placeholder": "Votre nom",
+    "phone": "Téléphone (pour les notifications)",
+    "phone_placeholder": "00 00 00 00 00",
+    "take_ticket": "Prendre un Ticket",
+    "taking": "Génération du ticket...",
+    "estimated": "Temps estimé",
+    "minutes": "min",
+    "position": "Position"
+  },
+  "ticket": {
+    "confirmed": "Ticket Confirmé !",
+    "your_ticket": "Votre ticket",
+    "estimated_wait": "Temps d'attente estimé",
+    "queue_position": "Position dans la file",
+    "waiting_room": "Entrer dans la Salle d'Attente",
+    "min": "min"
+  },
+  "waiting": {
+    "status": "État de la File",
+    "current_ticket": "Ticket Actuel",
+    "position": "Position",
+    "status_label": "Statut",
+    "waiting": "En attente",
+    "earn_points": "Gagnez des Points",
+    "earn_points_desc": "Jouez, répondez aux sondages et passez des commandes pour gagner des points et échanger des récompenses !",
+    "games": "Jeux",
+    "polls": "Sondages",
+    "orders": "Commandes",
+    "no_games": "Aucun jeu disponible",
+    "no_games_desc": "Revenez plus tard pour découvrir les nouveautés",
+    "no_polls": "Aucun sondage disponible",
+    "no_polls_desc": "Participez et gagnez des points !"
+  },
+  "called": {
+    "title": "C'est votre tour !",
+    "subtitle": "Veuillez vous présenter au comptoir"
+  },
+  "games": {
+    "play": "Jouer",
+    "moves": "Coups",
+    "question": "Question",
+    "points": "Points",
+    "spin": "Tournez !",
+    "spinning": "En train de tourner..."
+  },
+  "polls": {
+    "vote": "Voter",
+    "voted": "Merci de votre participation !",
+    "points_earned": "+10 points pour votre participation !"
+  },
+  "orders": {
+    "menu": "Menu",
+    "your_order": "Votre Commande",
+    "empty": "Ajoutez des articles du menu",
+    "notes": "Notes",
+    "notes_placeholder": "Des demandes spéciales ?",
+    "total": "Total",
+    "send": "Envoyer la Commande",
+    "sending": "Envoi en cours...",
+    "sent": "Commande Envoyée !",
+    "preparing": "Votre commande est en cours de préparation"
+  },
+  "admin": {
+    "dashboard": "Tableau de bord",
+    "queues": "Files",
+    "tickets": "Tickets",
+    "games": "Jeux",
+    "settings": "Paramètres",
+    "logout": "Déconnexion"
+  },
+  "dashboard": {
+    "today_tickets": "Tickets Aujourd'hui",
+    "waiting": "En attente",
+    "completed": "Terminés",
+    "avg_wait": "Temps Moyen",
+    "hourly": "Passages par Heure",
+    "recent": "Activité Récente"
+  },
+  "queues_admin": {
+    "title": "Files",
+    "description": "Gérez les files de l'établissement",
+    "new_queue": "Nouvelle File",
+    "queue_name": "Nom de la File",
+    "queue_name_placeholder": "EX : Caisse Express",
+    "description_label": "Description",
+    "description_placeholder": "Description facultative",
+    "avg_time": "Temps Moyen (min)",
+    "create": "Créer la File",
+    "cancel": "Annuler",
+    "call_next": "Appeler le Suivant",
+    "waiting_count": "En attente",
+    "called_count": "Appelés",
+    "last_ticket": "Dernier Ticket",
+    "queue_tickets": "Tickets dans la file :"
+  },
+  "tickets_admin": {
+    "title": "Tickets",
+    "description": "Gérez tous les tickets",
+    "search_placeholder": "Rechercher par ticket ou nom...",
+    "all_status": "Tous les statuts",
+    "filter_waiting": "En attente",
+    "filter_called": "Appelés",
+    "filter_completed": "Terminés",
+    "password": "Ticket",
+    "queue": "File",
+    "customer": "Client",
+    "status": "Statut",
+    "created": "Créé le",
+    "actions": "Actions"
+  },
+  "games_admin": {
+    "title": "Jeux",
+    "description": "Gérez les jeux disponibles pour les clients",
+    "new_game": "Nouveau Jeu",
+    "game_name": "Nom du Jeu",
+    "game_name_placeholder": "EX : Quiz de Marque",
+    "type": "Type",
+    "type_quiz": "Quiz",
+    "type_memory": "Mémoire",
+    "type_spin": "Roue",
+    "description_label": "Description",
+    "description_placeholder": "Description du jeu",
+    "points_reward": "Points de Récompense",
+    "create": "Créer le Jeu",
+    "no_games": "Aucun jeu créé pour le moment"
+  },
+  "settings_admin": {
+    "title": "Paramètres",
+    "description": "Personnalisez votre système",
+    "basic_info": "Informations de Base",
+    "establishment_name": "Nom de l'Établissement",
+    "primary_color": "Couleur Principale",
+    "features": "Fonctionnalités",
+    "notification_sound": "Son de Notification",
+    "notification_sound_desc": "Jouer un son lors de l'appel d'un ticket",
+    "auto_call": "Appel Automatique",
+    "auto_call_desc": "Appeler automatiquement quand le ticket est prêt",
+    "qr_code": "QR Code",
+    "qr_code_desc": "Activer l'entrée via QR Code",
+    "gamification": "Ludification",
+    "gamification_desc": "Activer les jeux et les points",
+    "enabled": "Activé",
+    "disabled": "Désactivé",
+    "integrations": "Intégrations",
+    "whatsapp": "WhatsApp Business API",
+    "whatsapp_placeholder": "Numéro WhatsApp",
+    "sms": "SMS (Twilio)",
+    "sms_placeholder": "Account SID"
+  },
+  "tv_display": {
+    "title": "QFlow TV",
+    "subtitle": "Panneau d'affichage des tickets",
+    "code_label": "Code de l'Établissement",
+    "call": "MAINTENANT À L'ORDRE",
+    "serving": "En service",
+    "next_tickets": "Prochains tickets",
+    "no_queue": "Aucun ticket en file",
+    "updated": "Mis à jour en temps réel"
+  },
+  "establishment": {
+    "title": "Créer un Établissement",
+    "subtitle": "Configurez votre espace pour commencer à utiliser QFlow",
+    "name_label": "Nom de l'Établissement",
+    "name_placeholder": "EX : Boulangerie du Coin",
+    "slug_label": "Slug (URL conviviale)",
+    "slug_placeholder": "mon-etablissement",
+    "slug_hint": "Ce sera le code que les clients utiliseront pour accéder à votre file",
+    "category": "Catégorie",
+    "cat_general": "Général",
+    "cat_restaurant": "Restaurant",
+    "cat_clinic": "Clinique",
+    "cat_retail": "Commerce",
+    "cat_bank": "Banque",
+    "cat_government": "Gouvernement",
+    "create": "Créer l'Établissement",
+    "creating": "Création..."
+  },
+  "footer": {
+    "made_with": "Fait avec ❤️ pour éliminer les files dans le monde"
+  }
+}

@@ -1,0 +1,231 @@
+{
+  "metadata": {
+    "title": "QFlow - Elimine Filas",
+    "description": "Sistema de fila virtual com QR Code, gamificação e painéis inteligentes."
+  },
+  "home": {
+    "title": "Elimine Filas. Engaje Clientes.",
+    "subtitle": "Sistema de fila virtual com QR Code, gamificação e painéis inteligentes. Transforme o tempo de espera em uma experiência positiva.",
+    "cta_enter": "Entrar na Fila",
+    "cta_create": "Criar Estabelecimento",
+    "admin": "Admin",
+    "tv_display": "Painel TV"
+  },
+  "features": {
+    "qr_title": "QR Code Instantâneo",
+    "qr_desc": "Clientes escaneiam e entram na fila sem precisar baixar apps ou fazer cadastros complicados.",
+    "realtime_title": "Tempo Real",
+    "realtime_desc": "Acompanhe sua posição na fila em tempo real e receba notificações quando for chamado.",
+    "games_title": "Gamificação",
+    "games_desc": "Enquanto espera, jogue, responda enquetes e ganhe recompensas. Transforme espera em diversão.",
+    "mobile_title": "Mobile-First",
+    "mobile_desc": "Interface otimizada para celular. Funciona em qualquer smartphone sem instalação.",
+    "tv_title": "Painel TV",
+    "tv_desc": "Exiba a fila em tempo real em telas da loja. Clientes veem sua posição sem perguntar.",
+    "multi_title": "Multi-Estabelecimento",
+    "multi_desc": "Gerencie múltiplas filas por categoria. Ideal para shoppings, clínicas e eventos."
+  },
+  "steps": {
+    "title": "Como Funciona",
+    "scan": "Escaneie",
+    "scan_desc": "Escaneie o QR Code na entrada ou na mesa",
+    "wait": "Aguarde",
+    "wait_desc": "Receba sua senha e acompanhe a fila pelo celular",
+    "called": "Seja Chamado",
+    "called_desc": "Receba uma notificação quando for sua vez"
+  },
+  "enter": {
+    "title": "TiraSenha",
+    "subtitle": "Digite o código do estabelecimento para entrar na fila",
+    "code_label": "Código do Estabelecimento",
+    "code_placeholder": "EX: MERCADO01",
+    "button": "Entrar na Fila",
+    "searching": "Buscando...",
+    "not_found": "Estabelecimento não encontrado",
+    "not_found_desc": "Verifique o código e tente novamente"
+  },
+  "queue": {
+    "select_queue": "Selecione a Fila",
+    "optional_info": "Informações (opcional)",
+    "name": "Nome",
+    "name_placeholder": "Seu nome",
+    "phone": "Telefone (para notificações)",
+    "phone_placeholder": "(00) 00000-0000",
+    "take_ticket": "Pegar Senha",
+    "taking": "Gerando senha...",
+    "estimated": "Tempo estimado",
+    "minutes": "min",
+    "position": "Posição"
+  },
+  "ticket": {
+    "confirmed": "Senha Confirmada!",
+    "your_ticket": "Sua senha",
+    "estimated_wait": "Tempo estimado",
+    "queue_position": "Posição na fila",
+    "waiting_room": "Entrar na Sala de Espera",
+    "min": "min"
+  },
+  "waiting": {
+    "status": "Status da Fila",
+    "current_ticket": "Senha Atual",
+    "position": "Posição",
+    "status_label": "Status",
+    "waiting": "Aguardando",
+    "earn_points": "Ganhe Pontos",
+    "earn_points_desc": "Jogue, responda enquetes e faça pedidos para ganhar pontos e resgatar recompensas!",
+    "games": "Jogos",
+    "polls": "Enquetes",
+    "orders": "Pedidos",
+    "no_games": "Nenhum jogo disponível",
+    "no_games_desc": "Volte mais tarde para ver novidades",
+    "no_polls": "Nenhuma enquete disponível",
+    "no_polls_desc": "Participe e ganhe pontos!"
+  },
+  "called": {
+    "title": "É a sua vez!",
+    "subtitle": "Dirija-se ao atendimento"
+  },
+  "games": {
+    "play": "Jogar",
+    "moves": "Movimentos",
+    "question": "Questão",
+    "points": "Pontos",
+    "spin": "Girar!",
+    "spinning": "Girando..."
+  },
+  "polls": {
+    "vote": "Votar",
+    "voted": "Obrigado por participar!",
+    "points_earned": "+10 pontos por participar!"
+  },
+  "orders": {
+    "menu": "Cardápio",
+    "your_order": "Seu Pedido",
+    "empty": "Adicione itens do cardápio",
+    "notes": "Observações",
+    "notes_placeholder": "Alguma observação?",
+    "total": "Total",
+    "send": "Enviar Pedido",
+    "sending": "Enviando...",
+    "sent": "Pedido Enviado!",
+    "preparing": "Seu pedido está sendo preparado"
+  },
+  "admin": {
+    "dashboard": "Dashboard",
+    "queues": "Filas",
+    "tickets": "Senhas",
+    "games": "Jogos",
+    "settings": "Configurações",
+    "logout": "Sair"
+  },
+  "dashboard": {
+    "today_tickets": "Senhas Hoje",
+    "waiting": "Aguardando",
+    "completed": "Atendidos",
+    "avg_wait": "Tempo Médio",
+    "hourly": "Atendimentos por Hora",
+    "recent": "Atividades Recentes"
+  },
+  "queues_admin": {
+    "title": "Filas",
+    "description": "Gerencie as filas do estabelecimento",
+    "new_queue": "Nova Fila",
+    "queue_name": "Nome da Fila",
+    "queue_name_placeholder": "Ex: Caixa Rápido",
+    "description_label": "Descrição",
+    "description_placeholder": "Descrição opcional",
+    "avg_time": "Tempo Médio (min)",
+    "create": "Criar Fila",
+    "cancel": "Cancelar",
+    "call_next": "Chamar Próximo",
+    "waiting_count": "Aguardando",
+    "called_count": "Chamados",
+    "last_ticket": "Última Senha",
+    "queue_tickets": "Senhas na fila:"
+  },
+  "tickets_admin": {
+    "title": "Senhas",
+    "description": "Gerencie todas as senhas",
+    "search_placeholder": "Buscar por senha ou nome...",
+    "all_status": "Todos os status",
+    "filter_waiting": "Aguardando",
+    "filter_called": "Chamados",
+    "filter_completed": "Concluídos",
+    "password": "Senha",
+    "queue": "Fila",
+    "customer": "Cliente",
+    "status": "Status",
+    "created": "Criado em",
+    "actions": "Ações"
+  },
+  "games_admin": {
+    "title": "Jogos",
+    "description": "Gerencie os jogos disponíveis para os clientes",
+    "new_game": "Novo Jogo",
+    "game_name": "Nome do Jogo",
+    "game_name_placeholder": "Ex: Quiz da Marca",
+    "type": "Tipo",
+    "type_quiz": "Quiz",
+    "type_memory": "Memória",
+    "type_spin": "Roleta",
+    "description_label": "Descrição",
+    "description_placeholder": "Descrição do jogo",
+    "points_reward": "Pontos de Recompensa",
+    "create": "Criar Jogo",
+    "no_games": "Nenhum jogo criado ainda"
+  },
+  "settings_admin": {
+    "title": "Configurações",
+    "description": "Personalize seu sistema",
+    "basic_info": "Informações Básicas",
+    "establishment_name": "Nome do Estabelecimento",
+    "primary_color": "Cor Primária",
+    "features": "Funcionalidades",
+    "notification_sound": "Som de Notificação",
+    "notification_sound_desc": "Reproduzir som quando chamar senha",
+    "auto_call": "Chamada Automática",
+    "auto_call_desc": "Chamar automaticamente quando a senha chegar",
+    "qr_code": "QR Code",
+    "qr_code_desc": "Habilitar entrada via QR Code",
+    "gamification": "Gamificação",
+    "gamification_desc": "Habilitar jogos e pontos",
+    "enabled": "Ativado",
+    "disabled": "Desativado",
+    "integrations": "Integrações",
+    "whatsapp": "WhatsApp Business API",
+    "whatsapp_placeholder": "Número do WhatsApp",
+    "sms": "SMS (Twilio)",
+    "sms_placeholder": "Account SID"
+  },
+  "tv_display": {
+    "title": "QFlow TV",
+    "subtitle": "Painel de exibição de senhas",
+    "code_label": "Código do Estabelecimento",
+    "call": "COMPAREÇA",
+    "serving": "Em atendimento",
+    "next_tickets": "Próximas senhas",
+    "no_queue": "Nenhuma senha na fila",
+    "updated": "Atualizado em tempo real"
+  },
+  "establishment": {
+    "title": "Criar Estabelecimento",
+    "subtitle": "Configure seu espaço para começar a usar o QFlow",
+    "name_label": "Nome do Estabelecimento",
+    "name_placeholder": "Ex: Mercado do Bairro",
+    "slug_label": "Slug (URL amigável)",
+    "slug_placeholder": "meu-estabelecimento",
+    "slug_hint": "Este será o código que os clientes usarão para acessar sua fila",
+    "category": "Categoria",
+    "cat_general": "Geral",
+    "cat_restaurant": "Restaurante",
+    "cat_clinic": "Clínica",
+    "cat_retail": "Varejo",
+    "cat_bank": "Banco",
+    "cat_government": "Governo",
+    "create": "Criar Estabelecimento",
+    "creating": "Criando..."
+  },
+  "footer": {
+    "made_with": "Feito com ❤️ para eliminar filas no mundo"
+  }
+}

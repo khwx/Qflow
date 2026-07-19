@@ -1,0 +1,231 @@
+{
+  "metadata": {
+    "title": "QFlow - लाइनों को समाप्त करें",
+    "description": "QR कोड, गेमिफिकेशन और स्मार्ट डिस्प्ले के साथ वर्चुअल क्यू सिस्टम।"
+  },
+  "home": {
+    "title": "लाइनों को समाप्त करें। ग्राहकों को आकर्षित करें।",
+    "subtitle": "QR कोड, गेमिफिकेशन और स्मार्ट डिस्प्ले के साथ वर्चुअल क्यू सिस्टम। प्रतीक्षा समय को सकारात्मक अनुभव में बदलें।",
+    "cta_enter": "क्यू में शामिल हों",
+    "cta_create": "प्रतिष्ठान बनाएं",
+    "admin": "प्रशासन",
+    "tv_display": "TV डिस्प्ले"
+  },
+  "features": {
+    "qr_title": "तत्काल QR कोड",
+    "qr_desc": "ग्राहक ऐप डाउनलोड किए बिना या जटिल खाते बनाए बिना स्कैन करके क्यू में शामिल हो सकते हैं।",
+    "realtime_title": "रियल-टाइम",
+    "realtime_desc": "क्यू में अपनी स्थिति को रियल-टाइम में ट्रैक करें और बुलाए जाने पर सूचनाएं प्राप्त करें।",
+    "games_title": "गेमिफिकेशन",
+    "games_desc": "प्रतीक्षा के दौरान खेलें, सर्वेक्षणों का उत्तर दें और पुरस्कार अर्जित करें। प्रतीक्षा को मनोरंजन में बदलें।",
+    "mobile_title": "मोबाइल-फर्स्ट",
+    "mobile_desc": "मोबाइल के लिए अनुकूलित इंटरफेस। बिना इंस्टॉल के किसी भी स्मार्टफोन पर काम करता है।",
+    "tv_title": "TV डिस्प्ले",
+    "tv_desc": "स्टोर स्क्रीन पर रियल-टाइम में क्यू दिखाएं। ग्राहक बिना पूछे अपनी स्थिति देख सकते हैं।",
+    "multi_title": "मल्टी-प्रतिष्ठान",
+    "multi_desc": "श्रेणी के अनुसार कई क्यू प्रबंधित करें। मॉल, क्लिनिक और कार्यक्रमों के लिए आदर्श।"
+  },
+  "steps": {
+    "title": "कैसे काम करता है",
+    "scan": "स्कैन करें",
+    "scan_desc": "प्रवेश द्वार या टेबल पर QR कोड स्कैन करें",
+    "wait": "प्रतीक्षा करें",
+    "wait_desc": "अपना टिकट प्राप्त करें और अपने फोन पर क्यू ट्रैक करें",
+    "called": "बुलाया जाए",
+    "called_desc": "आपकी बारी आने पर सूचना प्राप्त करें"
+  },
+  "enter": {
+    "title": "TiraSenha",
+    "subtitle": "क्यू में शामिल होने के लिए प्रतिष्ठान कोड दर्ज करें",
+    "code_label": "प्रतिष्ठान कोड",
+    "code_placeholder": "उदा: STORE01",
+    "button": "क्यू में शामिल हों",
+    "searching": "खोज रहे हैं...",
+    "not_found": "प्रतिष्ठान नहीं मिला",
+    "not_found_desc": "कोड जांचें और फिर से प्रयास करें"
+  },
+  "queue": {
+    "select_queue": "क्यू चुनें",
+    "optional_info": "जानकारी (वैकल्पिक)",
+    "name": "नाम",
+    "name_placeholder": "आपका नाम",
+    "phone": "फोन (सूचनाओं के लिए)",
+    "phone_placeholder": "+91 00000 00000",
+    "take_ticket": "टिकट लें",
+    "taking": "टिकट बना रहे हैं...",
+    "estimated": "अनुमानित समय",
+    "minutes": "मिनट",
+    "position": "स्थिति"
+  },
+  "ticket": {
+    "confirmed": "टिकट पुष्ट!",
+    "your_ticket": "आपका टिकट",
+    "estimated_wait": "अनुमानित प्रतीक्षा",
+    "queue_position": "क्यू में स्थिति",
+    "waiting_room": "प्रतीक्षा कक्ष में प्रवेश करें",
+    "min": "मिनट"
+  },
+  "waiting": {
+    "status": "क्यू की स्थिति",
+    "current_ticket": "वर्तमान टिकट",
+    "position": "स्थिति",
+    "status_label": "स्थिति",
+    "waiting": "प्रतीक्षा में",
+    "earn_points": "अंक अर्जित करें",
+    "earn_points_desc": "खेलें, सर्वेक्षणों का उत्तर दें और ऑर्डर करके अंक अर्जित करें और पुरस्कार बदलें!",
+    "games": "खेल",
+    "polls": "सर्वेक्षण",
+    "orders": "ऑर्डर",
+    "no_games": "कोई खेल उपलब्ध नहीं",
+    "no_games_desc": "नई चीजें देखने के लिए बाद में वापस आएं",
+    "no_polls": "कोई सर्वेक्षण उपलब्ध नहीं",
+    "no_polls_desc": "भाग लें और अंक अर्जित करें!"
+  },
+  "called": {
+    "title": "आपकी बारी है!",
+    "subtitle": "सेवा काउंटर पर आएं"
+  },
+  "games": {
+    "play": "खेलें",
+    "moves": "चाल",
+    "question": "प्रश्न",
+    "points": "अंक",
+    "spin": "घुमाएं!",
+    "spinning": "घूम रहा है..."
+  },
+  "polls": {
+    "vote": "वोट करें",
+    "voted": "भाग लेने के लिए धन्यवाद!",
+    "points_earned": "+10 अंक भाग लेने के लिए!"
+  },
+  "orders": {
+    "menu": "मेनू",
+    "your_order": "आपका ऑर्डर",
+    "empty": "मेनू से आइटम जोड़ें",
+    "notes": "नोट्स",
+    "notes_placeholder": "कोई विशेष अनुरोध?",
+    "total": "कुल",
+    "send": "ऑर्डर भेजें",
+    "sending": "भेज रहे हैं...",
+    "sent": "ऑर्डर भेजा गया!",
+    "preparing": "आपका ऑर्डर तैयार हो रहा है"
+  },
+  "admin": {
+    "dashboard": "डैशबोर्ड",
+    "queues": "क्यू",
+    "tickets": "टिकट",
+    "games": "खेल",
+    "settings": "सेटिंग्स",
+    "logout": "लॉग आउट"
+  },
+  "dashboard": {
+    "today_tickets": "आज के टिकट",
+    "waiting": "प्रतीक्षा में",
+    "completed": "पूर्ण",
+    "avg_wait": "औसत प्रतीक्षा",
+    "hourly": "प्रति घंटा ट्रैफ़िक",
+    "recent": "हाल की गतिविधि"
+  },
+  "queues_admin": {
+    "title": "क्यू",
+    "description": "प्रतिष्ठान के क्यू प्रबंधित करें",
+    "new_queue": "नया क्यू",
+    "queue_name": "क्यू का नाम",
+    "queue_name_placeholder": "उदा: एक्सप्रेस चेकआउट",
+    "description_label": "विवरण",
+    "description_placeholder": "वैकल्पिक विवरण",
+    "avg_time": "औसत समय (मिनट)",
+    "create": "क्यू बनाएं",
+    "cancel": "रद्द करें",
+    "call_next": "अगला बुलाएं",
+    "waiting_count": "प्रतीक्षा में",
+    "called_count": "बुलाए गए",
+    "last_ticket": "अंतिम टिकट",
+    "queue_tickets": "क्यू में टिकट:"
+  },
+  "tickets_admin": {
+    "title": "टिकट",
+    "description": "सभी टिकट प्रबंधित करें",
+    "search_placeholder": "टिकट या नाम से खोजें...",
+    "all_status": "सभी स्थितियां",
+    "filter_waiting": "प्रतीक्षा में",
+    "filter_called": "बुलाए गए",
+    "filter_completed": "पूर्ण",
+    "password": "टिकट",
+    "queue": "क्यू",
+    "customer": "ग्राहक",
+    "status": "स्थिति",
+    "created": "बनाया गया",
+    "actions": "क्रियाएं"
+  },
+  "games_admin": {
+    "title": "खेल",
+    "description": "ग्राहकों के लिए उपलब्ध खेल प्रबंधित करें",
+    "new_game": "नया खेल",
+    "game_name": "खेल का नाम",
+    "game_name_placeholder": "उदा: ब्रांड क्विज़",
+    "type": "प्रकार",
+    "type_quiz": "क्विज़",
+    "type_memory": "मेमोरी",
+    "type_spin": "स्पिन व्हील",
+    "description_label": "विवरण",
+    "description_placeholder": "खेल का विवरण",
+    "points_reward": "पुरस्कार अंक",
+    "create": "खेल बनाएं",
+    "no_games": "अभी तक कोई खेल नहीं बनाया गया"
+  },
+  "settings_admin": {
+    "title": "सेटिंग्स",
+    "description": "अपने सिस्टम को अनुकूलित करें",
+    "basic_info": "बुनियादी जानकारी",
+    "establishment_name": "प्रतिष्ठान का नाम",
+    "primary_color": "प्राथमिक रंग",
+    "features": "सुविधाएं",
+    "notification_sound": "सूचना ध्वनि",
+    "notification_sound_desc": "टिकट बुलाते समय ध्वनि चलाएं",
+    "auto_call": "स्वचालित कॉल",
+    "auto_call_desc": "टिकट तैयार होने पर स्वचालित रूप से बुलाएं",
+    "qr_code": "QR कोड",
+    "qr_code_desc": "QR कोड के माध्यम से प्रवेश सक्षम करें",
+    "gamification": "गेमिफिकेशन",
+    "gamification_desc": "खेल और अंक सक्षम करें",
+    "enabled": "सक्षम",
+    "disabled": "अक्षम",
+    "integrations": "एकीकरण",
+    "whatsapp": "WhatsApp Business API",
+    "whatsapp_placeholder": "WhatsApp नंबर",
+    "sms": "SMS (Twilio)",
+    "sms_placeholder": "Account SID"
+  },
+  "tv_display": {
+    "title": "QFlow TV",
+    "subtitle": "टिकट प्रदर्शन पैनल",
+    "code_label": "प्रतिष्ठान कोड",
+    "call": "अब सेवा में",
+    "serving": "सेवा में",
+    "next_tickets": "अगले टिकट",
+    "no_queue": "क्यू में कोई टिकट नहीं",
+    "updated": "रियल-टाइम में अपडेट"
+  },
+  "establishment": {
+    "title": "प्रतिष्ठान बनाएं",
+    "subtitle": "QFlow का उपयोग शुरू करने के लिए अपना स्थान सेट करें",
+    "name_label": "प्रतिष्ठान का नाम",
+    "name_placeholder": "उदा: पड़ोस की दुकान",
+    "slug_label": "स्लग (अनुकूल URL)",
+    "slug_placeholder": "मेरा-प्रतिष्ठान",
+    "slug_hint": "यह वह कोड होगा जिसका उपयोग ग्राहक आपके क्यू तक पहुंचने के लिए करेंगे",
+    "category": "श्रेणी",
+    "cat_general": "सामान्य",
+    "cat_restaurant": "रेस्तरां",
+    "cat_clinic": "क्लिनिक",
+    "cat_retail": "खुदरा",
+    "cat_bank": "बैंक",
+    "cat_government": "सरकारी",
+    "create": "प्रतिष्ठान बनाएं",
+    "creating": "बना रहे हैं..."
+  },
+  "footer": {
+    "made_with": "दुनिया भर में लाइनों को समाप्त करने के लिए ❤️ से बनाया गया"
+  }
+}

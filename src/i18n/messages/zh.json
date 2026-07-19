@@ -1,0 +1,231 @@
+{
+  "metadata": {
+    "title": "QFlow - 消除排队",
+    "description": "虚拟排队系统，支持二维码、游戏化和智能显示屏。"
+  },
+  "home": {
+    "title": "消除排队，提升客户体验。",
+    "subtitle": "虚拟排队系统，支持二维码、游戏化和智能显示屏。将等待时间转化为积极的体验。",
+    "cta_enter": "加入排队",
+    "cta_create": "创建商户",
+    "admin": "管理后台",
+    "tv_display": "电视显示屏"
+  },
+  "features": {
+    "qr_title": "即时二维码",
+    "qr_desc": "客户扫码即可加入排队，无需下载应用或注册复杂账户。",
+    "realtime_title": "实时更新",
+    "realtime_desc": "实时追踪排队位置，被叫号时收到通知提醒。",
+    "games_title": "游戏化",
+    "games_desc": "等待期间可以玩游戏、参与投票、赢取奖励。将等待变成乐趣。",
+    "mobile_title": "移动优先",
+    "mobile_desc": "针对手机优化的界面，无需安装即可在任何智能手机上使用。",
+    "tv_title": "电视显示屏",
+    "tv_desc": "在店铺屏幕上实时显示排队信息，客户无需询问即可看到自己的位置。",
+    "multi_title": "多商户支持",
+    "multi_desc": "按类别管理多个排队通道。适用于商场、诊所和活动现场。"
+  },
+  "steps": {
+    "title": "使用流程",
+    "scan": "扫码",
+    "scan_desc": "在入口或餐桌上扫描二维码",
+    "wait": "等待",
+    "wait_desc": "获取排队号码，通过手机追踪排队进度",
+    "called": "被叫号",
+    "called_desc": "轮到您时收到通知提醒"
+  },
+  "enter": {
+    "title": "TiraSenha",
+    "subtitle": "输入商户代码加入排队",
+    "code_label": "商户代码",
+    "code_placeholder": "例如：STORE01",
+    "button": "加入排队",
+    "searching": "搜索中...",
+    "not_found": "未找到该商户",
+    "not_found_desc": "请检查代码后重试"
+  },
+  "queue": {
+    "select_queue": "选择排队通道",
+    "optional_info": "信息（可选）",
+    "name": "姓名",
+    "name_placeholder": "您的姓名",
+    "phone": "手机号（用于接收通知）",
+    "phone_placeholder": "13800138000",
+    "take_ticket": "取号",
+    "taking": "正在生成号码...",
+    "estimated": "预计等待",
+    "minutes": "分钟",
+    "position": "当前位置"
+  },
+  "ticket": {
+    "confirmed": "号码已确认！",
+    "your_ticket": "您的号码",
+    "estimated_wait": "预计等待时间",
+    "queue_position": "排队位置",
+    "waiting_room": "进入等候区",
+    "min": "分钟"
+  },
+  "waiting": {
+    "status": "排队状态",
+    "current_ticket": "当前号码",
+    "position": "位置",
+    "status_label": "状态",
+    "waiting": "等待中",
+    "earn_points": "赢取积分",
+    "earn_points_desc": "玩游戏、参与投票、下单获取积分，兑换奖励！",
+    "games": "游戏",
+    "polls": "投票",
+    "orders": "下单",
+    "no_games": "暂无可用游戏",
+    "no_games_desc": "请稍后再来查看新游戏",
+    "no_polls": "暂无可用投票",
+    "no_polls_desc": "参与投票赢取积分！"
+  },
+  "called": {
+    "title": "轮到您了！",
+    "subtitle": "请前往服务台"
+  },
+  "games": {
+    "play": "开始游戏",
+    "moves": "步数",
+    "question": "问题",
+    "points": "积分",
+    "spin": "转盘！",
+    "spinning": "转动中..."
+  },
+  "polls": {
+    "vote": "投票",
+    "voted": "感谢您的参与！",
+    "points_earned": "+10 积分奖励！"
+  },
+  "orders": {
+    "menu": "菜单",
+    "your_order": "您的订单",
+    "empty": "从菜单中添加商品",
+    "notes": "备注",
+    "notes_placeholder": "有特殊要求吗？",
+    "total": "合计",
+    "send": "提交订单",
+    "sending": "提交中...",
+    "sent": "订单已提交！",
+    "preparing": "您的订单正在准备中"
+  },
+  "admin": {
+    "dashboard": "仪表盘",
+    "queues": "排队通道",
+    "tickets": "号码管理",
+    "games": "游戏管理",
+    "settings": "系统设置",
+    "logout": "退出登录"
+  },
+  "dashboard": {
+    "today_tickets": "今日号码",
+    "waiting": "等待中",
+    "completed": "已完成",
+    "avg_wait": "平均等待",
+    "hourly": "每小时人流量",
+    "recent": "最近活动"
+  },
+  "queues_admin": {
+    "title": "排队通道",
+    "description": "管理商户的排队通道",
+    "new_queue": "新建通道",
+    "queue_name": "通道名称",
+    "queue_name_placeholder": "例如：快速通道",
+    "description_label": "描述",
+    "description_placeholder": "可选描述",
+    "avg_time": "平均时间（分钟）",
+    "create": "创建通道",
+    "cancel": "取消",
+    "call_next": "叫下一位",
+    "waiting_count": "等待中",
+    "called_count": "已叫号",
+    "last_ticket": "最后一个号码",
+    "queue_tickets": "通道内号码："
+  },
+  "tickets_admin": {
+    "title": "号码管理",
+    "description": "管理所有排队号码",
+    "search_placeholder": "按号码或姓名搜索...",
+    "all_status": "所有状态",
+    "filter_waiting": "等待中",
+    "filter_called": "已叫号",
+    "filter_completed": "已完成",
+    "password": "号码",
+    "queue": "排队通道",
+    "customer": "客户",
+    "status": "状态",
+    "created": "创建时间",
+    "actions": "操作"
+  },
+  "games_admin": {
+    "title": "游戏管理",
+    "description": "管理提供给客户的游戏",
+    "new_game": "新建游戏",
+    "game_name": "游戏名称",
+    "game_name_placeholder": "例如：品牌问答",
+    "type": "类型",
+    "type_quiz": "问答",
+    "type_memory": "记忆",
+    "type_spin": "转盘",
+    "description_label": "描述",
+    "description_placeholder": "游戏描述",
+    "points_reward": "奖励积分",
+    "create": "创建游戏",
+    "no_games": "暂未创建任何游戏"
+  },
+  "settings_admin": {
+    "title": "系统设置",
+    "description": "自定义您的系统",
+    "basic_info": "基本信息",
+    "establishment_name": "商户名称",
+    "primary_color": "主色调",
+    "features": "功能开关",
+    "notification_sound": "通知铃声",
+    "notification_sound_desc": "叫号时播放提示音",
+    "auto_call": "自动叫号",
+    "auto_call_desc": "号码到达时自动叫号",
+    "qr_code": "二维码",
+    "qr_code_desc": "启用二维码入口",
+    "gamification": "游戏化",
+    "gamification_desc": "启用游戏和积分系统",
+    "enabled": "已启用",
+    "disabled": "已禁用",
+    "integrations": "集成服务",
+    "whatsapp": "WhatsApp Business API",
+    "whatsapp_placeholder": "WhatsApp 号码",
+    "sms": "SMS (Twilio)",
+    "sms_placeholder": "Account SID"
+  },
+  "tv_display": {
+    "title": "QFlow 电视显示屏",
+    "subtitle": "号码显示面板",
+    "code_label": "商户代码",
+    "call": "请到号",
+    "serving": "正在服务",
+    "next_tickets": "下一个号码",
+    "no_queue": "当前无排队号码",
+    "updated": "实时更新"
+  },
+  "establishment": {
+    "title": "创建商户",
+    "subtitle": "设置您的店铺以开始使用 QFlow",
+    "name_label": "商户名称",
+    "name_placeholder": "例如：社区便利店",
+    "slug_label": "标识符（友好URL）",
+    "slug_placeholder": "我的商户",
+    "slug_hint": "这将是客户用于访问您排队系统的代码",
+    "category": "类别",
+    "cat_general": "通用",
+    "cat_restaurant": "餐饮",
+    "cat_clinic": "诊所",
+    "cat_retail": "零售",
+    "cat_bank": "银行",
+    "cat_government": "政府机构",
+    "create": "创建商户",
+    "creating": "创建中..."
+  },
+  "footer": {
+    "made_with": "用 ❤️ 打造，消除全球排队"
+  }
+}

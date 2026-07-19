@@ -1,6 +1,7 @@
 'use client'
 
 import { use, useState, useEffect, useRef } from 'react'
+import { useTranslations } from 'next-intl'
 import { createClientComponentClient } from '@/lib/supabase'
 import { Ticket, Game, Poll } from '@/types'
 import { Gamepad2, ClipboardList, ShoppingCart, Trophy, Star } from 'lucide-react'
@@ -11,8 +12,13 @@ import { cn } from '@/lib/utils'
 
 type Tab = 'games' | 'polls' | 'orders'
 
-export default function WaitingPage({ params }: { params: Promise<{ ticketId: string }> }) {
-  const { ticketId } = use(params)
+export default function WaitingPage({ params }: { params: Promise<{ locale: string; ticketId: string }> }) {
+  const { locale, ticketId } = use(params)
+  const t = useTranslations('waiting')
+  const tGames = useTranslations('games')
+  const tPolls = useTranslations('polls')
+  const tCalled = useTranslations('called')
+  const tTicket = useTranslations('ticket')
 
   const [ticket, setTicket] = useState<Ticket | null>(null)
   const [establishment, setEstablishment] = useState<any>(null)
@@ -102,10 +108,10 @@ export default function WaitingPage({ params }: { params: Promise<{ ticketId: st
           <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
             <span className="text-3xl">🔔</span>
           </div>
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">É a sua vez!</h1>
-          <p className="text-gray-600 mb-6">Dirija-se ao atendimento</p>
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">{tCalled('title')}</h1>
+          <p className="text-gray-600 mb-6">{tCalled('subtitle')}</p>
           <div className="bg-indigo-50 rounded-xl p-4 mb-6">
-            <p className="text-sm text-gray-600">Senha</p>
+            <p className="text-sm text-gray-600">{tTicket('your_ticket')}</p>
             <p className="text-3xl font-bold text-indigo-600">{ticket.ticket_number}</p>
           </div>
         </div>
@@ -119,7 +125,7 @@ export default function WaitingPage({ params }: { params: Promise<{ ticketId: st
         <div className="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
           <div>
             <h1 className="font-semibold text-gray-900">{establishment?.name}</h1>
-            <p className="text-sm text-gray-600">Senha: {ticket.ticket_number}</p>
+            <p className="text-sm text-gray-600">{tTicket('your_ticket')}: {ticket.ticket_number}</p>
           </div>
           <div className="flex items-center gap-2 bg-yellow-50 px-4 py-2 rounded-lg">
             <Trophy className="h-5 w-5 text-yellow-600" />
@@ -132,20 +138,20 @@ export default function WaitingPage({ params }: { params: Promise<{ ticketId: st
         <div className="grid lg:grid-cols-3 gap-6">
           <div className="lg:col-span-1">
             <div className="bg-white rounded-xl shadow-sm p-6 mb-6">
-              <h2 className="font-semibold text-gray-900 mb-4">Status da Fila</h2>
+              <h2 className="font-semibold text-gray-900 mb-4">{t('status')}</h2>
               <div className="space-y-4">
                 <div className="flex justify-between items-center">
-                  <span className="text-gray-600">Senha Atual</span>
+                  <span className="text-gray-600">{t('current_ticket')}</span>
                   <span className="font-semibold text-indigo-600">{ticket.ticket_number}</span>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-gray-600">Posição</span>
+                  <span className="text-gray-600">{t('position')}</span>
                   <span className="font-semibold">#{ticket.ticket_number.split('-')[1]}</span>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-gray-600">Status</span>
+                  <span className="text-gray-600">{t('status_label')}</span>
                   <span className="px-2 py-1 bg-yellow-100 text-yellow-700 rounded-full text-sm">
-                    Aguardando
+                    {t('waiting')}
                   </span>
                 </div>
               </div>
@@ -154,10 +160,10 @@ export default function WaitingPage({ params }: { params: Promise<{ ticketId: st
             <div className="bg-gradient-to-br from-indigo-500 to-purple-600 rounded-xl shadow-sm p-6 text-white">
               <div className="flex items-center gap-3 mb-4">
                 <Star className="h-6 w-6" />
-                <h3 className="font-semibold">Ganhe Pontos</h3>
+                <h3 className="font-semibold">{t('earn_points')}</h3>
               </div>
               <p className="text-sm text-white/80 mb-4">
-                Jogue, responda enquetes e faça pedidos para ganhar pontos e resgatar recompensas!
+                {t('earn_points_desc')}
               </p>
             </div>
           </div>
@@ -167,21 +173,21 @@ export default function WaitingPage({ params }: { params: Promise<{ ticketId: st
               <div className="flex border-b">
                 <TabButton
                   icon={<Gamepad2 className="h-5 w-5" />}
-                  label="Jogos"
+                  label={t('games')}
                   active={activeTab === 'games'}
                   onClick={() => setActiveTab('games')}
                   count={games.length}
                 />
                 <TabButton
                   icon={<ClipboardList className="h-5 w-5" />}
-                  label="Enquetes"
+                  label={t('polls')}
                   active={activeTab === 'polls'}
                   onClick={() => setActiveTab('polls')}
                   count={polls.length}
                 />
                 <TabButton
                   icon={<ShoppingCart className="h-5 w-5" />}
-                  label="Pedidos"
+                  label={t('orders')}
                   active={activeTab === 'orders'}
                   onClick={() => setActiveTab('orders')}
                 />
@@ -193,8 +199,8 @@ export default function WaitingPage({ params }: { params: Promise<{ ticketId: st
                     {games.length === 0 ? (
                       <EmptyState
                         icon={<Gamepad2 className="h-12 w-12" />}
-                        title="Nenhum jogo disponível"
-                        description="Volte mais tarde para ver novidades"
+                        title={t('no_games')}
+                        description={t('no_games_desc')}
                       />
                     ) : (
                       <div className="grid sm:grid-cols-2 gap-4">
@@ -210,7 +216,7 @@ export default function WaitingPage({ params }: { params: Promise<{ ticketId: st
                             )}
                             <div className="flex items-center gap-2 text-sm text-indigo-600">
                               <Trophy className="h-4 w-4" />
-                              <span>+{game.points_reward} pts</span>
+                              <span>+{game.points_reward} {tGames('points')}</span>
                             </div>
                           </button>
                         ))}
@@ -224,8 +230,8 @@ export default function WaitingPage({ params }: { params: Promise<{ ticketId: st
                     {polls.length === 0 ? (
                       <EmptyState
                         icon={<ClipboardList className="h-12 w-12" />}
-                        title="Nenhuma enquete disponível"
-                        description="Participe e ganhe pontos!"
+                        title={t('no_polls')}
+                        description={t('no_polls_desc')}
                       />
                     ) : (
                       <div className="space-y-4">

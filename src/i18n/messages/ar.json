@@ -1,0 +1,231 @@
+{
+  "metadata": {
+    "title": "QFlow - أزل الطوابير",
+    "description": "نظام طابور افتراضي مع رمز QR والتحفيز وألواح العرض الذكية."
+  },
+  "home": {
+    "title": "أزل الطوابير. اجذب العملاء.",
+    "subtitle": "نظام طابور افتراضي مع رمز QR والتحفيز وألواح العرض الذكية. حوّل وقت الانتظار إلى تجربة إيجابية.",
+    "cta_enter": "ادخل الطابور",
+    "cta_create": "إنشاء منشأة",
+    "admin": "الإدارة",
+    "tv_display": "شاشة العرض"
+  },
+  "features": {
+    "qr_title": "رمز QR فوري",
+    "qr_desc": "يقوم العملاء بالمسح الضوئي والدخول إلى الطابور دون الحاجة لتنزيل تطبيقات أو إنشاء حسابات معقدة.",
+    "realtime_title": "وقت حقيقي",
+    "realtime_desc": "تتبع موقعك في الطابور في الوقت الحقيقي واستلم إشعارات عند استدعاءك.",
+    "games_title": "تحفيز",
+    "games_desc": "أثناء الانتظار، العب، أجب على الاستطلاعات واكسب مكافآت. حوّل الانتظار إلى متعة.",
+    "mobile_title": "مобильي أولاً",
+    "mobile_desc": "واجهة محسّنة للهاتف. تعمل على أي هاتف ذكي بدون تثبيت.",
+    "tv_title": "شاشة العرض",
+    "tv_desc": "اعرض الطابور في الوقت الحقيقي على شاشات المتجر. يرى العملاء موقعهم دون أن يسألوا.",
+    "multi_title": "متعدد المنشآت",
+    "multi_desc": "أدر عدة طوابير حسب الفئة. مثالي للمستشفيات والعيادات والفعاليات."
+  },
+  "steps": {
+    "title": "كيف يعمل",
+    "scan": "امسح",
+    "scan_desc": "امسح رمز QR عند المدخل أو على الطاولة",
+    "wait": "انتظر",
+    "wait_desc": "استلم تذكرتك وتبع الطابور من هاتفك",
+    "called": "استدعَ",
+    "called_desc": "استلم إشعاراً عندما يحين دورك"
+  },
+  "enter": {
+    "title": "TiraSenha",
+    "subtitle": "أدخل رمز المنشأة للدخول إلى الطابور",
+    "code_label": "رمز المنشأة",
+    "code_placeholder": "مثال: محل01",
+    "button": "ادخل الطابور",
+    "searching": "جاري البحث...",
+    "not_found": "المنشأة غير موجودة",
+    "not_found_desc": "تحقق من الرمز وحاول مرة أخرى"
+  },
+  "queue": {
+    "select_queue": "اختر الطابور",
+    "optional_info": "معلومات (اختياري)",
+    "name": "الاسم",
+    "name_placeholder": "اسمك",
+    "phone": "الهاتف (للإشعارات)",
+    "phone_placeholder": "05XXXXXXXX",
+    "take_ticket": "خذ تذكرة",
+    "taking": "جاري إنشاء التذكرة...",
+    "estimated": "الوقت المقدر",
+    "minutes": "دقيقة",
+    "position": "الموقع"
+  },
+  "ticket": {
+    "confirmed": "تم تأكيد التذكرة!",
+    "your_ticket": "تذكرتك",
+    "estimated_wait": "وقت الانتظار المقدر",
+    "queue_position": "الموقع في الطابور",
+    "waiting_room": "ادخل غرفة الانتظار",
+    "min": "دقيقة"
+  },
+  "waiting": {
+    "status": "حالة الطابور",
+    "current_ticket": "التذكرة الحالية",
+    "position": "الموقع",
+    "status_label": "الحالة",
+    "waiting": "في الانتظار",
+    "earn_points": "اكسب نقاطاً",
+    "earn_points_desc": "العب، أجب على الاستطلاعات، واطلب للحصول على نقاط واستبدال المكافآت!",
+    "games": "ألعاب",
+    "polls": "استطلاعات",
+    "orders": "طلبات",
+    "no_games": "لا توجد ألعاب متاحة",
+    "no_games_desc": "عُد لاحقاً لرؤية الجديد",
+    "no_polls": "لا توجد استطلاعات متاحة",
+    "no_polls_desc": "شارك واكسب نقاطاً!"
+  },
+  "called": {
+    "title": "حان دورك!",
+    "subtitle": "توجه إلى نقطة الخدمة"
+  },
+  "games": {
+    "play": "العب",
+    "moves": "حركات",
+    "question": "سؤال",
+    "points": "نقاط",
+    "spin": "أدر!",
+    "spinning": "جاري الدوران..."
+  },
+  "polls": {
+    "vote": "صوّت",
+    "voted": "شكراً لمشاركتك!",
+    "points_earned": "+10 نقاط للمشاركة!"
+  },
+  "orders": {
+    "menu": "القائمة",
+    "your_order": "طلبك",
+    "empty": "أضف أصنافاً من القائمة",
+    "notes": "ملاحظات",
+    "notes_placeholder": "طلبات خاصة؟",
+    "total": "المجموع",
+    "send": "إرسال الطلب",
+    "sending": "جاري الإرسال...",
+    "sent": "تم إرسال الطلب!",
+    "preparing": "جاري تحضير طلبك"
+  },
+  "admin": {
+    "dashboard": "لوحة التحكم",
+    "queues": "الطوابير",
+    "tickets": "التذاكر",
+    "games": "الألعاب",
+    "settings": "الإعدادات",
+    "logout": "تسجيل الخروج"
+  },
+  "dashboard": {
+    "today_tickets": "تذاكر اليوم",
+    "waiting": "في الانتظار",
+    "completed": "مكتملة",
+    "avg_wait": "متوسط الانتظار",
+    "hourly": "الحركة بالساعة",
+    "recent": "النشاط الأخير"
+  },
+  "queues_admin": {
+    "title": "الطوابير",
+    "description": "أدر طوابير المنشأة",
+    "new_queue": "طابور جديد",
+    "queue_name": "اسم الطابور",
+    "queue_name_placeholder": "مثال: كاشير سريع",
+    "description_label": "الوصف",
+    "description_placeholder": "وصف اختياري",
+    "avg_time": "المتوسط (دقيقة)",
+    "create": "إنشاء طابور",
+    "cancel": "إلغاء",
+    "call_next": "استدعاء التالي",
+    "waiting_count": "في الانتظار",
+    "called_count": "مستدعون",
+    "last_ticket": "آخر تذكرة",
+    "queue_tickets": "التذاكر في الطابور:"
+  },
+  "tickets_admin": {
+    "title": "التذاكر",
+    "description": "أدر جميع التذاكر",
+    "search_placeholder": "بحث بالتذكرة أو الاسم...",
+    "all_status": "جميع الحالات",
+    "filter_waiting": "في الانتظار",
+    "filter_called": "مستدعون",
+    "filter_completed": "مكتملة",
+    "password": "التذكرة",
+    "queue": "الطابور",
+    "customer": "العميل",
+    "status": "الحالة",
+    "created": "أنشئ في",
+    "actions": "إجراءات"
+  },
+  "games_admin": {
+    "title": "الألعاب",
+    "description": "أدر الألعاب المتاحة للعملاء",
+    "new_game": "لعبة جديدة",
+    "game_name": "اسم اللعبة",
+    "game_name_placeholder": "مثال: اختبار العلامة التجارية",
+    "type": "النوع",
+    "type_quiz": "اختبار",
+    "type_memory": "ذاكرة",
+    "type_spin": "عجلة الحظ",
+    "description_label": "الوصف",
+    "description_placeholder": "وصف اللعبة",
+    "points_reward": "نقاط المكافأة",
+    "create": "إنشاء لعبة",
+    "no_games": "لم يتم إنشاء ألعاب بعد"
+  },
+  "settings_admin": {
+    "title": "الإعدادات",
+    "description": "خصّص نظامك",
+    "basic_info": "المعلومات الأساسية",
+    "establishment_name": "اسم المنشأة",
+    "primary_color": "اللون الأساسي",
+    "features": "الميزات",
+    "notification_sound": "صوت الإشعار",
+    "notification_sound_desc": "تشغيل صوت عند استدعاء التذكرة",
+    "auto_call": "الاستدعاء التلقائي",
+    "auto_call_desc": "استدعاء تلقائي عندما تصبح التذكرة جاهزة",
+    "qr_code": "رمز QR",
+    "qr_code_desc": "تفعيل الدخول عبر رمز QR",
+    "gamification": "التحفيز",
+    "gamification_desc": "تفعيل الألعاب والنقاط",
+    "enabled": "مفعّل",
+    "disabled": "معطّل",
+    "integrations": "التكاملات",
+    "whatsapp": "WhatsApp Business API",
+    "whatsapp_placeholder": "رقم واتساب",
+    "sms": "SMS (Twilio)",
+    "sms_placeholder": "Account SID"
+  },
+  "tv_display": {
+    "title": "QFlow TV",
+    "subtitle": "لوحة عرض التذاكر",
+    "code_label": "رمز المنشأة",
+    "call": "جاري الخدمة الآن",
+    "serving": "جاري الخدمة",
+    "next_tickets": "التذاكر التالية",
+    "no_queue": "لا توجد تذاكر في الطابور",
+    "updated": "يُحدَّث في الوقت الحقيقي"
+  },
+  "establishment": {
+    "title": "إنشاء منشأة",
+    "subtitle": "قم بإعداد مساحتك لبدء استخدام QFlow",
+    "name_label": "اسم المنشأة",
+    "name_placeholder": "مثال: محل الحي",
+    "slug_label": "الرابط (URL ودي)",
+    "slug_placeholder": "منشأتي",
+    "slug_hint": "سيكون هذا الرمز الذي يستخدمه العملاء للوصول إلى طابورك",
+    "category": "الفئة",
+    "cat_general": "عام",
+    "cat_restaurant": "مطعم",
+    "cat_clinic": "عيادة",
+    "cat_retail": "تجزئة",
+    "cat_bank": "بنك",
+    "cat_government": "حكومي",
+    "create": "إنشاء المنشأة",
+    "creating": "جاري الإنشاء..."
+  },
+  "footer": {
+    "made_with": "صنع بـ ❤️ لإزالة الطوابير حول العالم"
+  }
+}
