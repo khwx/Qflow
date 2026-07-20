@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { createClientComponentClient } from '@/lib/supabase'
 import { Game } from '@/types'
+import toast from 'react-hot-toast'
 import { Plus, Trash2, ToggleLeft, ToggleRight } from 'lucide-react'
 
 export default function GamesPage() {
@@ -32,7 +33,7 @@ export default function GamesPage() {
   const createGame = async (e: React.FormEvent) => {
     e.preventDefault()
     
-    await supabase.from('games').insert({
+    const { error } = await supabase.from('games').insert({
       ...newGame,
       config: newGame.type === 'quiz' ? {
         questions: [
@@ -42,22 +43,39 @@ export default function GamesPage() {
       } : {},
     })
 
+    if (error) {
+      toast.error(error.message || 'Erro ao criar jogo')
+      return
+    }
+
+    toast.success('Jogo criado com sucesso!')
     setNewGame({ name: '', description: '', type: 'quiz', points_reward: 10 })
     setShowForm(false)
     loadGames()
   }
 
   const toggleGame = async (game: Game) => {
-    await supabase
+    const { error } = await supabase
       .from('games')
       .update({ is_active: !game.is_active })
       .eq('id', game.id)
 
+    if (error) {
+      toast.error(error.message || 'Erro ao alterar jogo')
+      return
+    }
+
+    toast.success(game.is_active ? 'Jogo desativado' : 'Jogo ativado')
     loadGames()
   }
 
   const deleteGame = async (id: string) => {
-    await supabase.from('games').delete().eq('id', id)
+    const { error } = await supabase.from('games').delete().eq('id', id)
+    if (error) {
+      toast.error(error.message || 'Erro ao excluir jogo')
+      return
+    }
+    toast.success('Jogo excluído com sucesso!')
     loadGames()
   }
 

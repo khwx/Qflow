@@ -79,7 +79,7 @@ export default function TVDisplayPage() {
     return (
       <div className="min-h-screen bg-gradient-to-br from-indigo-900 to-purple-900 flex items-center justify-center">
         <div className="bg-white/10 backdrop-blur rounded-2xl p-8 max-w-md w-full mx-4">
-          <h1 className="text-4xl font-bold text-white text-center mb-2">TiraSenha TV</h1>
+          <h1 className="text-4xl font-bold text-white text-center mb-2">QFlow TV</h1>
           <p className="text-white/80 text-center mb-8">Painel de exibição de senhas</p>
           
           <div className="bg-white/10 rounded-xl p-6">
@@ -201,7 +201,7 @@ export default function TVDisplayPage() {
 
       <footer className="p-8 text-center">
         <p className="text-white/40">
-          Atualizado em tempo real • TiraSenha
+          Atualizado em tempo real • QFlow
         </p>
       </footer>
     </div>

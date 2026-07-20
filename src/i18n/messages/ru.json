@@ -35,7 +35,7 @@
     "called_desc": "Получите уведомление, когда придёт ваша очередь"
   },
   "enter": {
-    "title": "TiraSenha",
+    "title": "QFlow",
     "subtitle": "Введите код учреждения для входа в очередь",
     "code_label": "Код Учреждения",
     "code_placeholder": "Например: STORE01",

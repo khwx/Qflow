@@ -35,7 +35,7 @@
     "called_desc": "차례가 되면 알림을 받으세요"
   },
   "enter": {
-    "title": "TiraSenha",
+    "title": "QFlow",
     "subtitle": "매장 코드를 입력하여 줄에 참여하세요",
     "code_label": "매장 코드",
     "code_placeholder": "예: STORE01",

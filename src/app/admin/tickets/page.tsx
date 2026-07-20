@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { createClientComponentClient } from '@/lib/supabase'
 import { Ticket } from '@/types'
+import toast from 'react-hot-toast'
 import { Check, X, Search, Play } from 'lucide-react'
 
 export default function TicketsPage() {
@@ -40,7 +41,15 @@ export default function TicketsPage() {
   }
 
   const updateStatus = async (id: string, status: Ticket['status']) => {
-    await supabase
+    const statusLabels: Record<string, string> = {
+      waiting: 'Aguardando',
+      called: 'Chamado',
+      serving: 'Em atendimento',
+      completed: 'Concluído',
+      cancelled: 'Cancelado',
+    }
+
+    const { error } = await supabase
       .from('tickets')
       .update({ 
         status,
@@ -49,6 +58,12 @@ export default function TicketsPage() {
       })
       .eq('id', id)
 
+    if (error) {
+      toast.error(error.message || 'Erro ao alterar status')
+      return
+    }
+
+    toast.success(`Status alterado para "${statusLabels[status]}"`)
     loadTickets()
   }
 

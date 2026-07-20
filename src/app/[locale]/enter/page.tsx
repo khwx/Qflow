@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { useTranslations } from 'next-intl'
 import { useRouter, usePathname } from '@/i18n/navigation'
+import toast from 'react-hot-toast'
 import { QrCode, Search, MapPin } from 'lucide-react'
 
 export default function EnterPage() {
@@ -14,10 +15,14 @@ export default function EnterPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (!code.trim()) return
+    const trimmed = code.trim()
+    if (!trimmed) {
+      toast.error(t('code_empty') || 'Digite um código para continuar')
+      return
+    }
     
     setLoading(true)
-    router.push(`/queue/${code.toUpperCase()}`)
+    router.push(`/queue/${trimmed.toUpperCase()}`)
   }
 
   return (

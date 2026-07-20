@@ -35,7 +35,7 @@
     "called_desc": "Recibe una notificación cuando sea tu turno"
   },
   "enter": {
-    "title": "TiraSenha",
+    "title": "QFlow",
     "subtitle": "Ingresa el código del establecimiento para entrar en la cola",
     "code_label": "Código del Establecimiento",
     "code_placeholder": "EJ: TIENDA01",

@@ -6,6 +6,7 @@ import { useRouter } from '@/i18n/navigation'
 import { createClientComponentClient } from '@/lib/supabase'
 import { Establishment, Queue, Ticket } from '@/types'
 import { cn, generateTicketNumber, getEstimatedWait } from '@/lib/utils'
+import toast from 'react-hot-toast'
 import { QrCode, Clock, Users, AlertCircle, CheckCircle2 } from 'lucide-react'
 
 export default function QueuePage({ params }: { params: Promise<{ locale: string; code: string }> }) {
@@ -83,6 +84,7 @@ export default function QueuePage({ params }: { params: Promise<{ locale: string
 
     if (error) {
       console.error('Error creating ticket:', error)
+      toast.error(error.message || tTicket('error_creating'))
       setTakingTicket(false)
       return
     }

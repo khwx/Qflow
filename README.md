@@ -1,4 +1,4 @@
-# TiraSenha
+# QFlow
 
 Sistema de fila virtual com QR Code, gamificação e painéis inteligentes.
 

@@ -34,7 +34,7 @@ export default function AdminShell({
       <aside className="fixed inset-y-0 left-0 w-64 bg-white shadow-lg">
         <div className="flex items-center gap-2 p-6 border-b">
           <QrCode className="h-8 w-8 text-indigo-600" />
-          <span className="text-xl font-bold text-gray-900">TiraSenha</span>
+          <span className="text-xl font-bold text-gray-900">QFlow</span>
         </div>
 
         <nav className="p-4 space-y-1">

@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { createClientComponentClient } from '@/lib/supabase'
 import { Queue, Ticket } from '@/types'
+import toast from 'react-hot-toast'
 import { Plus, Play, Check, X, Trash2 } from 'lucide-react'
 
 export default function QueuesPage() {
@@ -45,11 +46,17 @@ export default function QueuesPage() {
   const createQueue = async (e: React.FormEvent) => {
     e.preventDefault()
     
-    await supabase.from('queues').insert({
+    const { error } = await supabase.from('queues').insert({
       ...newQueue,
       current_number: 0,
     })
 
+    if (error) {
+      toast.error(error.message || 'Erro ao criar fila')
+      return
+    }
+
+    toast.success('Fila criada com sucesso!')
     setNewQueue({ name: '', description: '', estimated_wait_minutes: 5 })
     setShowForm(false)
     loadData()
@@ -59,7 +66,7 @@ export default function QueuesPage() {
     const nextTicket = tickets.find(t => t.queue_id === queue.id && t.status === 'waiting')
     
     if (nextTicket) {
-      await supabase
+      const { error } = await supabase
         .from('tickets')
         .update({ 
           status: 'called',
@@ -67,12 +74,20 @@ export default function QueuesPage() {
         })
         .eq('id', nextTicket.id)
 
+      if (error) {
+        toast.error(error.message || 'Erro ao chamar próximo')
+        return
+      }
+
       await supabase
         .from('queues')
         .update({ current_number: parseInt(nextTicket.ticket_number.split('-')[1]) })
         .eq('id', queue.id)
 
+      toast.success(`Chamada senha ${nextTicket.ticket_number}`)
       loadData()
+    } else {
+      toast.error('Nenhuma senha aguardando nesta fila')
     }
   }
 
@@ -89,7 +104,12 @@ export default function QueuesPage() {
   }
 
   const deleteQueue = async (id: string) => {
-    await supabase.from('queues').delete().eq('id', id)
+    const { error } = await supabase.from('queues').delete().eq('id', id)
+    if (error) {
+      toast.error(error.message || 'Erro ao excluir fila')
+      return
+    }
+    toast.success('Fila excluída com sucesso!')
     loadData()
   }
 

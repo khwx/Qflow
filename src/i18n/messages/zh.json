@@ -35,7 +35,7 @@
     "called_desc": "轮到您时收到通知提醒"
   },
   "enter": {
-    "title": "TiraSenha",
+    "title": "QFlow",
     "subtitle": "输入商户代码加入排队",
     "code_label": "商户代码",
     "code_placeholder": "例如：STORE01",

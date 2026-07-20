@@ -35,7 +35,7 @@
     "called_desc": "Receba uma notificação quando for sua vez"
   },
   "enter": {
-    "title": "TiraSenha",
+    "title": "QFlow",
     "subtitle": "Digite o código do estabelecimento para entrar na fila",
     "code_label": "Código do Estabelecimento",
     "code_placeholder": "EX: MERCADO01",

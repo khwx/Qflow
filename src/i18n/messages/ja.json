@@ -35,7 +35,7 @@
     "called_desc": "番が来たら通知を受け取る"
   },
   "enter": {
-    "title": "TiraSenha",
+    "title": "QFlow",
     "subtitle": "店舗コードを入力してキューに参加",
     "code_label": "店舗コード",
     "code_placeholder": "例：SHOP01",

@@ -35,7 +35,7 @@
     "called_desc": "Receive a notification when it's your turn"
   },
   "enter": {
-    "title": "TiraSenha",
+    "title": "QFlow",
     "subtitle": "Enter the establishment code to join the queue",
     "code_label": "Establishment Code",
     "code_placeholder": "E.G.: STORE01",

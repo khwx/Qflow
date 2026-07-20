@@ -35,7 +35,7 @@
     "called_desc": "Erhalten Sie eine Benachrichtigung, wenn Sie an der Reihe sind"
   },
   "enter": {
-    "title": "TiraSenha",
+    "title": "QFlow",
     "subtitle": "Geben Sie den Code des Betriebs ein, um der Schlange beizutreten",
     "code_label": "Betriebscode",
     "code_placeholder": "Z.B.: LADEN01",

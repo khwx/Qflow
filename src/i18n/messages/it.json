@@ -35,7 +35,7 @@
     "called_desc": "Ricevi una notifica quando è il tuo turno"
   },
   "enter": {
-    "title": "TiraSenha",
+    "title": "QFlow",
     "subtitle": "Inserisci il codice della struttura per entrare in coda",
     "code_label": "Codice Struttura",
     "code_placeholder": "ES: NEGOZIO01",

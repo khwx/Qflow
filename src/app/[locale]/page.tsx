@@ -1,10 +1,13 @@
 'use client'
 
+import { use } from 'react'
 import { useTranslations } from 'next-intl'
 import { useRouter, usePathname, Link } from '@/i18n/navigation'
 import { QrCode, Smartphone, Clock, Gamepad2, BarChart3 } from 'lucide-react'
+import LanguageSwitcher from '@/components/ui/LanguageSwitcher'
 
-export default function Home() {
+export default function Home({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale } = use(params)
   const t = useTranslations('home')
   const tFeatures = useTranslations('features')
   const tSteps = useTranslations('steps')
@@ -17,9 +20,9 @@ export default function Home() {
       <nav className="flex items-center justify-between p-6">
         <div className="flex items-center gap-2 text-white">
           <QrCode className="h-8 w-8" />
-          <span className="text-2xl font-bold">TiraSenha</span>
+          <span className="text-2xl font-bold">QFlow</span>
         </div>
-        <div className="flex gap-4">
+        <div className="flex items-center gap-4">
           <Link
             href="/admin"
             className="rounded-lg bg-white/10 px-4 py-2 text-white hover:bg-white/20 transition"
@@ -32,6 +35,7 @@ export default function Home() {
           >
             {t('tv_display')}
           </Link>
+          <LanguageSwitcher locale={locale} />
         </div>
       </nav>
 
