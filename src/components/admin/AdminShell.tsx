@@ -10,11 +10,13 @@ import {
   Gamepad2, 
   Settings, 
   QrCode,
-  LogOut
+  LogOut,
+  Building2
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 const navigation = [
+  { name: 'Estabelecimentos', href: '/admin/establishments', icon: Building2 },
   { name: 'Dashboard', href: '/admin/dashboard', icon: LayoutDashboard },
   { name: 'Filas', href: '/admin/queues', icon: Users },
   { name: 'Senhas', href: '/admin/tickets', icon: Ticket },
