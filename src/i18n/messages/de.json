@@ -239,6 +239,11 @@
     "back": "Zurück",
     "scan_hint": "Richten Sie Ihre Kamera auf den QR-Code"
   },
+  "notFound": {
+    "title": "Seite nicht gefunden",
+    "message": "Die gesuchte Seite existiert nicht",
+    "go_home": "Zur Startseite"
+  },
   "footer": {
     "made_with": "Mit ❤️ gemacht, um Schlangen weltweit zu beseitigen"
   }

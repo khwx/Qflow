@@ -242,6 +242,11 @@
     "back": "Voltar",
     "scan_hint": "Aponte a câmera para o QR code"
   },
+  "notFound": {
+    "title": "Página não encontrada",
+    "message": "A página que procura não existe",
+    "go_home": "Voltar ao Início"
+  },
   "footer": {
     "made_with": "Feito com ❤️ para eliminar filas no mundo"
   }

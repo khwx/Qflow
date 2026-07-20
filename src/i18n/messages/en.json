@@ -242,6 +242,11 @@
     "back": "Back",
     "scan_hint": "Point your camera at the QR code"
   },
+  "notFound": {
+    "title": "Page not found",
+    "message": "The page you're looking for doesn't exist",
+    "go_home": "Go Home"
+  },
   "footer": {
     "made_with": "Made with ❤️ to eliminate lines worldwide"
   }

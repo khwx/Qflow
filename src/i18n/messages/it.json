@@ -239,6 +239,11 @@
     "back": "Indietro",
     "scan_hint": "Punta la fotocamera sul codice QR"
   },
+  "notFound": {
+    "title": "Pagina non trovata",
+    "message": "La pagina che stai cercando non esiste",
+    "go_home": "Vai alla Home"
+  },
   "footer": {
     "made_with": "Fatto con ❤️ per eliminare le code nel mondo"
   }

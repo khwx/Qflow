@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist } from "next/font/google";
 import "./globals.css";
 
@@ -8,10 +8,35 @@ const geist = Geist({
 });
 
 export const metadata: Metadata = {
-  title: "QFlow - Elimine Filas",
+  title: {
+    template: "%s | QFlow",
+    default: "QFlow - Virtual Queue System",
+  },
   description:
-    "Sistema de fila virtual com QR Code, gamificação e painéis inteligentes.",
-  icons: { icon: "/favicon.ico" },
+    "QR Code-based virtual queue with gamification. Eliminate waiting lines and engage customers.",
+  icons: {
+    icon: "/favicon.svg",
+  },
+  openGraph: {
+    title: "QFlow - Virtual Queue System",
+    description:
+      "QR Code-based virtual queue with gamification. Eliminate waiting lines and engage customers.",
+    siteName: "QFlow",
+    type: "website",
+    locale: "en_US",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "QFlow - Virtual Queue System",
+    description:
+      "QR Code-based virtual queue with gamification. Eliminate waiting lines and engage customers.",
+  },
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  themeColor: "#0f172a",
 };
 
 export default function RootLayout({
@@ -20,7 +45,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html className={`${geist.variable} h-full antialiased`}>
+    <html lang="en" className={`${geist.variable} h-full antialiased`}>
       <body className="min-h-full">{children}</body>
     </html>
   );

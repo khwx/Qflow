@@ -239,6 +239,11 @@
     "back": "Retour",
     "scan_hint": "Pointez votre caméra vers le QR code"
   },
+  "notFound": {
+    "title": "Page introuvable",
+    "message": "La page que vous recherchez n'existe pas",
+    "go_home": "Accueil"
+  },
   "footer": {
     "made_with": "Fait avec ❤️ pour éliminer les files dans le monde"
   }

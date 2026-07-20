@@ -239,6 +239,11 @@
     "back": "Volver",
     "scan_hint": "Apunta tu cámara al código QR"
   },
+  "notFound": {
+    "title": "Página no encontrada",
+    "message": "La página que buscas no existe",
+    "go_home": "Ir al Inicio"
+  },
   "footer": {
     "made_with": "Hecho con ❤️ para eliminar filas en el mundo"
   }
