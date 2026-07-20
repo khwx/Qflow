@@ -226,7 +226,18 @@
     "cat_bank": "Bank",
     "cat_government": "Regierung",
     "create": "Betrieb Erstellen",
-    "creating": "Wird erstellt..."
+    "creating": "Wird erstellt...",
+    "qr_success": "Betrieb erfolgreich erstellt!",
+    "show_qr": "QR-Code anzeigen"
+  },
+  "qr": {
+    "title": "QR-Code",
+    "subtitle": "Scannen, um der Schlange beizutreten",
+    "establishment": "Betrieb",
+    "download": "QR-Code herunterladen",
+    "print": "Drucken",
+    "back": "Zurück",
+    "scan_hint": "Richten Sie Ihre Kamera auf den QR-Code"
   },
   "footer": {
     "made_with": "Mit ❤️ gemacht, um Schlangen weltweit zu beseitigen"

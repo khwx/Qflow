@@ -226,7 +226,18 @@
     "cat_bank": "银行",
     "cat_government": "政府机构",
     "create": "创建商户",
-    "creating": "创建中..."
+    "creating": "创建中...",
+    "qr_success": "商户创建成功！",
+    "show_qr": "显示二维码"
+  },
+  "qr": {
+    "title": "二维码",
+    "subtitle": "扫码加入排队",
+    "establishment": "商户",
+    "download": "下载二维码",
+    "print": "打印",
+    "back": "返回",
+    "scan_hint": "将相机对准二维码"
   },
   "footer": {
     "made_with": "用 ❤️ 打造，消除全球排队"

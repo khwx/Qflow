@@ -226,7 +226,18 @@
     "cat_bank": "Banca",
     "cat_government": "Governo",
     "create": "Crea Struttura",
-    "creating": "Creazione..."
+    "creating": "Creazione...",
+    "qr_success": "Struttura creata con successo!",
+    "show_qr": "Mostra QR Code"
+  },
+  "qr": {
+    "title": "QR Code",
+    "subtitle": "Scansiona per entrare in coda",
+    "establishment": "Struttura",
+    "download": "Scarica QR Code",
+    "print": "Stampa",
+    "back": "Indietro",
+    "scan_hint": "Punta la fotocamera sul codice QR"
   },
   "footer": {
     "made_with": "Fatto con ❤️ per eliminare le code nel mondo"

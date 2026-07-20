@@ -226,7 +226,18 @@
     "cat_bank": "은행",
     "cat_government": "관공서",
     "create": "매장 만들기",
-    "creating": "생성 중..."
+    "creating": "생성 중...",
+    "qr_success": "매장이 성공적으로 생성되었습니다!",
+    "show_qr": "QR 코드 표시"
+  },
+  "qr": {
+    "title": "QR 코드",
+    "subtitle": "스캔하여 줄에 참여하세요",
+    "establishment": "매장",
+    "download": "QR 코드 다운로드",
+    "print": "인쇄",
+    "back": "뒤로",
+    "scan_hint": "카메라를 QR 코드에 맞추세요"
   },
   "footer": {
     "made_with": "전 세계의 줄을 없애기 위해 ❤️로 제작"

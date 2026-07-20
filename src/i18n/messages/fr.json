@@ -226,7 +226,18 @@
     "cat_bank": "Banque",
     "cat_government": "Gouvernement",
     "create": "Créer l'Établissement",
-    "creating": "Création..."
+    "creating": "Création...",
+    "qr_success": "Établissement créé avec succès !",
+    "show_qr": "Afficher le QR Code"
+  },
+  "qr": {
+    "title": "QR Code",
+    "subtitle": "Scannez pour rejoindre la file",
+    "establishment": "Établissement",
+    "download": "Télécharger le QR Code",
+    "print": "Imprimer",
+    "back": "Retour",
+    "scan_hint": "Pointez votre caméra vers le QR code"
   },
   "footer": {
     "made_with": "Fait avec ❤️ pour éliminer les files dans le monde"

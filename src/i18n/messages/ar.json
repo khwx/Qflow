@@ -226,7 +226,18 @@
     "cat_bank": "بنك",
     "cat_government": "حكومي",
     "create": "إنشاء المنشأة",
-    "creating": "جاري الإنشاء..."
+    "creating": "جاري الإنشاء...",
+    "qr_success": "تم إنشاء المنشأة بنجاح!",
+    "show_qr": "عرض رمز QR"
+  },
+  "qr": {
+    "title": "رمز QR",
+    "subtitle": "امسح للانضمام إلى الطابور",
+    "establishment": "المنشأة",
+    "download": "تنزيل رمز QR",
+    "print": "طباعة",
+    "back": "رجوع",
+    "scan_hint": "وجّه كاميرتك نحو رمز QR"
   },
   "footer": {
     "made_with": "صنع بـ ❤️ لإزالة الطوابير حول العالم"

@@ -2,9 +2,16 @@
 
 import { useState } from 'react'
 import { useTranslations } from 'next-intl'
-import { useRouter } from '@/i18n/navigation'
+import { Link } from '@/i18n/navigation'
 import { createClientComponentClient } from '@/lib/supabase'
-import { QrCode, Building2, Users } from 'lucide-react'
+import { QrCode, Building2, CheckCircle2, ExternalLink } from 'lucide-react'
+import { QRCodeSVG } from 'qrcode.react'
+
+interface CreatedEstablishment {
+  id: string
+  name: string
+  slug: string
+}
 
 export default function CreateEstablishmentPage() {
   const t = useTranslations('establishment')
@@ -12,7 +19,7 @@ export default function CreateEstablishmentPage() {
   const [slug, setSlug] = useState('')
   const [category, setCategory] = useState('general')
   const [loading, setLoading] = useState(false)
-  const router = useRouter()
+  const [created, setCreated] = useState<CreatedEstablishment | null>(null)
   const supabase = createClientComponentClient()
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -35,7 +42,53 @@ export default function CreateEstablishmentPage() {
       return
     }
 
-    window.location.href = `/admin/dashboard?est=${data.id}`
+    setCreated({ id: data.id, name: data.name, slug: data.slug })
+    setLoading(false)
+  }
+
+  if (created) {
+    const enterUrl = `${typeof window !== 'undefined' ? window.location.origin : ''}/${created.slug}`
+
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-500 flex items-center justify-center p-6">
+        <div className="w-full max-w-md">
+          <div className="bg-white rounded-2xl shadow-2xl p-8 text-center">
+            <CheckCircle2 className="h-16 w-16 text-green-500 mx-auto mb-4" />
+            <h1 className="text-2xl font-bold text-gray-900 mb-2">{t('success_title')}</h1>
+            <p className="text-gray-600 mb-6">{t('success_desc')}</p>
+
+            <div className="bg-gray-50 rounded-lg p-4 mb-6">
+              <p className="text-sm text-gray-500 mb-1">{t('name_label')}</p>
+              <p className="font-semibold text-gray-900">{created.name}</p>
+              <p className="text-sm text-gray-500 mt-2 mb-1">{t('slug_display')}</p>
+              <p className="font-mono text-lg font-bold text-indigo-600">{created.slug}</p>
+            </div>
+
+            <div className="bg-gray-50 rounded-lg p-6 mb-6 flex justify-center">
+              <QRCodeSVG value={enterUrl} size={180} />
+            </div>
+
+            <div className="flex flex-col gap-3">
+              <Link
+                href={`/qr/${created.slug}`}
+                className="w-full bg-indigo-600 text-white py-3 rounded-lg font-semibold hover:bg-indigo-700 transition flex items-center justify-center gap-2"
+              >
+                {t('show_qr')}
+                <ExternalLink className="h-4 w-4" />
+              </Link>
+              <button
+                onClick={() => {
+                  window.location.href = `/admin/dashboard?est=${created.id}`
+                }}
+                className="w-full bg-gray-100 text-gray-700 py-3 rounded-lg font-semibold hover:bg-gray-200 transition"
+              >
+                {t('go_dashboard')}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    )
   }
 
   return (

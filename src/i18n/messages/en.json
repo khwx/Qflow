@@ -226,7 +226,21 @@
     "cat_bank": "Bank",
     "cat_government": "Government",
     "create": "Create Establishment",
-    "creating": "Creating..."
+    "creating": "Creating...",
+    "success_title": "Establishment Created!",
+    "success_desc": "Your establishment is ready. Share the QR Code with your customers.",
+    "show_qr": "Show QR Code",
+    "go_dashboard": "Go to Dashboard",
+    "slug_display": "Your code"
+  },
+  "qr": {
+    "title": "QR Code",
+    "subtitle": "Scan to join the queue",
+    "establishment": "Establishment",
+    "download": "Download QR Code",
+    "print": "Print",
+    "back": "Back",
+    "scan_hint": "Point your camera at the QR code"
   },
   "footer": {
     "made_with": "Made with ❤️ to eliminate lines worldwide"

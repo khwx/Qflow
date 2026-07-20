@@ -226,7 +226,18 @@
     "cat_bank": "Banco",
     "cat_government": "Gobierno",
     "create": "Crear Establecimiento",
-    "creating": "Creando..."
+    "creating": "Creando...",
+    "qr_success": "¡Establecimiento creado con éxito!",
+    "show_qr": "Mostrar QR Code"
+  },
+  "qr": {
+    "title": "QR Code",
+    "subtitle": "Escanea para unirte a la cola",
+    "establishment": "Establecimiento",
+    "download": "Descargar QR Code",
+    "print": "Imprimir",
+    "back": "Volver",
+    "scan_hint": "Apunta tu cámara al código QR"
   },
   "footer": {
     "made_with": "Hecho con ❤️ para eliminar filas en el mundo"

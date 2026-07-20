@@ -226,7 +226,21 @@
     "cat_bank": "Banco",
     "cat_government": "Governo",
     "create": "Criar Estabelecimento",
-    "creating": "Criando..."
+    "creating": "Criando...",
+    "success_title": "Estabelecimento Criado!",
+    "success_desc": "Seu estabelecimento está pronto. Compartilhe o QR Code com seus clientes.",
+    "show_qr": "Mostrar QR Code",
+    "go_dashboard": "Ir para o Painel",
+    "slug_display": "Seu código"
+  },
+  "qr": {
+    "title": "QR Code",
+    "subtitle": "Escaneie para entrar na fila",
+    "establishment": "Estabelecimento",
+    "download": "Baixar QR Code",
+    "print": "Imprimir",
+    "back": "Voltar",
+    "scan_hint": "Aponte a câmera para o QR code"
   },
   "footer": {
     "made_with": "Feito com ❤️ para eliminar filas no mundo"

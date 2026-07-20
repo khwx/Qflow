@@ -1,6 +1,6 @@
 'use client'
 
-import { use, useState, useEffect, useRef } from 'react'
+import { use, useState, useEffect } from 'react'
 import { useTranslations } from 'next-intl'
 import { createClientComponentClient } from '@/lib/supabase'
 import { Ticket, Game, Poll } from '@/types'
@@ -28,15 +28,29 @@ export default function WaitingPage({ params }: { params: Promise<{ locale: stri
   const [loading, setLoading] = useState(true)
   const [selectedGame, setSelectedGame] = useState<Game | null>(null)
   const [customerPoints, setCustomerPoints] = useState(0)
-  const intervalRef = useRef<NodeJS.Timeout | null>(null)
   const supabase = createClientComponentClient()
 
   useEffect(() => {
     loadData()
-    intervalRef.current = setInterval(checkStatus, 3000)
+
+    const channel = supabase
+      .channel('ticket-updates')
+      .on(
+        'postgres_changes',
+        {
+          event: 'UPDATE',
+          schema: 'public',
+          table: 'tickets',
+          filter: `id=eq.${ticketId}`,
+        },
+        (payload) => {
+          setTicket(payload.new as Ticket)
+        }
+      )
+      .subscribe()
 
     return () => {
-      if (intervalRef.current) clearInterval(intervalRef.current)
+      supabase.removeChannel(channel)
     }
   }, [])
 
@@ -69,20 +83,6 @@ export default function WaitingPage({ params }: { params: Promise<{ locale: stri
     }
 
     setLoading(false)
-  }
-
-  const checkStatus = async () => {
-    if (!ticketId) return
-
-    const { data } = await supabase
-      .from('tickets')
-      .select('*')
-      .eq('id', ticketId)
-      .single()
-
-    if (data && (data.status === 'called' || data.status === 'completed')) {
-      setTicket(data)
-    }
   }
 
   if (loading) {

@@ -226,7 +226,18 @@
     "cat_bank": "銀行",
     "cat_government": "官公庁",
     "create": "店舗を作成",
-    "creating": "作成中..."
+    "creating": "作成中...",
+    "qr_success": "店舗が正常に作成されました！",
+    "show_qr": "QRコードを表示"
+  },
+  "qr": {
+    "title": "QRコード",
+    "subtitle": "スキャンしてキューに参加",
+    "establishment": "店舗",
+    "download": "QRコードをダウンロード",
+    "print": "印刷",
+    "back": "戻る",
+    "scan_hint": "カメラをQRコードに向けてください"
   },
   "footer": {
     "made_with": "世界中の列をなくすために ❤️ で作成"
