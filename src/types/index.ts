@@ -72,7 +72,7 @@ export interface Game {
   name: string
   description: string | null
   type: 'quiz' | 'memory' | 'scratch' | 'spin' | 'word'
-  config: Record<string, any>
+  config: Record<string, unknown>
   is_active: boolean
   points_reward: number
   created_at: string

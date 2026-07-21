@@ -1,6 +1,6 @@
 'use client'
 
-import { use, useState, useRef, useEffect } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { useRouter, usePathname } from '@/i18n/navigation'
 import { locales, type Locale, localeNames, localeFlags } from '@/i18n/config'
 

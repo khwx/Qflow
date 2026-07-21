@@ -148,7 +148,7 @@ function QuizGame({ game, onComplete, onClose }: {
   onClose: () => void
 }) {
   const t = useTranslations('games')
-  const questions: { q: string; options: string[]; answer: number }[] = game.config.questions || [
+  const questions: { q: string; options: string[]; answer: number }[] = (game.config as { questions?: { q: string; options: string[]; answer: number }[] }).questions || [
     { q: 'Qual fruta é vermelha e redonda?', options: ['Maçã', 'Banana', 'Uva'], answer: 0 },
     { q: 'Quantas pernas tem uma aranha?', options: ['4', '6', '8'], answer: 2 },
     { q: 'Qual é o maior planeta?', options: ['Terra', 'Júpiter', 'Marte'], answer: 1 },
@@ -235,7 +235,7 @@ function SpinWheelGame({ game, onComplete, onClose }: {
   const t = useTranslations('games')
   const [spinning, setSpinning] = useState(false)
   const [rotation, setRotation] = useState(0)
-  const segments: { label: string; value: number }[] = game.config.segments || [
+  const segments: { label: string; value: number }[] = (game.config as { segments?: { label: string; value: number }[] }).segments || [
     { label: '10 pts', value: 10 },
     { label: '20 pts', value: 20 },
     { label: '50 pts', value: 50 },
