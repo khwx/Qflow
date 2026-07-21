@@ -293,6 +293,15 @@
     "login_success": "Login successful!",
     "signup_success": "Account created! Please check your email.",
     "password_mismatch": "Passwords do not match",
-    "logout": "Logout"
+    "logout": "Logout",
+    "forgot_title": "Forgot password?",
+    "forgot_subtitle": "Enter your email and we will send you a reset link.",
+    "send_reset_link": "Send Reset Link",
+    "email_sent_title": "Check your email",
+    "email_sent_desc": "We sent you a password reset link. Please check your inbox.",
+    "back_to_login": "Back to login",
+    "reset_title": "Reset Password",
+    "reset_subtitle": "Enter your new password below.",
+    "update_password": "Update Password"
   }
 }

@@ -290,6 +290,15 @@
     "login_success": "ログイン成功！",
     "signup_success": "アカウントを作成しました！メールを確認してください。",
     "password_mismatch": "パスワードが一致しません",
-    "logout": "ログアウト"
+    "logout": "ログアウト",
+    "forgot_title": "パスワードを忘れましたか？",
+    "forgot_subtitle": "メールアドレスを入力してください。リセットリンクを送信します。",
+    "send_reset_link": "リセットリンクを送信",
+    "email_sent_title": "メールを確認してください",
+    "email_sent_desc": "パスワードリセットリンクを送信しました。受信トレイを確認してください。",
+    "back_to_login": "ログインに戻る",
+    "reset_title": "パスワードのリセット",
+    "reset_subtitle": "新しいパスワードを以下に入力してください。",
+    "update_password": "パスワードを更新"
   }
 }

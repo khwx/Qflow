@@ -290,6 +290,15 @@
     "login_success": "¡Inicio de sesión exitoso!",
     "signup_success": "¡Cuenta creada! Revisa tu correo.",
     "password_mismatch": "Las contraseñas no coinciden",
-    "logout": "Cerrar sesión"
+    "logout": "Cerrar sesión",
+    "forgot_title": "¿Olvidaste tu contraseña?",
+    "forgot_subtitle": "Ingresa tu correo y te enviaremos un enlace de restablecimiento.",
+    "send_reset_link": "Enviar Enlace de Restablecimiento",
+    "email_sent_title": "Revisa tu correo",
+    "email_sent_desc": "Te enviamos un enlace de restablecimiento. Revisa tu bandeja de entrada.",
+    "back_to_login": "Volver al inicio de sesión",
+    "reset_title": "Restablecer Contraseña",
+    "reset_subtitle": "Ingresa tu nueva contraseña a continuación.",
+    "update_password": "Actualizar Contraseña"
   }
 }

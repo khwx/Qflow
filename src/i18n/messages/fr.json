@@ -290,6 +290,15 @@
     "login_success": "Connexion réussie !",
     "signup_success": "Compte créé ! Vérifiez votre email.",
     "password_mismatch": "Les mots de passe ne correspondent pas",
-    "logout": "Déconnexion"
+    "logout": "Déconnexion",
+    "forgot_title": "Mot de passe oublié ?",
+    "forgot_subtitle": "Entrez votre email et nous vous enverrons un lien de réinitialisation.",
+    "send_reset_link": "Envoyer le lien de réinitialisation",
+    "email_sent_title": "Vérifiez votre email",
+    "email_sent_desc": "Nous vous avons envoyé un lien de réinitialisation. Veuillez vérifier votre boîte de réception.",
+    "back_to_login": "Retour à la connexion",
+    "reset_title": "Réinitialiser le mot de passe",
+    "reset_subtitle": "Entrez votre nouveau mot de passe ci-dessous.",
+    "update_password": "Mettre à jour le mot de passe"
   }
 }

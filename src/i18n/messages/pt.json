@@ -293,6 +293,15 @@
     "login_success": "Login realizado com sucesso!",
     "signup_success": "Conta criada! Verifique seu email.",
     "password_mismatch": "As senhas não coincidem",
-    "logout": "Sair"
+    "logout": "Sair",
+    "forgot_title": "Esqueceu a senha?",
+    "forgot_subtitle": "Digite seu email e enviaremos um link de redefinição.",
+    "send_reset_link": "Enviar Link de Redefinição",
+    "email_sent_title": "Verifique seu email",
+    "email_sent_desc": "Enviamos um link de redefinição de senha. Verifique sua caixa de entrada.",
+    "back_to_login": "Voltar para o login",
+    "reset_title": "Redefinir Senha",
+    "reset_subtitle": "Digite sua nova senha abaixo.",
+    "update_password": "Atualizar Senha"
   }
 }

@@ -290,6 +290,15 @@
     "login_success": "Erfolgreich angemeldet!",
     "signup_success": "Konto erstellt! Bitte prüfen Sie Ihre E-Mail.",
     "password_mismatch": "Passwörter stimmen nicht überein",
-    "logout": "Abmelden"
+    "logout": "Abmelden",
+    "forgot_title": "Passwort vergessen?",
+    "forgot_subtitle": "Geben Sie Ihre E-Mail ein und wir senden Ihnen einen Reset-Link.",
+    "send_reset_link": "Reset-Link senden",
+    "email_sent_title": "Prüfen Sie Ihre E-Mail",
+    "email_sent_desc": "Wir haben Ihnen einen Reset-Link gesendet. Bitte prüfen Sie Ihren Posteingang.",
+    "back_to_login": "Zurück zum Login",
+    "reset_title": "Passwort zurücksetzen",
+    "reset_subtitle": "Geben Sie Ihr neues Passwort unten ein.",
+    "update_password": "Passwort aktualisieren"
   }
 }
