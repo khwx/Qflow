@@ -160,6 +160,21 @@
     "created": "생성일",
     "actions": "작업"
   },
+  "orders_admin": {
+    "title": "주문",
+    "description": "고객 주문 관리",
+    "ticket": "번호표",
+    "customer": "고객",
+    "items": "항목",
+    "total": "합계",
+    "status": "상태",
+    "time": "시간",
+    "actions": "작업",
+    "filter_all": "모든 상태",
+    "no_orders": "주문 없음",
+    "advance": "진행",
+    "cancel": "취소"
+  },
   "games_admin": {
     "title": "게임 관리",
     "description": "고객에게 제공되는 게임을 관리합니다",

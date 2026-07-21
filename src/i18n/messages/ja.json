@@ -160,6 +160,21 @@
     "created": "作成日時",
     "actions": "操作"
   },
+  "orders_admin": {
+    "title": "注文",
+    "description": "顧客の注文を管理",
+    "ticket": "番号券",
+    "customer": "顧客",
+    "items": "商品",
+    "total": "合計",
+    "status": "ステータス",
+    "time": "時間",
+    "actions": "操作",
+    "filter_all": "すべてのステータス",
+    "no_orders": "注文が見つかりません",
+    "advance": "進行",
+    "cancel": "キャンセル"
+  },
   "games_admin": {
     "title": "ゲーム管理",
     "description": "顧客向けゲームを管理",

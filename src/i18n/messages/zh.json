@@ -160,6 +160,21 @@
     "created": "创建时间",
     "actions": "操作"
   },
+  "orders_admin": {
+    "title": "订单",
+    "description": "管理客户订单",
+    "ticket": "号码",
+    "customer": "客户",
+    "items": "商品",
+    "total": "总计",
+    "status": "状态",
+    "time": "时间",
+    "actions": "操作",
+    "filter_all": "所有状态",
+    "no_orders": "未找到订单",
+    "advance": "推进",
+    "cancel": "取消"
+  },
   "games_admin": {
     "title": "游戏管理",
     "description": "管理提供给客户的游戏",

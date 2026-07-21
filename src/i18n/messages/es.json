@@ -160,6 +160,21 @@
     "created": "Creado el",
     "actions": "Acciones"
   },
+  "orders_admin": {
+    "title": "Pedidos",
+    "description": "Gestiona los pedidos de los clientes",
+    "ticket": "Ticket",
+    "customer": "Cliente",
+    "items": "Artículos",
+    "total": "Total",
+    "status": "Estado",
+    "time": "Hora",
+    "actions": "Acciones",
+    "filter_all": "Todos los estados",
+    "no_orders": "No se encontraron pedidos",
+    "advance": "Avanzar",
+    "cancel": "Cancelar"
+  },
   "games_admin": {
     "title": "Juegos",
     "description": "Gestiona los juegos disponibles para los clientes",

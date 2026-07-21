@@ -169,8 +169,8 @@ export default function WaitingPage({ params }: { params: Promise<{ locale: stri
           </div>
 
           <div className="lg:col-span-2">
-            <div className="bg-white rounded-xl shadow-sm overflow-hidden">
-              <div className="flex border-b">
+              <div className="bg-white rounded-xl shadow-sm overflow-hidden">
+                <div className="flex border-b overflow-x-auto">
                 <TabButton
                   icon={<Gamepad2 className="h-5 w-5" />}
                   label={t('games')}

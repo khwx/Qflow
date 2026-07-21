@@ -160,6 +160,21 @@
     "created": "Создан",
     "actions": "Действия"
   },
+  "orders_admin": {
+    "title": "Заказы",
+    "description": "Управление заказами клиентов",
+    "ticket": "Талон",
+    "customer": "Клиент",
+    "items": "Товары",
+    "total": "Итого",
+    "status": "Статус",
+    "time": "Время",
+    "actions": "Действия",
+    "filter_all": "Все статусы",
+    "no_orders": "Заказы не найдены",
+    "advance": "Продвинуть",
+    "cancel": "Отменить"
+  },
   "games_admin": {
     "title": "Игры",
     "description": "Управляйте играми, доступными для клиентов",

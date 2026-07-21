@@ -160,6 +160,21 @@
     "created": "أنشئ في",
     "actions": "إجراءات"
   },
+  "orders_admin": {
+    "title": "الطلبات",
+    "description": "إدارة طلبات العملاء",
+    "ticket": "التذكرة",
+    "customer": "العميل",
+    "items": "العناصر",
+    "total": "المجموع",
+    "status": "الحالة",
+    "time": "الوقت",
+    "actions": "إجراءات",
+    "filter_all": "جميع الحالات",
+    "no_orders": "لم يتم العثور على طلبات",
+    "advance": "متابعة",
+    "cancel": "إلغاء"
+  },
   "games_admin": {
     "title": "الألعاب",
     "description": "أدر الألعاب المتاحة للعملاء",

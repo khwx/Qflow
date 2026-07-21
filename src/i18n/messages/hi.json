@@ -160,6 +160,21 @@
     "created": "बनाया गया",
     "actions": "क्रियाएं"
   },
+  "orders_admin": {
+    "title": "ऑर्डर",
+    "description": "ग्राहक ऑर्डर प्रबंधन",
+    "ticket": "टिकट",
+    "customer": "ग्राहक",
+    "items": "आइटम",
+    "total": "कुल",
+    "status": "स्थिति",
+    "time": "समय",
+    "actions": "क्रियाएं",
+    "filter_all": "सभी स्थितियां",
+    "no_orders": "कोई ऑर्डर नहीं मिला",
+    "advance": "आगे बढ़ाएं",
+    "cancel": "रद्द करें"
+  },
   "games_admin": {
     "title": "खेल",
     "description": "ग्राहकों के लिए उपलब्ध खेल प्रबंधित करें",

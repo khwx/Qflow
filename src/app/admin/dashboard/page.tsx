@@ -179,7 +179,7 @@ function DashboardContent() {
         Última atualização: {lastRefresh.toLocaleTimeString('pt-BR')}
       </p>
 
-      <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
         {statCards.map((stat) => (
           <div key={stat.label} className="bg-white rounded-xl shadow-sm p-6">
             <div className="flex items-center justify-between mb-4">

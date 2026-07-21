@@ -101,7 +101,7 @@ export default function EstablishmentsPage() {
           <p className="text-gray-500">Nenhum estabelecimento cadastrado ainda</p>
         </div>
       ) : (
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {establishments.map((est) => (
             <div key={est.id} className="bg-white rounded-xl shadow-sm p-6 flex flex-col">
               <div className="flex items-start justify-between mb-4">

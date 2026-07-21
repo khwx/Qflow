@@ -160,6 +160,21 @@
     "created": "Créé le",
     "actions": "Actions"
   },
+  "orders_admin": {
+    "title": "Commandes",
+    "description": "Gérez les commandes des clients",
+    "ticket": "Ticket",
+    "customer": "Client",
+    "items": "Articles",
+    "total": "Total",
+    "status": "Statut",
+    "time": "Heure",
+    "actions": "Actions",
+    "filter_all": "Tous les statuts",
+    "no_orders": "Aucune commande trouvée",
+    "advance": "Avancer",
+    "cancel": "Annuler"
+  },
   "games_admin": {
     "title": "Jeux",
     "description": "Gérez les jeux disponibles pour les clients",

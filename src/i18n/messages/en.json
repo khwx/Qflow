@@ -160,6 +160,21 @@
     "created": "Created at",
     "actions": "Actions"
   },
+  "orders_admin": {
+    "title": "Orders",
+    "description": "Manage customer orders",
+    "ticket": "Ticket",
+    "customer": "Customer",
+    "items": "Items",
+    "total": "Total",
+    "status": "Status",
+    "time": "Time",
+    "actions": "Actions",
+    "filter_all": "All statuses",
+    "no_orders": "No orders found",
+    "advance": "Advance",
+    "cancel": "Cancel"
+  },
   "games_admin": {
     "title": "Games",
     "description": "Manage games available to customers",
