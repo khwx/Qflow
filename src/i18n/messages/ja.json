@@ -63,7 +63,8 @@
     "estimated_wait": "予想待ち時間",
     "queue_position": "キューの位置",
     "waiting_room": "待合室に入る",
-    "min": "分"
+    "min": "分",
+    "error_creating": "チケットの作成中にエラーが発生しました。もう一度お試しください。"
   },
   "waiting": {
     "status": "キューの状態",
@@ -89,11 +90,16 @@
   },
   "games": {
     "play": "プレイ",
-    "moves": "手数",
-    "question": "質問",
-    "points": "ポイント",
+    "play_demo": "デモプレイ",
+    "moves": "手数: {count}",
+    "question": "質問 {current}/{total}",
+    "points": "ポイント: {count}",
     "spin": "スピン！",
-    "spinning": "回転中..."
+    "spinning": "回転中...",
+    "score": "スコア",
+    "level": "レベル",
+    "time": "時間",
+    "best_score": "ベストスコア"
   },
   "polls": {
     "vote": "投票",

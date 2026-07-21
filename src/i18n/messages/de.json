@@ -63,7 +63,8 @@
     "estimated_wait": "Geschätzte Wartezeit",
     "queue_position": "Position in der Schlange",
     "waiting_room": "Wartebetreten",
-    "min": "Min"
+    "min": "Min",
+    "error_creating": "Fehler beim Erstellen des Tickets. Bitte versuchen Sie es erneut."
   },
   "waiting": {
     "status": "Schlangen-Status",
@@ -89,11 +90,16 @@
   },
   "games": {
     "play": "Spielen",
-    "moves": "Züge",
-    "question": "Frage",
-    "points": "Punkte",
+    "play_demo": "Demo Spielen",
+    "moves": "Züge: {count}",
+    "question": "Frage {current}/{total}",
+    "points": "Punkte: {count}",
     "spin": "Drehen!",
-    "spinning": "Dreht sich..."
+    "spinning": "Dreht sich...",
+    "score": "Punktzahl",
+    "level": "Level",
+    "time": "Zeit",
+    "best_score": "Bestpunktzahl"
   },
   "polls": {
     "vote": "Abstimmen",

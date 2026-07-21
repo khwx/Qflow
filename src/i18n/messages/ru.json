@@ -63,7 +63,8 @@
     "estimated_wait": "Примерное время ожидания",
     "queue_position": "Позиция в очереди",
     "waiting_room": "Войти в Зал Ожидания",
-    "min": "мин"
+    "min": "мин",
+    "error_creating": "Ошибка создания талона. Пожалуйста, попробуйте снова."
   },
   "waiting": {
     "status": "Статус Очереди",
@@ -89,11 +90,16 @@
   },
   "games": {
     "play": "Играть",
-    "moves": "Ходы",
-    "question": "Вопрос",
-    "points": "Баллы",
+    "play_demo": "Демо Игра",
+    "moves": "Ходы: {count}",
+    "question": "Вопрос {current}/{total}",
+    "points": "Баллы: {count}",
     "spin": "Крутить!",
-    "spinning": "Крутится..."
+    "spinning": "Крутится...",
+    "score": "Счёт",
+    "level": "Уровень",
+    "time": "Время",
+    "best_score": "Лучший Счёт"
   },
   "polls": {
     "vote": "Голосовать",

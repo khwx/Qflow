@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { createClientComponentClient } from '@/lib/supabase'
 import { Game } from '@/types'
 import { X, Trophy } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 
 interface GameModalProps {
   game: Game
@@ -13,6 +14,7 @@ interface GameModalProps {
 }
 
 export default function GameModal({ game, ticketId, onClose, onComplete }: GameModalProps) {
+  const t = useTranslations('games')
   const [score, setScore] = useState(0)
   const [isComplete, setIsComplete] = useState(false)
   const supabase = createClientComponentClient()
@@ -58,7 +60,7 @@ export default function GameModal({ game, ticketId, onClose, onComplete }: GameM
           onClick={() => completeGame(100)}
           className="w-full bg-indigo-600 text-white py-3 rounded-lg font-semibold hover:bg-indigo-700"
         >
-          Jogar Demo
+          {t('play_demo')}
         </button>
       </div>
     </div>
@@ -70,6 +72,7 @@ function MemoryGame({ game, onComplete, onClose }: {
   onComplete: (score: number) => void
   onClose: () => void
 }) {
+  const t = useTranslations('games')
   const emojis = ['🎮', '🎯', '🎨', '🎭', '🎪', '🎬']
   const [cards, setCards] = useState(() => shuffleArray([...emojis, ...emojis]).slice(0, 8))
   const [flipped, setFlipped] = useState<number[]>([])
@@ -132,7 +135,7 @@ function MemoryGame({ game, onComplete, onClose }: {
         </div>
 
         <div className="text-center text-sm text-gray-600">
-          Movimentos: {moves}
+          {t('moves', { count: moves })}
         </div>
       </div>
     </div>
@@ -144,6 +147,7 @@ function QuizGame({ game, onComplete, onClose }: {
   onComplete: (score: number) => void
   onClose: () => void
 }) {
+  const t = useTranslations('games')
   const questions: { q: string; options: string[]; answer: number }[] = game.config.questions || [
     { q: 'Qual fruta é vermelha e redonda?', options: ['Maçã', 'Banana', 'Uva'], answer: 0 },
     { q: 'Quantas pernas tem uma aranha?', options: ['4', '6', '8'], answer: 2 },
@@ -183,8 +187,8 @@ function QuizGame({ game, onComplete, onClose }: {
 
         <div className="mb-4">
           <div className="flex justify-between text-sm text-gray-600 mb-2">
-            <span>Questão {current + 1}/{questions.length}</span>
-            <span>Pontos: {score}</span>
+            <span>{t('question', { current: current + 1, total: questions.length })}</span>
+            <span>{t('points', { count: score })}</span>
           </div>
           <div className="w-full bg-gray-200 rounded-full h-2">
             <div
@@ -228,6 +232,7 @@ function SpinWheelGame({ game, onComplete, onClose }: {
   onComplete: (score: number) => void
   onClose: () => void
 }) {
+  const t = useTranslations('games')
   const [spinning, setSpinning] = useState(false)
   const [rotation, setRotation] = useState(0)
   const segments: { label: string; value: number }[] = game.config.segments || [
@@ -297,7 +302,7 @@ function SpinWheelGame({ game, onComplete, onClose }: {
           disabled={spinning}
           className="bg-indigo-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-indigo-700 disabled:opacity-50"
         >
-          {spinning ? 'Girando...' : 'Girar!'}
+          {spinning ? t('spinning') : t('spin')}
         </button>
       </div>
     </div>

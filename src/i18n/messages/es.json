@@ -63,7 +63,8 @@
     "estimated_wait": "Tiempo estimado de espera",
     "queue_position": "Posición en la cola",
     "waiting_room": "Entrar a la Sala de Espera",
-    "min": "min"
+    "min": "min",
+    "error_creating": "Error al crear la entrada. Por favor, inténtalo de nuevo."
   },
   "waiting": {
     "status": "Estado de la Cola",
@@ -89,11 +90,16 @@
   },
   "games": {
     "play": "Jugar",
-    "moves": "Movimientos",
-    "question": "Pregunta",
-    "points": "Puntos",
+    "play_demo": "Jugar Demo",
+    "moves": "Movimientos: {count}",
+    "question": "Pregunta {current}/{total}",
+    "points": "Puntos: {count}",
     "spin": "¡Girar!",
-    "spinning": "Girando..."
+    "spinning": "Girando...",
+    "score": "Puntuación",
+    "level": "Nivel",
+    "time": "Tiempo",
+    "best_score": "Mejor Puntuación"
   },
   "polls": {
     "vote": "Votar",

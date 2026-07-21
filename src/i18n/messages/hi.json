@@ -63,7 +63,8 @@
     "estimated_wait": "अनुमानित प्रतीक्षा",
     "queue_position": "क्यू में स्थिति",
     "waiting_room": "प्रतीक्षा कक्ष में प्रवेश करें",
-    "min": "मिनट"
+    "min": "मिनट",
+    "error_creating": "टिकट बनाने में त्रुटि। कृपया पुनः प्रयास करें।"
   },
   "waiting": {
     "status": "क्यू की स्थिति",
@@ -89,11 +90,16 @@
   },
   "games": {
     "play": "खेलें",
-    "moves": "चाल",
-    "question": "प्रश्न",
-    "points": "अंक",
+    "play_demo": "डेमो खेलें",
+    "moves": "चाल: {count}",
+    "question": "प्रश्न {current}/{total}",
+    "points": "अंक: {count}",
     "spin": "घुमाएं!",
-    "spinning": "घूम रहा है..."
+    "spinning": "घूम रहा है...",
+    "score": "स्कोर",
+    "level": "लेवल",
+    "time": "समय",
+    "best_score": "बेस्ट स्कोर"
   },
   "polls": {
     "vote": "वोट करें",

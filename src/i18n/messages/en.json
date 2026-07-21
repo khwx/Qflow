@@ -63,7 +63,8 @@
     "estimated_wait": "Estimated wait",
     "queue_position": "Queue position",
     "waiting_room": "Enter Waiting Room",
-    "min": "min"
+    "min": "min",
+    "error_creating": "Error creating ticket. Please try again."
   },
   "waiting": {
     "status": "Queue Status",
@@ -89,11 +90,16 @@
   },
   "games": {
     "play": "Play",
-    "moves": "Moves",
-    "question": "Question",
-    "points": "Points",
+    "play_demo": "Play Demo",
+    "moves": "Moves: {count}",
+    "question": "Question {current}/{total}",
+    "points": "Points: {count}",
     "spin": "Spin!",
-    "spinning": "Spinning..."
+    "spinning": "Spinning...",
+    "score": "Score",
+    "level": "Level",
+    "time": "Time",
+    "best_score": "Best Score"
   },
   "polls": {
     "vote": "Vote",

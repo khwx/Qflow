@@ -63,7 +63,8 @@
     "estimated_wait": "Temps d'attente estimé",
     "queue_position": "Position dans la file",
     "waiting_room": "Entrer dans la Salle d'Attente",
-    "min": "min"
+    "min": "min",
+    "error_creating": "Erreur lors de la création du ticket. Veuillez réessayer."
   },
   "waiting": {
     "status": "État de la File",
@@ -89,11 +90,16 @@
   },
   "games": {
     "play": "Jouer",
-    "moves": "Coups",
-    "question": "Question",
-    "points": "Points",
+    "play_demo": "Jouer Démo",
+    "moves": "Coups: {count}",
+    "question": "Question {current}/{total}",
+    "points": "Points: {count}",
     "spin": "Tournez !",
-    "spinning": "En train de tourner..."
+    "spinning": "En train de tourner...",
+    "score": "Score",
+    "level": "Niveau",
+    "time": "Temps",
+    "best_score": "Meilleur Score"
   },
   "polls": {
     "vote": "Voter",

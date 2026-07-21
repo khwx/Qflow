@@ -63,7 +63,8 @@
     "estimated_wait": "وقت الانتظار المقدر",
     "queue_position": "الموقع في الطابور",
     "waiting_room": "ادخل غرفة الانتظار",
-    "min": "دقيقة"
+    "min": "دقيقة",
+    "error_creating": "خطأ في إنشاء التذكرة. يرجى المحاولة مرة أخرى."
   },
   "waiting": {
     "status": "حالة الطابور",
@@ -89,11 +90,16 @@
   },
   "games": {
     "play": "العب",
-    "moves": "حركات",
-    "question": "سؤال",
-    "points": "نقاط",
+    "play_demo": "العب التجريبي",
+    "moves": "حركات: {count}",
+    "question": "سؤال {current}/{total}",
+    "points": "نقاط: {count}",
     "spin": "أدر!",
-    "spinning": "جاري الدوران..."
+    "spinning": "جاري الدوران...",
+    "score": "النقاط",
+    "level": "المستوى",
+    "time": "الوقت",
+    "best_score": "أفضل نقاط"
   },
   "polls": {
     "vote": "صوّت",

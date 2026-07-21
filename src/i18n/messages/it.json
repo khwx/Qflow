@@ -63,7 +63,8 @@
     "estimated_wait": "Tempo di attesa stimato",
     "queue_position": "Posizione nella coda",
     "waiting_room": "Entra nella Sala d'Attesa",
-    "min": "min"
+    "min": "min",
+    "error_creating": "Errore nella creazione del ticket. Riprova."
   },
   "waiting": {
     "status": "Stato della Coda",
@@ -89,11 +90,16 @@
   },
   "games": {
     "play": "Gioca",
-    "moves": "Mosse",
-    "question": "Domanda",
-    "points": "Punti",
+    "play_demo": "Gioca Demo",
+    "moves": "Mosse: {count}",
+    "question": "Domanda {current}/{total}",
+    "points": "Punti: {count}",
     "spin": "Gira!",
-    "spinning": "Girando..."
+    "spinning": "Girando...",
+    "score": "Punteggio",
+    "level": "Livello",
+    "time": "Tempo",
+    "best_score": "Miglior Punteggio"
   },
   "polls": {
     "vote": "Vota",

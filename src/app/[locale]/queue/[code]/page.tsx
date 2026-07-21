@@ -25,6 +25,11 @@ export default function QueuePage({ params }: { params: Promise<{ locale: string
   const router = useRouter()
   const supabase = createClientComponentClient()
 
+  const validatePhone = (phone: string) => {
+    const cleaned = phone.replace(/\D/g, '')
+    return cleaned.length >= 10 && cleaned.length <= 11
+  }
+
   useEffect(() => {
     if (!code) {
       router.push('/enter')
@@ -230,9 +235,15 @@ export default function QueuePage({ params }: { params: Promise<{ locale: string
                   type="tel"
                   value={customerPhone}
                   onChange={(e) => setCustomerPhone(e.target.value)}
+                  onBlur={() => {
+                    if (customerPhone && !validatePhone(customerPhone)) {
+                      toast.error('Número de telefone inválido')
+                    }
+                  }}
                   placeholder={t('phone_placeholder')}
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500"
                 />
+                <p className="text-xs text-gray-500 mt-1">Formato: (00) 00000-0000</p>
               </div>
 
               <button

@@ -63,7 +63,8 @@
     "estimated_wait": "예상 대기 시간",
     "queue_position": "줄에서의 위치",
     "waiting_room": "대기실 입장",
-    "min": "분"
+    "min": "분",
+    "error_creating": "티켓 생성 오류. 다시 시도해 주세요."
   },
   "waiting": {
     "status": "줄 상태",
@@ -89,11 +90,16 @@
   },
   "games": {
     "play": "플레이",
-    "moves": "이동",
-    "question": "질문",
-    "points": "포인트",
+    "play_demo": "데모 플레이",
+    "moves": "이동: {count}",
+    "question": "질문 {current}/{total}",
+    "points": "포인트: {count}",
     "spin": "스핀!",
-    "spinning": "스핀 중..."
+    "spinning": "스핀 중...",
+    "score": "점수",
+    "level": "레벨",
+    "time": "시간",
+    "best_score": "최고 점수"
   },
   "polls": {
     "vote": "투표",

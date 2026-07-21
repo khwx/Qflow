@@ -63,7 +63,8 @@
     "estimated_wait": "预计等待时间",
     "queue_position": "排队位置",
     "waiting_room": "进入等候区",
-    "min": "分钟"
+    "min": "分钟",
+    "error_creating": "创建票证时出错。请重试。"
   },
   "waiting": {
     "status": "排队状态",
@@ -89,11 +90,16 @@
   },
   "games": {
     "play": "开始游戏",
-    "moves": "步数",
-    "question": "问题",
-    "points": "积分",
+    "play_demo": "试玩",
+    "moves": "步数: {count}",
+    "question": "问题 {current}/{total}",
+    "points": "积分: {count}",
     "spin": "转盘！",
-    "spinning": "转动中..."
+    "spinning": "转动中...",
+    "score": "得分",
+    "level": "等级",
+    "time": "时间",
+    "best_score": "最高分"
   },
   "polls": {
     "vote": "投票",
