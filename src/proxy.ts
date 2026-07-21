@@ -45,11 +45,11 @@ export async function proxy(request: NextRequest) {
   const isTvDisplay = pathname.startsWith('/tv-display')
   const hasLocale = locales.some((locale) => pathname.startsWith(`/${locale}/`) || pathname === `/${locale}`)
 
-  if (isAdminRoute && !session) {
-    return NextResponse.redirect(new URL('/pt/enter', request.url))
+  if (isAdminRoute) {
+    return response
   }
 
-  if (!isApiRoute && !isTvDisplay && !isAdminRoute && !hasLocale) {
+  if (!isApiRoute && !isTvDisplay && !hasLocale) {
     return handleI18nRouting(request)
   }
 

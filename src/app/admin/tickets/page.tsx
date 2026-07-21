@@ -1,25 +1,51 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { Suspense, useState, useEffect } from 'react'
 import { createClientComponentClient } from '@/lib/supabase'
-import { Ticket } from '@/types'
+import { Ticket, Establishment } from '@/types'
 import toast from 'react-hot-toast'
 import { Check, X, Search, Play } from 'lucide-react'
+import { useSearchParams } from 'next/navigation'
+import Link from 'next/link'
 
-export default function TicketsPage() {
+function TicketsContent() {
+  const searchParams = useSearchParams()
+  const estSlug = searchParams.get('est')
+  const [establishment, setEstablishment] = useState<Establishment | null>(null)
   const [tickets, setTickets] = useState<Ticket[]>([])
   const [filter, setFilter] = useState('all')
   const [search, setSearch] = useState('')
+  const [loading, setLoading] = useState(true)
   const supabase = createClientComponentClient()
 
   useEffect(() => {
-    loadTickets()
-  }, [filter])
+    if (estSlug) {
+      supabase
+        .from('establishments')
+        .select('*')
+        .eq('slug', estSlug)
+        .single()
+        .then(({ data }) => {
+          setEstablishment(data)
+          if (data) loadTickets(data.id)
+        })
+    } else {
+      setLoading(false)
+    }
+  }, [estSlug])
 
-  const loadTickets = async () => {
+  useEffect(() => {
+    if (establishment) {
+      loadTickets(establishment.id)
+    }
+  }, [filter, establishment])
+
+  const loadTickets = async (establishmentId: string) => {
+    setLoading(true)
     let query = supabase
       .from('tickets')
-      .select('*, queues(name)')
+      .select('*, queues!inner(establishment_id, name)')
+      .eq('queues.establishment_id', establishmentId)
       .order('created_at', { ascending: false })
 
     if (filter !== 'all') {
@@ -38,6 +64,7 @@ export default function TicketsPage() {
       }
       setTickets(filtered)
     }
+    setLoading(false)
   }
 
   const updateStatus = async (id: string, status: Ticket['status']) => {
@@ -64,7 +91,7 @@ export default function TicketsPage() {
     }
 
     toast.success(`Status alterado para "${statusLabels[status]}"`)
-    loadTickets()
+    if (establishment) loadTickets(establishment.id)
   }
 
   const getStatusBadge = (status: string) => {
@@ -89,12 +116,30 @@ export default function TicketsPage() {
     )
   }
 
+  if (loading) {
+    return <div className="animate-pulse">Carregando...</div>
+  }
+
+  if (!estSlug || !establishment) {
+    return (
+      <div className="text-center py-12">
+        <p className="text-gray-500 text-lg mb-4">Nenhum estabelecimento selecionado</p>
+        <Link
+          href="/admin/establishments"
+          className="text-indigo-600 hover:text-indigo-800 underline"
+        >
+          Selecionar estabelecimento
+        </Link>
+      </div>
+    )
+  }
+
   return (
     <div>
       <div className="flex justify-between items-center mb-6">
         <div>
           <h2 className="text-2xl font-bold text-gray-900">Senhas</h2>
-          <p className="text-gray-600">Gerencie todas as senhas</p>
+          <p className="text-gray-600">Gerencie todas as senhas de {establishment.name}</p>
         </div>
       </div>
 
@@ -219,5 +264,17 @@ export default function TicketsPage() {
         )}
       </div>
     </div>
+  )
+}
+
+export default function TicketsPage() {
+  return (
+    <Suspense fallback={
+      <div className="flex items-center justify-center py-20">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600" />
+      </div>
+    }>
+      <TicketsContent />
+    </Suspense>
   )
 }

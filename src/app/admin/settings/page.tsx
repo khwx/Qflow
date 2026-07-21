@@ -1,13 +1,13 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { Suspense, useState, useEffect } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { createClientComponentClient } from '@/lib/supabase'
 import toast from 'react-hot-toast'
 import { AlertCircle, Loader2, Save } from 'lucide-react'
 import Link from 'next/link'
 
-export default function SettingsPage() {
+function SettingsContent() {
   const searchParams = useSearchParams()
   const estSlug = searchParams.get('est')
 
@@ -416,5 +416,17 @@ export default function SettingsPage() {
         </div>
       </div>
     </div>
+  )
+}
+
+export default function SettingsPage() {
+  return (
+    <Suspense fallback={
+      <div className="flex items-center justify-center py-20">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600" />
+      </div>
+    }>
+      <SettingsContent />
+    </Suspense>
   )
 }

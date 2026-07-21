@@ -1,12 +1,17 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { Suspense, useState, useEffect } from 'react'
 import { createClientComponentClient } from '@/lib/supabase'
-import { Game } from '@/types'
+import { Game, Establishment } from '@/types'
 import toast from 'react-hot-toast'
 import { Plus, Trash2, ToggleLeft, ToggleRight } from 'lucide-react'
+import { useSearchParams } from 'next/navigation'
+import Link from 'next/link'
 
-export default function GamesPage() {
+function GamesContent() {
+  const searchParams = useSearchParams()
+  const estSlug = searchParams.get('est')
+  const [establishment, setEstablishment] = useState<Establishment | null>(null)
   const [games, setGames] = useState<Game[]>([])
   const [showForm, setShowForm] = useState(false)
   const [newGame, setNewGame] = useState({
@@ -18,13 +23,24 @@ export default function GamesPage() {
   const supabase = createClientComponentClient()
 
   useEffect(() => {
-    loadGames()
-  }, [])
+    if (estSlug) {
+      supabase
+        .from('establishments')
+        .select('*')
+        .eq('slug', estSlug)
+        .single()
+        .then(({ data }) => {
+          setEstablishment(data)
+          if (data) loadGames(data.id)
+        })
+    }
+  }, [estSlug])
 
-  const loadGames = async () => {
+  const loadGames = async (establishmentId: string) => {
     const { data } = await supabase
       .from('games')
       .select('*')
+      .eq('establishment_id', establishmentId)
       .order('name')
 
     if (data) setGames(data)
@@ -35,6 +51,7 @@ export default function GamesPage() {
     
     const { error } = await supabase.from('games').insert({
       ...newGame,
+      establishment_id: establishment!.id,
       config: newGame.type === 'quiz' ? {
         questions: [
           { q: 'Pergunta exemplo 1?', options: ['A', 'B', 'C'], answer: 0 },
@@ -51,7 +68,7 @@ export default function GamesPage() {
     toast.success('Jogo criado com sucesso!')
     setNewGame({ name: '', description: '', type: 'quiz', points_reward: 10 })
     setShowForm(false)
-    loadGames()
+    loadGames(establishment!.id)
   }
 
   const toggleGame = async (game: Game) => {
@@ -66,7 +83,7 @@ export default function GamesPage() {
     }
 
     toast.success(game.is_active ? 'Jogo desativado' : 'Jogo ativado')
-    loadGames()
+    if (establishment) loadGames(establishment.id)
   }
 
   const deleteGame = async (id: string) => {
@@ -76,7 +93,21 @@ export default function GamesPage() {
       return
     }
     toast.success('Jogo excluído com sucesso!')
-    loadGames()
+    if (establishment) loadGames(establishment.id)
+  }
+
+  if (!estSlug || !establishment) {
+    return (
+      <div className="text-center py-12">
+        <p className="text-gray-500 text-lg mb-4">Nenhum estabelecimento selecionado</p>
+        <Link
+          href="/admin/establishments"
+          className="text-indigo-600 hover:text-indigo-800 underline"
+        >
+          Selecionar estabelecimento
+        </Link>
+      </div>
+    )
   }
 
   return (
@@ -84,7 +115,7 @@ export default function GamesPage() {
       <div className="flex justify-between items-center mb-6">
         <div>
           <h2 className="text-2xl font-bold text-gray-900">Jogos</h2>
-          <p className="text-gray-600">Gerencie os jogos disponíveis para os clientes</p>
+          <p className="text-gray-600">Gerencie os jogos de {establishment.name}</p>
         </div>
         <button
           onClick={() => setShowForm(!showForm)}
@@ -206,5 +237,17 @@ export default function GamesPage() {
         </div>
       )}
     </div>
+  )
+}
+
+export default function GamesPage() {
+  return (
+    <Suspense fallback={
+      <div className="flex items-center justify-center py-20">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600" />
+      </div>
+    }>
+      <GamesContent />
+    </Suspense>
   )
 }

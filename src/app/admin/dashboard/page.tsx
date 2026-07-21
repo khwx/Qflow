@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
+import { Suspense, useState, useEffect, useCallback } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { createClientComponentClient } from '@/lib/supabase'
 import { BarChart3, Users, Ticket, TrendingUp, Clock, RefreshCw, QrCode, AlertCircle } from 'lucide-react'
@@ -42,7 +42,7 @@ function getStatusColor(status: string): string {
   return colors[status] || 'bg-gray-400'
 }
 
-export default function DashboardPage() {
+function DashboardContent() {
   const searchParams = useSearchParams()
   const estSlug = searchParams.get('est')
 
@@ -240,5 +240,17 @@ export default function DashboardPage() {
         </div>
       </div>
     </div>
+  )
+}
+
+export default function DashboardPage() {
+  return (
+    <Suspense fallback={
+      <div className="flex items-center justify-center py-20">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600" />
+      </div>
+    }>
+      <DashboardContent />
+    </Suspense>
   )
 }

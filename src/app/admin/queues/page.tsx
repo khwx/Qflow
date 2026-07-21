@@ -1,12 +1,17 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { Suspense, useState, useEffect } from 'react'
 import { createClientComponentClient } from '@/lib/supabase'
-import { Queue, Ticket } from '@/types'
+import { Queue, Ticket, Establishment } from '@/types'
 import toast from 'react-hot-toast'
 import { Plus, Play, Check, X, Trash2 } from 'lucide-react'
+import { useSearchParams } from 'next/navigation'
+import Link from 'next/link'
 
-export default function QueuesPage() {
+function QueuesContent() {
+  const searchParams = useSearchParams()
+  const estSlug = searchParams.get('est')
+  const [establishment, setEstablishment] = useState<Establishment | null>(null)
   const [queues, setQueues] = useState<Queue[]>([])
   const [tickets, setTickets] = useState<Ticket[]>([])
   const [loading, setLoading] = useState(true)
@@ -15,13 +20,26 @@ export default function QueuesPage() {
   const supabase = createClientComponentClient()
 
   useEffect(() => {
-    loadData()
-  }, [])
+    if (estSlug) {
+      supabase
+        .from('establishments')
+        .select('*')
+        .eq('slug', estSlug)
+        .single()
+        .then(({ data }) => {
+          setEstablishment(data)
+          if (data) loadData(data.id)
+        })
+    } else {
+      setLoading(false)
+    }
+  }, [estSlug])
 
-  const loadData = async () => {
+  const loadData = async (establishmentId: string) => {
     const { data: queuesData } = await supabase
       .from('queues')
       .select('*')
+      .eq('establishment_id', establishmentId)
       .order('name')
 
     if (queuesData) {
@@ -48,6 +66,7 @@ export default function QueuesPage() {
     
     const { error } = await supabase.from('queues').insert({
       ...newQueue,
+      establishment_id: establishment!.id,
       current_number: 0,
     })
 
@@ -59,7 +78,7 @@ export default function QueuesPage() {
     toast.success('Fila criada com sucesso!')
     setNewQueue({ name: '', description: '', estimated_wait_minutes: 5 })
     setShowForm(false)
-    loadData()
+    loadData(establishment!.id)
   }
 
   const callNext = async (queue: Queue) => {
@@ -85,7 +104,7 @@ export default function QueuesPage() {
         .eq('id', queue.id)
 
       toast.success(`Chamada senha ${nextTicket.ticket_number}`)
-      loadData()
+      loadData(establishment!.id)
     } else {
       toast.error('Nenhuma senha aguardando nesta fila')
     }
@@ -100,7 +119,7 @@ export default function QueuesPage() {
       })
       .eq('id', ticket.id)
 
-    loadData()
+    loadData(establishment!.id)
   }
 
   const deleteQueue = async (id: string) => {
@@ -110,11 +129,25 @@ export default function QueuesPage() {
       return
     }
     toast.success('Fila excluída com sucesso!')
-    loadData()
+    loadData(establishment!.id)
   }
 
   if (loading) {
     return <div className="animate-pulse">Carregando...</div>
+  }
+
+  if (!estSlug || !establishment) {
+    return (
+      <div className="text-center py-12">
+        <p className="text-gray-500 text-lg mb-4">Nenhum estabelecimento selecionado</p>
+        <Link
+          href="/admin/establishments"
+          className="text-indigo-600 hover:text-indigo-800 underline"
+        >
+          Selecionar estabelecimento
+        </Link>
+      </div>
+    )
   }
 
   return (
@@ -122,7 +155,7 @@ export default function QueuesPage() {
       <div className="flex justify-between items-center mb-6">
         <div>
           <h2 className="text-2xl font-bold text-gray-900">Filas</h2>
-          <p className="text-gray-600">Gerencie as filas do estabelecimento</p>
+          <p className="text-gray-600">Gerencie as filas de {establishment.name}</p>
         </div>
         <button
           onClick={() => setShowForm(!showForm)}
@@ -269,9 +302,21 @@ export default function QueuesPage() {
                 </div>
               )}
             </div>
-          )
+           )
         })}
       </div>
     </div>
+  )
+}
+
+export default function QueuesPage() {
+  return (
+    <Suspense fallback={
+      <div className="flex items-center justify-center py-20">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600" />
+      </div>
+    }>
+      <QueuesContent />
+    </Suspense>
   )
 }

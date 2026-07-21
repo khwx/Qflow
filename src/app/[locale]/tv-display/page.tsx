@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useTranslations } from 'next-intl'
 import { createClientComponentClient } from '@/lib/supabase'
 import { Ticket } from '@/types'
@@ -14,50 +14,102 @@ export default function TVDisplayPage() {
   const [tickets, setTickets] = useState<Ticket[]>([])
   const [soundEnabled, setSoundEnabled] = useState(true)
   const supabase = createClientComponentClient()
+  const channelRef = useRef<ReturnType<typeof supabase.channel> | null>(null)
 
-  useEffect(() => {
-    if (!code) return
-
-    loadData()
-    const interval = setInterval(loadData, 2000)
-
-    return () => clearInterval(interval)
-  }, [code])
-
-  const loadData = async () => {
+  const loadEstablishment = async (slug: string) => {
     const { data: est } = await supabase
       .from('establishments')
       .select('*')
-      .eq('slug', code.toLowerCase())
+      .eq('slug', slug.toLowerCase())
       .eq('is_active', true)
       .single()
 
     if (est) {
       setEstablishment(est)
+    }
+    return est
+  }
 
-      const { data: queueData } = await supabase
-        .from('queues')
+  const loadQueues = async (estId: string) => {
+    const { data: queueData } = await supabase
+      .from('queues')
+      .select('*')
+      .eq('establishment_id', estId)
+      .eq('is_active', true)
+
+    if (queueData) {
+      setQueues(queueData)
+      return queueData
+    }
+    return []
+  }
+
+  const loadTickets = async (estId: string) => {
+    const { data: queueData } = await supabase
+      .from('queues')
+      .select('id')
+      .eq('establishment_id', estId)
+      .eq('is_active', true)
+
+    if (queueData && queueData.length > 0) {
+      const queueIds = queueData.map(q => q.id)
+      const { data: ticketData } = await supabase
+        .from('tickets')
         .select('*')
-        .eq('establishment_id', est.id)
-        .eq('is_active', true)
+        .in('queue_id', queueIds)
+        .in('status', ['waiting', 'called', 'serving'])
+        .order('created_at')
 
-      if (queueData) {
-        setQueues(queueData)
-
-        const queueIds = queueData.map(q => q.id)
-        const { data: ticketData } = await supabase
-          .from('tickets')
-          .select('*')
-          .in('queue_id', queueIds)
-          .in('status', ['waiting', 'called', 'serving'])
-          .order('created_at')
-
-        if (ticketData) {
-          setTickets(ticketData)
-        }
+      if (ticketData) {
+        setTickets(ticketData)
       }
     }
   }
+
+  useEffect(() => {
+    if (!code) return
+
+    let cancelled = false
+
+    const setup = async () => {
+      const est = await loadEstablishment(code)
+      if (cancelled || !est) return
+
+      await Promise.all([
+        loadQueues(est.id),
+        loadTickets(est.id),
+      ])
+
+      if (cancelled) return
+
+      if (channelRef.current) {
+        supabase.removeChannel(channelRef.current)
+      }
+
+      const channel = supabase
+        .channel('tv-tickets')
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'tickets' }, () => {
+          loadTickets(est.id)
+        })
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'queues' }, () => {
+          loadQueues(est.id)
+          loadTickets(est.id)
+        })
+        .subscribe()
+
+      channelRef.current = channel
+    }
+
+    setup()
+
+    return () => {
+      cancelled = true
+      if (channelRef.current) {
+        supabase.removeChannel(channelRef.current)
+        channelRef.current = null
+      }
+    }
+  }, [code])
 
   if (!code) {
     return (
