@@ -1,26 +1,35 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useTranslations } from 'next-intl'
 import { useRouter, usePathname } from '@/i18n/navigation'
+import { useSearchParams } from 'next/navigation'
 import toast from 'react-hot-toast'
-import { QrCode, Search, MapPin } from 'lucide-react'
+import { QrCode, Search } from 'lucide-react'
 
 export default function EnterPage() {
   const t = useTranslations('enter')
   const [code, setCode] = useState('')
   const [loading, setLoading] = useState(false)
   const router = useRouter()
-  const pathname = usePathname()
+  const searchParams = useSearchParams()
+
+  useEffect(() => {
+    const urlCode = searchParams.get('code')
+    if (urlCode) {
+      setCode(urlCode.toUpperCase())
+      handleSubmit(new Event('submit') as any)
+    }
+  }, [])
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
+    e.preventDefault?.()
     const trimmed = code.trim()
     if (!trimmed) {
       toast.error(t('code_empty') || 'Digite um código para continuar')
       return
     }
-    
+
     setLoading(true)
     router.push(`/queue/${trimmed.toUpperCase()}`)
   }

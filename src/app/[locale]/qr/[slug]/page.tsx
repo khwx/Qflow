@@ -11,7 +11,7 @@ export default function QRCodePage({
 }: {
   params: Promise<{ locale: string; slug: string }>
 }) {
-  const { locale, slug } = use(params)
+  const { slug } = use(params)
   const t = useTranslations('qr')
   const tEstablishment = useTranslations('establishment')
   const router = useRouter()
@@ -20,15 +20,14 @@ export default function QRCodePage({
   const [establishmentName, setEstablishmentName] = useState('')
 
   useEffect(() => {
-    setQrUrl(`${window.location.origin}/${locale}/enter`)
-
+    setQrUrl(`${window.location.origin}/enter?code=${slug}`)
     const name = localStorage.getItem('establishment_name')
     if (name) {
       setEstablishmentName(name)
     } else {
       setEstablishmentName(slug.replace(/-/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase()))
     }
-  }, [locale, slug])
+  }, [slug])
 
   const handleDownload = () => {
     const svgEl = qrRef.current?.querySelector('svg')
