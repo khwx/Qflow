@@ -267,5 +267,29 @@
   },
   "footer": {
     "made_with": "صنع بـ ❤️ لإزالة الطوابير حول العالم"
+  },
+  "auth": {
+    "login_title": "مرحباً بعودتك",
+    "login_subtitle": "سجل الدخول لإدارة طوابيرك",
+    "signup_title": "أنشئ حسابك",
+    "signup_subtitle": "ابدأ في إدارة طوابيرك اليوم",
+    "email": "البريد الإلكتروني",
+    "password": "كلمة المرور",
+    "confirm_password": "تأكيد كلمة المرور",
+    "name": "الاسم الكامل",
+    "email_placeholder": "you@example.com",
+    "password_placeholder": "••••••••",
+    "name_placeholder": "محمد أحمد",
+    "login_button": "تسجيل الدخول",
+    "signup_button": "إنشاء حساب",
+    "loading": "جاري التحميل...",
+    "no_account": "ليس لديك حساب؟",
+    "has_account": "لديك حساب بالفعل؟",
+    "signup_link": "سجل الآن",
+    "login_link": "تسجيل الدخول",
+    "login_success": "تم تسجيل الدخول بنجاح!",
+    "signup_success": "تم إنشاء الحساب! تحقق من بريدك الإلكتروني.",
+    "password_mismatch": "كلمات المرور غير متطابقة",
+    "logout": "تسجيل الخروج"
   }
 }

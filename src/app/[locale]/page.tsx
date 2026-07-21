@@ -3,8 +3,9 @@
 import { use } from 'react'
 import { useTranslations } from 'next-intl'
 import { useRouter, usePathname, Link } from '@/i18n/navigation'
-import { QrCode, Smartphone, Clock, Gamepad2, BarChart3 } from 'lucide-react'
+import { QrCode, Smartphone, Clock, Gamepad2, BarChart3, LogIn, UserPlus } from 'lucide-react'
 import LanguageSwitcher from '@/components/ui/LanguageSwitcher'
+import { useAuth } from '@/contexts/AuthContext'
 
 export default function Home({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = use(params)
@@ -12,8 +13,18 @@ export default function Home({ params }: { params: Promise<{ locale: string }> }
   const tFeatures = useTranslations('features')
   const tSteps = useTranslations('steps')
   const tFooter = useTranslations('footer')
+  const tAuth = useTranslations('auth')
   const router = useRouter()
   const pathname = usePathname()
+  const { user, signOut } = useAuth()
+
+  const handleAuthClick = () => {
+    if (user) {
+      router.push('/admin/dashboard')
+    } else {
+      router.push('/auth/login')
+    }
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-500">
@@ -23,6 +34,25 @@ export default function Home({ params }: { params: Promise<{ locale: string }> }
           <span className="text-2xl font-bold">QFlow</span>
         </div>
         <div className="flex items-center gap-4">
+          <button
+            onClick={handleAuthClick}
+            className="rounded-lg bg-white/10 px-4 py-2 text-white hover:bg-white/20 transition"
+          >
+            {user ? tAuth('login_title') : (
+              <>
+                <LogIn className="h-4 w-4 inline mr-2" />
+                {tAuth('login_button')}
+              </>
+            )}
+          </button>
+          {user && (
+            <button
+              onClick={async () => { await signOut(); router.push('/') }}
+              className="rounded-lg bg-white/10 px-4 py-2 text-white hover:bg-white/20 transition"
+            >
+              {tAuth('logout', { default: 'Logout' })}
+            </button>
+          )}
           <Link
             href="/admin"
             className="rounded-lg bg-white/10 px-4 py-2 text-white hover:bg-white/20 transition"

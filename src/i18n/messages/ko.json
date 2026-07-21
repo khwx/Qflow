@@ -267,5 +267,29 @@
   },
   "footer": {
     "made_with": "전 세계의 줄을 없애기 위해 ❤️로 제작"
+  },
+  "auth": {
+    "login_title": "다시 오셔서 반갑습니다",
+    "login_subtitle": "로그인하여 대기열 관리",
+    "signup_title": "계정 만들기",
+    "signup_subtitle": "오늘부터 대기열 관리를 시작하세요",
+    "email": "이메일",
+    "password": "비밀번호",
+    "confirm_password": "비밀번호 확인",
+    "name": "전체 이름",
+    "email_placeholder": "you@example.com",
+    "password_placeholder": "••••••••",
+    "name_placeholder": "홍길동",
+    "login_button": "로그인",
+    "signup_button": "계정 생성",
+    "loading": "로딩 중...",
+    "no_account": "계정이 없으신가요?",
+    "has_account": "이미 계정이 있으신가요?",
+    "signup_link": "가입하기",
+    "login_link": "로그인",
+    "login_success": "로그인 성공!",
+    "signup_success": "계정이 생성되었습니다! 이메일을 확인하세요.",
+    "password_mismatch": "비밀번호가 일치하지 않습니다",
+    "logout": "로그아웃"
   }
 }

@@ -267,5 +267,29 @@
   },
   "footer": {
     "made_with": "世界中の列をなくすために ❤️ で作成"
+  },
+  "auth": {
+    "login_title": "おかえりなさい",
+    "login_subtitle": "ログインしてキューを管理",
+    "signup_title": "アカウント作成",
+    "signup_subtitle": "今日からキューの管理を始めましょう",
+    "email": "メールアドレス",
+    "password": "パスワード",
+    "confirm_password": "パスワード確認",
+    "name": "フルネーム",
+    "email_placeholder": "you@example.com",
+    "password_placeholder": "••••••••",
+    "name_placeholder": "田中太郎",
+    "login_button": "ログイン",
+    "signup_button": "アカウント作成",
+    "loading": "読み込み中...",
+    "no_account": "アカウントをお持ちでない方は",
+    "has_account": "すでにアカウントをお持ちの方は",
+    "signup_link": "新規登録",
+    "login_link": "ログイン",
+    "login_success": "ログイン成功！",
+    "signup_success": "アカウントを作成しました！メールを確認してください。",
+    "password_mismatch": "パスワードが一致しません",
+    "logout": "ログアウト"
   }
 }

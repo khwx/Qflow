@@ -270,5 +270,29 @@
   },
   "footer": {
     "made_with": "Feito com ❤️ para eliminar filas no mundo"
+  },
+  "auth": {
+    "login_title": "Bem-vindo de volta",
+    "login_subtitle": "Entre para gerenciar suas filas",
+    "signup_title": "Crie sua conta",
+    "signup_subtitle": "Comece a gerenciar suas filas hoje",
+    "email": "Email",
+    "password": "Senha",
+    "confirm_password": "Confirmar Senha",
+    "name": "Nome Completo",
+    "email_placeholder": "voce@exemplo.com",
+    "password_placeholder": "••••••••",
+    "name_placeholder": "João Silva",
+    "login_button": "Entrar",
+    "signup_button": "Criar Conta",
+    "loading": "Carregando...",
+    "no_account": "Não tem uma conta?",
+    "has_account": "Já tem uma conta?",
+    "signup_link": "Cadastre-se",
+    "login_link": "Entre",
+    "login_success": "Login realizado com sucesso!",
+    "signup_success": "Conta criada! Verifique seu email.",
+    "password_mismatch": "As senhas não coincidem",
+    "logout": "Sair"
   }
 }

@@ -267,5 +267,29 @@
   },
   "footer": {
     "made_with": "Fatto con ❤️ per eliminare le code nel mondo"
+  },
+  "auth": {
+    "login_title": "Bentornato",
+    "login_subtitle": "Accedi per gestire le tue code",
+    "signup_title": "Crea il tuo account",
+    "signup_subtitle": "Inizia a gestire le tue code oggi",
+    "email": "Email",
+    "password": "Password",
+    "confirm_password": "Conferma Password",
+    "name": "Nome Completo",
+    "email_placeholder": "tuo@esempio.it",
+    "password_placeholder": "••••••••",
+    "name_placeholder": "Mario Rossi",
+    "login_button": "Accedi",
+    "signup_button": "Crea Account",
+    "loading": "Caricamento...",
+    "no_account": "Non hai un account?",
+    "has_account": "Hai già un account?",
+    "signup_link": "Registrati",
+    "login_link": "Accedi",
+    "login_success": "Accesso riuscito!",
+    "signup_success": "Account creato! Controlla la tua email.",
+    "password_mismatch": "Le password non corrispondono",
+    "logout": "Disconnetti"
   }
 }

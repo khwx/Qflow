@@ -267,5 +267,29 @@
   },
   "footer": {
     "made_with": "Сделано с ❤️ для устранения очередей по всему миру"
+  },
+  "auth": {
+    "login_title": "С возвращением",
+    "login_subtitle": "Войдите, чтобы управлять очередями",
+    "signup_title": "Создайте аккаунт",
+    "signup_subtitle": "Начните управлять очередями сегодня",
+    "email": "Электронная почта",
+    "password": "Пароль",
+    "confirm_password": "Подтвердите пароль",
+    "name": "Полное имя",
+    "email_placeholder": "you@example.com",
+    "password_placeholder": "••••••••",
+    "name_placeholder": "Иван Иванов",
+    "login_button": "Войти",
+    "signup_button": "Создать аккаунт",
+    "loading": "Загрузка...",
+    "no_account": "Нет аккаунта?",
+    "has_account": "Уже есть аккаунт?",
+    "signup_link": "Зарегистрироваться",
+    "login_link": "Войти",
+    "login_success": "Вход выполнен успешно!",
+    "signup_success": "Аккаунт создан! Проверьте вашу почту.",
+    "password_mismatch": "Пароли не совпадают",
+    "logout": "Выйти"
   }
 }

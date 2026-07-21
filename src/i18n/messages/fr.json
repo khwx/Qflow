@@ -267,5 +267,29 @@
   },
   "footer": {
     "made_with": "Fait avec ❤️ pour éliminer les files dans le monde"
+  },
+  "auth": {
+    "login_title": "Content de vous revoir",
+    "login_subtitle": "Connectez-vous pour gérer vos files",
+    "signup_title": "Créez votre compte",
+    "signup_subtitle": "Commencez à gérer vos files aujourd'hui",
+    "email": "Email",
+    "password": "Mot de passe",
+    "confirm_password": "Confirmer le mot de passe",
+    "name": "Nom complet",
+    "email_placeholder": "vous@exemple.com",
+    "password_placeholder": "••••••••",
+    "name_placeholder": "Jean Dupont",
+    "login_button": "Se connecter",
+    "signup_button": "Créer un compte",
+    "loading": "Chargement...",
+    "no_account": "Pas encore de compte ?",
+    "has_account": "Vous avez déjà un compte ?",
+    "signup_link": "Inscrivez-vous",
+    "login_link": "Connectez-vous",
+    "login_success": "Connexion réussie !",
+    "signup_success": "Compte créé ! Vérifiez votre email.",
+    "password_mismatch": "Les mots de passe ne correspondent pas",
+    "logout": "Déconnexion"
   }
 }

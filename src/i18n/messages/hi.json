@@ -267,5 +267,29 @@
   },
   "footer": {
     "made_with": "दुनिया भर में लाइनों को समाप्त करने के लिए ❤️ से बनाया गया"
+  },
+  "auth": {
+    "login_title": "वापसी पर स्वागत है",
+    "login_subtitle": "अपनी कतारों का प्रबंधन करने के लिए लॉगिन करें",
+    "signup_title": "अपना खाता बनाएं",
+    "signup_subtitle": "आज ही अपनी कतारों का प्रबंधन शुरू करें",
+    "email": "ईमेल",
+    "password": "पासवर्ड",
+    "confirm_password": "पासवर्ड की पुष्टि करें",
+    "name": "पूरा नाम",
+    "email_placeholder": "you@example.com",
+    "password_placeholder": "••••••••",
+    "name_placeholder": "राहुल शर्मा",
+    "login_button": "लॉगिन करें",
+    "signup_button": "खाता बनाएं",
+    "loading": "लोड हो रहा है...",
+    "no_account": "खाता नहीं है?",
+    "has_account": "पहले से खाता है?",
+    "signup_link": "साइन अप करें",
+    "login_link": "लॉगिन करें",
+    "login_success": "लॉगिन सफल!",
+    "signup_success": "खाता बना दिया गया! अपना ईमेल जांचें।",
+    "password_mismatch": "पासवर्ड मेल नहीं खा रहे",
+    "logout": "लॉगआउट"
   }
 }

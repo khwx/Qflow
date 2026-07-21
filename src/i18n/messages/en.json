@@ -270,5 +270,29 @@
   },
   "footer": {
     "made_with": "Made with ❤️ to eliminate lines worldwide"
+  },
+  "auth": {
+    "login_title": "Welcome back",
+    "login_subtitle": "Sign in to manage your queues",
+    "signup_title": "Create your account",
+    "signup_subtitle": "Start managing your queues today",
+    "email": "Email",
+    "password": "Password",
+    "confirm_password": "Confirm Password",
+    "name": "Full Name",
+    "email_placeholder": "you@example.com",
+    "password_placeholder": "••••••••",
+    "name_placeholder": "John Doe",
+    "login_button": "Sign In",
+    "signup_button": "Create Account",
+    "loading": "Loading...",
+    "no_account": "Don't have an account?",
+    "has_account": "Already have an account?",
+    "signup_link": "Sign up",
+    "login_link": "Sign in",
+    "login_success": "Login successful!",
+    "signup_success": "Account created! Please check your email.",
+    "password_mismatch": "Passwords do not match",
+    "logout": "Logout"
   }
 }

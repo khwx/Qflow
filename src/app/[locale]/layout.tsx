@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation'
 import { Toaster } from 'react-hot-toast'
 import { Geist } from 'next/font/google'
 import { locales, localeNames } from '@/i18n/config'
+import { AuthProvider } from '@/contexts/AuthContext'
 import '../globals.css'
 
 const geist = Geist({
@@ -14,6 +15,8 @@ const geist = Geist({
 export function generateStaticParams() {
   return locales.map((locale) => ({ locale }))
 }
+
+export const dynamic = 'force-dynamic'
 
 const localizedMetadata: Record<string, { title: string; description: string }> = {
   pt: {
@@ -112,10 +115,12 @@ export default async function LocaleLayout({
   return (
     <html lang={locale} className={`${geist.variable} h-full antialiased`}>
       <body className="min-h-full">
-        <NextIntlClientProvider locale={locale} messages={messages}>
-          {children}
-          <Toaster position="top-center" />
-        </NextIntlClientProvider>
+        <AuthProvider>
+          <NextIntlClientProvider locale={locale} messages={messages}>
+            {children}
+            <Toaster position="top-center" />
+          </NextIntlClientProvider>
+        </AuthProvider>
       </body>
     </html>
   )

@@ -267,5 +267,29 @@
   },
   "footer": {
     "made_with": "Hecho con ❤️ para eliminar filas en el mundo"
+  },
+  "auth": {
+    "login_title": "Bienvenido de nuevo",
+    "login_subtitle": "Inicia sesión para gestionar tus colas",
+    "signup_title": "Crea tu cuenta",
+    "signup_subtitle": "Comienza a gestionar tus colas hoy",
+    "email": "Correo electrónico",
+    "password": "Contraseña",
+    "confirm_password": "Confirmar Contraseña",
+    "name": "Nombre Completo",
+    "email_placeholder": "tu@ejemplo.com",
+    "password_placeholder": "••••••••",
+    "name_placeholder": "Juan Pérez",
+    "login_button": "Iniciar Sesión",
+    "signup_button": "Crear Cuenta",
+    "loading": "Cargando...",
+    "no_account": "¿No tienes cuenta?",
+    "has_account": "¿Ya tienes cuenta?",
+    "signup_link": "Regístrate",
+    "login_link": "Inicia sesión",
+    "login_success": "¡Inicio de sesión exitoso!",
+    "signup_success": "¡Cuenta creada! Revisa tu correo.",
+    "password_mismatch": "Las contraseñas no coinciden",
+    "logout": "Cerrar sesión"
   }
 }

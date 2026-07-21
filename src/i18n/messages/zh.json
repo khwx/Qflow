@@ -267,5 +267,29 @@
   },
   "footer": {
     "made_with": "用 ❤️ 打造，消除全球排队"
+  },
+  "auth": {
+    "login_title": "欢迎回来",
+    "login_subtitle": "登录以管理您的队列",
+    "signup_title": "创建您的账户",
+    "signup_subtitle": "今天开始管理您的队列",
+    "email": "电子邮箱",
+    "password": "密码",
+    "confirm_password": "确认密码",
+    "name": "全名",
+    "email_placeholder": "you@example.com",
+    "password_placeholder": "••••••••",
+    "name_placeholder": "张三",
+    "login_button": "登录",
+    "signup_button": "创建账户",
+    "loading": "加载中...",
+    "no_account": "还没有账户？",
+    "has_account": "已有账户？",
+    "signup_link": "注册",
+    "login_link": "登录",
+    "login_success": "登录成功！",
+    "signup_success": "账户已创建！请检查您的邮箱。",
+    "password_mismatch": "密码不匹配",
+    "logout": "退出登录"
   }
 }

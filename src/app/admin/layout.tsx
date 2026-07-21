@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import AdminShell from '@/components/admin/AdminShell'
+import AdminAuthGuard from '@/components/admin/AdminAuthGuard'
 
 export const dynamic = 'force-dynamic'
 
@@ -14,5 +15,9 @@ export default function AdminLayout({
 }: {
   children: React.ReactNode
 }) {
-  return <AdminShell>{children}</AdminShell>
+  return (
+    <AdminAuthGuard>
+      <AdminShell>{children}</AdminShell>
+    </AdminAuthGuard>
+  )
 }

@@ -267,5 +267,29 @@
   },
   "footer": {
     "made_with": "Mit ❤️ gemacht, um Schlangen weltweit zu beseitigen"
+  },
+  "auth": {
+    "login_title": "Willkommen zurück",
+    "login_subtitle": "Melden Sie sich an, um Ihre Warteschlangen zu verwalten",
+    "signup_title": "Erstellen Sie Ihr Konto",
+    "signup_subtitle": "Beginnen Sie noch heute mit der Verwaltung Ihrer Warteschlangen",
+    "email": "E-Mail",
+    "password": "Passwort",
+    "confirm_password": "Passwort bestätigen",
+    "name": "Vollständiger Name",
+    "email_placeholder": "sie@beispiel.de",
+    "password_placeholder": "••••••••",
+    "name_placeholder": "Max Mustermann",
+    "login_button": "Anmelden",
+    "signup_button": "Konto erstellen",
+    "loading": "Laden...",
+    "no_account": "Noch kein Konto?",
+    "has_account": "Bereits ein Konto?",
+    "signup_link": "Registrieren",
+    "login_link": "Anmelden",
+    "login_success": "Erfolgreich angemeldet!",
+    "signup_success": "Konto erstellt! Bitte prüfen Sie Ihre E-Mail.",
+    "password_mismatch": "Passwörter stimmen nicht überein",
+    "logout": "Abmelden"
   }
 }
