@@ -136,19 +136,24 @@ alter table public.polls enable row level security;
 alter table public.poll_responses enable row level security;
 
 -- Policies para establishments
+drop policy if exists "Establishments are viewable by everyone" on public.establishments;
 create policy "Establishments are viewable by everyone" on public.establishments
   for select using (true);
 
+drop policy if exists "Establishments are insertable by authenticated users" on public.establishments;
 create policy "Establishments are insertable by authenticated users" on public.establishments
   for insert with check (auth.uid() = owner_id);
 
+drop policy if exists "Establishments are updatable by owner" on public.establishments;
 create policy "Establishments are updatable by owner" on public.establishments
   for update using (auth.uid() = owner_id);
 
 -- Policies para queues
+drop policy if exists "Queues are viewable by everyone" on public.queues;
 create policy "Queues are viewable by everyone" on public.queues
   for select using (true);
 
+drop policy if exists "Queues are insertable by owner" on public.queues;
 create policy "Queues are insertable by owner" on public.queues
   for insert with check (
     exists (
@@ -158,6 +163,7 @@ create policy "Queues are insertable by owner" on public.queues
     )
   );
 
+drop policy if exists "Queues are updatable by owner" on public.queues;
 create policy "Queues are updatable by owner" on public.queues
   for update using (
     exists (
@@ -168,12 +174,15 @@ create policy "Queues are updatable by owner" on public.queues
   );
 
 -- Policies para tickets
+drop policy if exists "Tickets are viewable by everyone" on public.tickets;
 create policy "Tickets are viewable by everyone" on public.tickets
   for select using (true);
 
+drop policy if exists "Tickets are insertable by everyone" on public.tickets;
 create policy "Tickets are insertable by everyone" on public.tickets
   for insert with check (true);
 
+drop policy if exists "Tickets are updatable by owner" on public.tickets;
 create policy "Tickets are updatable by owner" on public.tickets
   for update using (
     exists (
@@ -184,9 +193,11 @@ create policy "Tickets are updatable by owner" on public.tickets
   );
 
 -- Policies para games
+drop policy if exists "Games are viewable by everyone" on public.games;
 create policy "Games are viewable by everyone" on public.games
   for select using (true);
 
+drop policy if exists "Games are insertable by owner" on public.games;
 create policy "Games are insertable by owner" on public.games
   for insert with check (
     exists (
@@ -196,6 +207,7 @@ create policy "Games are insertable by owner" on public.games
     )
   );
 
+drop policy if exists "Games are updatable by owner" on public.games;
 create policy "Games are updatable by owner" on public.games
   for update using (
     exists (
@@ -206,16 +218,20 @@ create policy "Games are updatable by owner" on public.games
   );
 
 -- Policies para game_scores
+drop policy if exists "Game scores are viewable by everyone" on public.game_scores;
 create policy "Game scores are viewable by everyone" on public.game_scores
   for select using (true);
 
+drop policy if exists "Game scores are insertable by everyone" on public.game_scores;
 create policy "Game scores are insertable by everyone" on public.game_scores
   for insert with check (true);
 
 -- Policies para polls
+drop policy if exists "Polls are viewable by everyone" on public.polls;
 create policy "Polls are viewable by everyone" on public.polls
   for select using (true);
 
+drop policy if exists "Polls are insertable by owner" on public.polls;
 create policy "Polls are insertable by owner" on public.polls
   for insert with check (
     exists (
@@ -226,13 +242,16 @@ create policy "Polls are insertable by owner" on public.polls
   );
 
 -- Policies para poll_responses
+drop policy if exists "Poll responses are viewable by everyone" on public.poll_responses;
 create policy "Poll responses are viewable by everyone" on public.poll_responses
   for select using (true);
 
+drop policy if exists "Poll responses are insertable by everyone" on public.poll_responses;
 create policy "Poll responses are insertable by everyone" on public.poll_responses
   for insert with check (true);
 
 -- Policies para orders
+drop policy if exists "Orders are viewable by owner" on public.orders;
 create policy "Orders are viewable by owner" on public.orders
   for select using (
     exists (
@@ -242,6 +261,7 @@ create policy "Orders are viewable by owner" on public.orders
     )
   );
 
+drop policy if exists "Orders are insertable by everyone" on public.orders;
 create policy "Orders are insertable by everyone" on public.orders
   for insert with check (true);
 
