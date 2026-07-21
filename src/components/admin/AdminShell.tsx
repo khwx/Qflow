@@ -11,6 +11,7 @@ import {
   Settings,
   QrCode,
   LogOut,
+  User,
   Building2,
   Package,
   X,
@@ -19,6 +20,7 @@ import {
 import { cn } from '@/lib/utils'
 import { createClientComponentClient } from '@/lib/supabase'
 import { Establishment } from '@/types'
+import { useAuth } from '@/contexts/AuthContext'
 
 const navigation = [
   { name: 'Estabelecimentos', href: '/admin/establishments', icon: Building2 },
@@ -40,6 +42,7 @@ function AdminShellInner({
   const estSlug = searchParams.get('est')
   const [establishment, setEstablishment] = useState<Establishment | null>(null)
   const [sidebarOpen, setSidebarOpen] = useState(false)
+  const { user, signOut } = useAuth()
   const supabase = createClientComponentClient()
 
   useEffect(() => {
@@ -81,14 +84,27 @@ function AdminShellInner({
         ))}
       </nav>
 
-      <div className="absolute bottom-0 left-0 right-0 p-4 border-t">
-        <Link
-          href="/"
-          className="flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-gray-50 rounded-lg transition"
+      <div className="absolute bottom-0 left-0 right-0 p-4 border-t space-y-2">
+        {user && (
+          <div className="flex items-center gap-3 px-4 py-2">
+            <div className="h-8 w-8 rounded-full bg-indigo-100 flex items-center justify-center">
+              <User className="h-4 w-4 text-indigo-600" />
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="text-sm font-medium text-gray-900 truncate">
+                {user.user_metadata?.name || user.email?.split('@')[0]}
+              </p>
+              <p className="text-xs text-gray-500 truncate">{user.email}</p>
+            </div>
+          </div>
+        )}
+        <button
+          onClick={async () => { await signOut(); window.location.href = '/' }}
+          className="w-full flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-gray-50 rounded-lg transition"
         >
           <LogOut className="h-5 w-5" />
-          <span className="font-medium">Sair</span>
-        </Link>
+          <span className="font-medium">{user ? 'Sair' : 'Exit'}</span>
+        </button>
       </div>
     </>
   )
