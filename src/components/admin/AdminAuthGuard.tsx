@@ -1,18 +1,16 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { useRouter } from '@/i18n/navigation'
 import { useAuth } from '@/contexts/AuthContext'
 
 export default function AdminAuthGuard({ children }: { children: React.ReactNode }) {
   const { user, loading } = useAuth()
-  const router = useRouter()
 
   useEffect(() => {
     if (!loading && !user) {
-      router.push('/auth/login')
+      window.location.href = '/pt/auth/login'
     }
-  }, [user, loading, router])
+  }, [user, loading])
 
   if (loading) {
     return (
