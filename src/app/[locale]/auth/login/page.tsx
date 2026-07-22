@@ -29,7 +29,7 @@ export default function LoginPage() {
     }
 
     toast.success(t('login_success'))
-    router.push('/admin/dashboard')
+    window.location.href = '/admin/dashboard'
   }
 
   return (
@@ -86,7 +86,7 @@ export default function LoginPage() {
 
           <p className="text-center text-sm text-gray-600 mt-6">
             {t('no_account')}{' '}
-            <a href="/auth/signup" className="text-indigo-600 hover:underline font-medium">
+            <a href="/pt/auth/signup" className="text-indigo-600 hover:underline font-medium">
               {t('signup_link')}
             </a>
           </p>
