@@ -140,12 +140,12 @@ function DashboardContent() {
 
   if (!estSlug) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-[60vh] text-center">
-        <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-8 max-w-md">
+      <div className="flex flex-col items-center justify-center min-h-[60vh] text-center animate-fade-in">
+        <div className="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-2xl p-8 max-w-md">
           <AlertCircle className="h-12 w-12 text-yellow-500 mx-auto mb-4" />
-          <h2 className="text-xl font-semibold text-gray-900 mb-2">Nenhum estabelecimento selecionado</h2>
-          <p className="text-gray-600 mb-4">
-            Acesse o dashboard com o parâmetro <code className="bg-gray-100 px-1 rounded">?est=slug</code> para visualizar os dados.
+          <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">Nenhum estabelecimento selecionado</h2>
+          <p className="text-gray-600 dark:text-gray-400 mb-4">
+            Acesse o dashboard com o parâmetro <code className="bg-gray-200 dark:bg-gray-700 px-1 rounded">?est=slug</code> para visualizar os dados.
           </p>
           <Link
             href="/admin/establishments"
@@ -161,20 +161,20 @@ function DashboardContent() {
   const maxHourly = Math.max(...hourlyData.map(h => h.count), 1)
 
   const statCards = [
-    { label: 'Senhas Hoje', value: stats.todayTickets, icon: Ticket, color: 'bg-blue-500' },
-    { label: 'Aguardando', value: stats.waiting, icon: Clock, color: 'bg-yellow-500' },
-    { label: 'Atendidos', value: stats.completed, icon: Users, color: 'bg-green-500' },
-    { label: 'Tempo Médio', value: `${stats.avgWaitTime} min`, icon: TrendingUp, color: 'bg-purple-500' },
+    { label: 'Senhas Hoje', value: stats.todayTickets, icon: Ticket, color: 'from-blue-500 to-blue-600' },
+    { label: 'Aguardando', value: stats.waiting, icon: Clock, color: 'from-yellow-400 to-orange-400' },
+    { label: 'Atendidos', value: stats.completed, icon: Users, color: 'from-green-400 to-emerald-500' },
+    { label: 'Tempo Médio', value: `${stats.avgWaitTime} min`, icon: TrendingUp, color: 'from-purple-400 to-pink-500' },
   ]
 
   return (
-    <div>
+    <div className="animate-fade-in">
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-3">
           <Link
             href={`/qr/${estSlug}`}
             target="_blank"
-            className="inline-flex items-center gap-2 bg-gray-100 text-gray-700 px-3 py-2 rounded-lg hover:bg-gray-200 transition-colors text-sm"
+            className="inline-flex items-center gap-2 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 px-3 py-2 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors text-sm"
           >
             <QrCode className="h-4 w-4" />
             QR Code
@@ -194,58 +194,58 @@ function DashboardContent() {
       </p>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-        {statCards.map((stat) => (
-          <div key={stat.label} className="bg-white rounded-xl shadow-sm p-6">
+        {statCards.map((stat, index) => (
+          <div key={stat.label} className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm p-6 border border-gray-200 dark:border-gray-700 animate-slide-up" style={{ animationDelay: `${index * 100}ms` }}>
             <div className="flex items-center justify-between mb-4">
-              <div className={`${stat.color} p-3 rounded-lg`}>
+              <div className={`bg-gradient-to-br ${stat.color} p-3 rounded-xl shadow-sm`}>
                 <stat.icon className="h-6 w-6 text-white" />
               </div>
             </div>
-            <p className="text-3xl font-bold text-gray-900">{stat.value}</p>
-            <p className="text-gray-600 text-sm mt-1">{stat.label}</p>
+            <p className="text-3xl font-bold text-gray-900 dark:text-white">{stat.value}</p>
+            <p className="text-gray-600 dark:text-gray-400 text-sm mt-1">{stat.label}</p>
           </div>
         ))}
       </div>
 
       <div className="grid lg:grid-cols-2 gap-6">
-        <div className="bg-white rounded-xl shadow-sm p-6">
-          <h3 className="font-semibold text-gray-900 mb-4">Atendimentos por Hora</h3>
+        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm p-6 border border-gray-200 dark:border-gray-700">
+          <h3 className="font-semibold text-gray-900 dark:text-white mb-4">Atendimentos por Hora</h3>
           {hourlyData.length === 0 ? (
-            <p className="text-gray-500 text-sm py-8 text-center">Nenhum atendimento registrado hoje.</p>
+            <p className="text-gray-500 dark:text-gray-400 text-sm py-8 text-center">Nenhum atendimento registrado hoje.</p>
           ) : (
             <div className="space-y-3">
               {hourlyData.map(({ hour, count }) => (
                 <div key={hour} className="flex items-center gap-4">
-                  <span className="text-sm text-gray-600 w-16">{hour}</span>
-                  <div className="flex-1 bg-gray-100 rounded-full h-4 overflow-hidden">
+                  <span className="text-sm text-gray-600 dark:text-gray-400 w-16">{hour}</span>
+                  <div className="flex-1 bg-gray-100 dark:bg-gray-700 rounded-full h-4 overflow-hidden">
                     <div
-                      className="bg-indigo-600 h-full rounded-full transition-all"
+                      className="bg-gradient-to-r from-indigo-500 to-purple-600 h-full rounded-full transition-all duration-500"
                       style={{ width: `${(count / maxHourly) * 100}%` }}
                     />
                   </div>
-                  <span className="text-sm font-medium w-12 text-right">{count}</span>
+                  <span className="text-sm font-medium w-12 text-right text-gray-900 dark:text-white">{count}</span>
                 </div>
               ))}
             </div>
           )}
         </div>
 
-        <div className="bg-white rounded-xl shadow-sm p-6">
-          <h3 className="font-semibold text-gray-900 mb-4">Atividades Recentes</h3>
+        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm p-6 border border-gray-200 dark:border-gray-700">
+          <h3 className="font-semibold text-gray-900 dark:text-white mb-4">Atividades Recentes</h3>
           {recentTickets.length === 0 ? (
-            <p className="text-gray-500 text-sm py-8 text-center">Nenhuma atividade recente.</p>
+            <p className="text-gray-500 dark:text-gray-400 text-sm py-8 text-center">Nenhuma atividade recente.</p>
           ) : (
             <div className="space-y-4">
               {recentTickets.map((ticket) => (
-                <div key={ticket.id} className="flex items-start gap-3 pb-3 border-b last:border-0">
+                <div key={ticket.id} className="flex items-start gap-3 pb-3 border-b last:border-0 border-gray-200 dark:border-gray-700">
                   <div className={`w-2 h-2 rounded-full mt-2 ${getStatusColor(ticket.status)}`} />
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm text-gray-900">
+                    <p className="text-sm text-gray-900 dark:text-white">
                       Senha <span className="font-medium">#{ticket.ticket_number}</span>
                       {' — '}
-                      <span className="text-gray-600">{getStatusLabel(ticket.status)}</span>
+                      <span className="text-gray-600 dark:text-gray-400">{getStatusLabel(ticket.status)}</span>
                     </p>
-                    <p className="text-xs text-gray-500">{timeAgo(ticket.created_at)}</p>
+                    <p className="text-xs text-gray-500 dark:text-gray-500">{timeAgo(ticket.created_at)}</p>
                   </div>
                 </div>
               ))}
