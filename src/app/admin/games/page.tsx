@@ -37,13 +37,17 @@ function GamesContent() {
   }, [estSlug])
 
   const loadGames = async (establishmentId: string) => {
-    const { data } = await supabase
-      .from('games')
-      .select('*')
-      .eq('establishment_id', establishmentId)
-      .order('name')
+    try {
+      const { data } = await supabase
+        .from('games')
+        .select('*')
+        .eq('establishment_id', establishmentId)
+        .order('name')
 
-    if (data) setGames(data)
+      if (data) setGames(data)
+    } catch (error) {
+      console.error('Load games error:', error)
+    }
   }
 
   const createGame = async (e: React.FormEvent) => {

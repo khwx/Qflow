@@ -90,23 +90,28 @@ function OrdersContent() {
   }, [establishment])
 
   const loadOrders = async (establishmentId: string) => {
-    setLoading(true)
-    let query = supabase
-      .from('orders')
-      .select('*, tickets(ticket_number, customer_name)')
-      .eq('establishment_id', establishmentId)
-      .order('created_at', { ascending: false })
+    try {
+      setLoading(true)
+      let query = supabase
+        .from('orders')
+        .select('*, tickets(ticket_number, customer_name)')
+        .eq('establishment_id', establishmentId)
+        .order('created_at', { ascending: false })
 
-    if (filter !== 'all') {
-      query = query.eq('status', filter)
+      if (filter !== 'all') {
+        query = query.eq('status', filter)
+      }
+
+      const { data } = await query
+
+      if (data) {
+        setOrders(data)
+      }
+    } catch (error) {
+      console.error('Load orders error:', error)
+    } finally {
+      setLoading(false)
     }
-
-    const { data } = await query
-
-    if (data) {
-      setOrders(data)
-    }
-    setLoading(false)
   }
 
   const updateStatus = async (orderId: string, newStatus: string) => {

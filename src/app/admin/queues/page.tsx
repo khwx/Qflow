@@ -36,29 +36,33 @@ function QueuesContent() {
   }, [estSlug])
 
   const loadData = async (establishmentId: string) => {
-    const { data: queuesData } = await supabase
-      .from('queues')
-      .select('*')
-      .eq('establishment_id', establishmentId)
-      .order('name')
-
-    if (queuesData) {
-      setQueues(queuesData)
-      
-      const queueIds = queuesData.map(q => q.id)
-      const { data: ticketsData } = await supabase
-        .from('tickets')
+    try {
+      const { data: queuesData } = await supabase
+        .from('queues')
         .select('*')
-        .in('queue_id', queueIds)
-        .in('status', ['waiting', 'called', 'serving'])
-        .order('created_at')
+        .eq('establishment_id', establishmentId)
+        .order('name')
 
-      if (ticketsData) {
-        setTickets(ticketsData)
+      if (queuesData) {
+        setQueues(queuesData)
+        
+        const queueIds = queuesData.map(q => q.id)
+        const { data: ticketsData } = await supabase
+          .from('tickets')
+          .select('*')
+          .in('queue_id', queueIds)
+          .in('status', ['waiting', 'called', 'serving'])
+          .order('created_at')
+
+        if (ticketsData) {
+          setTickets(ticketsData)
+        }
       }
+    } catch (error) {
+      console.error('Load queues error:', error)
+    } finally {
+      setLoading(false)
     }
-
-    setLoading(false)
   }
 
   const createQueue = async (e: React.FormEvent) => {

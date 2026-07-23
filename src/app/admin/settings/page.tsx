@@ -34,53 +34,57 @@ function SettingsContent() {
     }
 
     async function loadEstablishment() {
-      const supabase = createClientComponentClient()
-      const { data, error } = await supabase
-        .from('establishments')
-        .select('*')
-        .eq('slug', estSlug)
-        .single()
+      try {
+        const supabase = createClientComponentClient()
+        const { data, error } = await supabase
+          .from('establishments')
+          .select('*')
+          .eq('slug', estSlug)
+          .single()
 
-      if (error) {
-        toast.error('Erro ao carregar dados do estabelecimento')
-        setLoading(false)
-        return
-      }
-
-      if (data) {
-        let qrCodeEnabled = true
-        let notificationSound = true
-        let autoCall = true
-        let pointsEnabled = true
-
-        if (data.notes) {
-          try {
-            const parsed = typeof data.notes === 'string' ? JSON.parse(data.notes) : data.notes
-            if (typeof parsed.qr_code_enabled === 'boolean') qrCodeEnabled = parsed.qr_code_enabled
-            if (typeof parsed.notification_sound === 'boolean') notificationSound = parsed.notification_sound
-            if (typeof parsed.auto_call === 'boolean') autoCall = parsed.auto_call
-            if (typeof parsed.points_enabled === 'boolean') pointsEnabled = parsed.points_enabled
-          } catch {
-            // notes field is not valid JSON, use defaults
-          }
+        if (error) {
+          toast.error('Erro ao carregar dados do estabelecimento')
+          setLoading(false)
+          return
         }
 
-        setSettings({
-          name: data.name || '',
-          description: data.description || '',
-          primary_color: data.primary_color || '#4f46e5',
-          secondary_color: data.secondary_color || '#000000',
-          phone: data.phone || '',
-          address: data.address || '',
-          is_active: data.is_active ?? true,
-          qr_code_enabled: qrCodeEnabled,
-          notification_sound: notificationSound,
-          auto_call: autoCall,
-          points_enabled: pointsEnabled,
-        })
-      }
+        if (data) {
+          let qrCodeEnabled = true
+          let notificationSound = true
+          let autoCall = true
+          let pointsEnabled = true
 
-      setLoading(false)
+          if (data.notes) {
+            try {
+              const parsed = typeof data.notes === 'string' ? JSON.parse(data.notes) : data.notes
+              if (typeof parsed.qr_code_enabled === 'boolean') qrCodeEnabled = parsed.qr_code_enabled
+              if (typeof parsed.notification_sound === 'boolean') notificationSound = parsed.notification_sound
+              if (typeof parsed.auto_call === 'boolean') autoCall = parsed.auto_call
+              if (typeof parsed.points_enabled === 'boolean') pointsEnabled = parsed.points_enabled
+            } catch {
+              // notes field is not valid JSON, use defaults
+            }
+          }
+
+          setSettings({
+            name: data.name || '',
+            description: data.description || '',
+            primary_color: data.primary_color || '#4f46e5',
+            secondary_color: data.secondary_color || '#000000',
+            phone: data.phone || '',
+            address: data.address || '',
+            is_active: data.is_active ?? true,
+            qr_code_enabled: qrCodeEnabled,
+            notification_sound: notificationSound,
+            auto_call: autoCall,
+            points_enabled: pointsEnabled,
+          })
+        }
+      } catch (error) {
+        console.error('Load establishment error:', error)
+      } finally {
+        setLoading(false)
+      }
     }
 
     loadEstablishment()

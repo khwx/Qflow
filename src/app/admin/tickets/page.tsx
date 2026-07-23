@@ -41,30 +41,35 @@ function TicketsContent() {
   }, [filter, establishment])
 
   const loadTickets = async (establishmentId: string) => {
-    setLoading(true)
-    let query = supabase
-      .from('tickets')
-      .select('*, queues!inner(establishment_id, name)')
-      .eq('queues.establishment_id', establishmentId)
-      .order('created_at', { ascending: false })
+    try {
+      setLoading(true)
+      let query = supabase
+        .from('tickets')
+        .select('*, queues!inner(establishment_id, name)')
+        .eq('queues.establishment_id', establishmentId)
+        .order('created_at', { ascending: false })
 
-    if (filter !== 'all') {
-      query = query.eq('status', filter)
-    }
-
-    const { data } = await query
-
-    if (data) {
-      let filtered = data
-      if (search) {
-        filtered = data.filter((t: any) =>
-          t.ticket_number.toLowerCase().includes(search.toLowerCase()) ||
-          t.customer_name?.toLowerCase().includes(search.toLowerCase())
-        )
+      if (filter !== 'all') {
+        query = query.eq('status', filter)
       }
-      setTickets(filtered)
+
+      const { data } = await query
+
+      if (data) {
+        let filtered = data
+        if (search) {
+          filtered = data.filter((t: any) =>
+            t.ticket_number.toLowerCase().includes(search.toLowerCase()) ||
+            t.customer_name?.toLowerCase().includes(search.toLowerCase())
+          )
+        }
+        setTickets(filtered)
+      }
+    } catch (error) {
+      console.error('Load tickets error:', error)
+    } finally {
+      setLoading(false)
     }
-    setLoading(false)
   }
 
   const updateStatus = async (id: string, status: Ticket['status']) => {
