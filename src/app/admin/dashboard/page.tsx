@@ -5,6 +5,7 @@ import { useSearchParams } from 'next/navigation'
 import { createClientComponentClient } from '@/lib/supabase'
 import { BarChart3, Users, Ticket, TrendingUp, Clock, RefreshCw, QrCode, AlertCircle } from 'lucide-react'
 import Link from 'next/link'
+import { DashboardSkeleton } from '@/components/ui/Skeleton'
 import type { Ticket as TicketType } from '@/types'
 
 const REFRESH_INTERVAL = 10000
@@ -59,63 +60,76 @@ function DashboardContent() {
   const [lastRefresh, setLastRefresh] = useState<Date>(new Date())
 
   const loadDashboard = useCallback(async () => {
-    const supabase = createClientComponentClient()
-    const today = new Date().toISOString().split('T')[0]
+    try {
+      const supabase = createClientComponentClient()
+      const today = new Date().toISOString().split('T')[0]
 
-    let query = supabase.from('tickets').select('*')
-    if (estSlug) {
-      const { data: est } = await supabase
-        .from('establishments')
-        .select('id')
-        .eq('slug', estSlug)
-        .single()
-      if (est) query = query.eq('establishment_id', est.id)
+      let query = supabase.from('tickets').select('*')
+      if (estSlug) {
+        const { data: est } = await supabase
+          .from('establishments')
+          .select('id')
+          .eq('slug', estSlug)
+          .single()
+        if (est) query = query.eq('establishment_id', est.id)
+      }
+
+      const { data: tickets, error } = await query.order('created_at', { ascending: false })
+      
+      if (error) {
+        console.error('Dashboard load error:', error)
+        setLastRefresh(new Date())
+        setLoading(false)
+        return
+      }
+
+      if (tickets) {
+        const todayTickets = tickets.filter(t => t.created_at.startsWith(today))
+        const waiting = todayTickets.filter(t => t.status === 'waiting').length
+        const completed = todayTickets.filter(t => t.status === 'completed').length
+
+        const completedWithTime = todayTickets.filter(
+          t => t.status === 'completed' && t.completed_at && t.called_at
+        )
+        const avgWaitTime =
+          completedWithTime.length > 0
+            ? Math.round(
+                completedWithTime.reduce(
+                  (sum, t) =>
+                    sum + (new Date(t.completed_at!).getTime() - new Date(t.called_at!).getTime()) / 60000,
+                  0
+                ) / completedWithTime.length
+              )
+            : 0
+
+        setStats({
+          totalTickets: tickets.length,
+          waiting,
+          completed,
+          todayTickets: todayTickets.length,
+          avgWaitTime,
+        })
+
+        const hourCounts: Record<string, number> = {}
+        todayTickets.forEach(t => {
+          const h = new Date(t.created_at).getHours().toString().padStart(2, '0') + ':00'
+          hourCounts[h] = (hourCounts[h] || 0) + 1
+        })
+        const sortedHours = Object.entries(hourCounts)
+          .sort(([a], [b]) => a.localeCompare(b))
+          .map(([hour, count]) => ({ hour, count }))
+        setHourlyData(sortedHours)
+
+        setRecentTickets(tickets.slice(0, 5))
+      }
+
+      setLastRefresh(new Date())
+      setLoading(false)
+    } catch (error) {
+      console.error('Dashboard unexpected error:', error)
+      setLastRefresh(new Date())
+      setLoading(false)
     }
-
-    const { data: tickets } = await query.order('created_at', { ascending: false })
-
-    if (tickets) {
-      const todayTickets = tickets.filter(t => t.created_at.startsWith(today))
-      const waiting = todayTickets.filter(t => t.status === 'waiting').length
-      const completed = todayTickets.filter(t => t.status === 'completed').length
-
-      const completedWithTime = todayTickets.filter(
-        t => t.status === 'completed' && t.completed_at && t.called_at
-      )
-      const avgWaitTime =
-        completedWithTime.length > 0
-          ? Math.round(
-              completedWithTime.reduce(
-                (sum, t) =>
-                  sum + (new Date(t.completed_at!).getTime() - new Date(t.called_at!).getTime()) / 60000,
-                0
-              ) / completedWithTime.length
-            )
-          : 0
-
-      setStats({
-        totalTickets: tickets.length,
-        waiting,
-        completed,
-        todayTickets: todayTickets.length,
-        avgWaitTime,
-      })
-
-      const hourCounts: Record<string, number> = {}
-      todayTickets.forEach(t => {
-        const h = new Date(t.created_at).getHours().toString().padStart(2, '0') + ':00'
-        hourCounts[h] = (hourCounts[h] || 0) + 1
-      })
-      const sortedHours = Object.entries(hourCounts)
-        .sort(([a], [b]) => a.localeCompare(b))
-        .map(([hour, count]) => ({ hour, count }))
-      setHourlyData(sortedHours)
-
-      setRecentTickets(tickets.slice(0, 5))
-    }
-
-    setLastRefresh(new Date())
-    setLoading(false)
   }, [estSlug])
 
   useEffect(() => {
@@ -245,11 +259,7 @@ function DashboardContent() {
 
 export default function DashboardPage() {
   return (
-    <Suspense fallback={
-      <div className="flex items-center justify-center py-20">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600" />
-      </div>
-    }>
+    <Suspense fallback={<DashboardSkeleton />}>
       <DashboardContent />
     </Suspense>
   )

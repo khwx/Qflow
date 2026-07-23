@@ -55,34 +55,38 @@ export default function WaitingPage({ params }: { params: Promise<{ locale: stri
   }, [])
 
   const loadData = async () => {
-    const { data: ticketData } = await supabase
-      .from('tickets')
-      .select('*, establishments(*)')
-      .eq('id', ticketId)
-      .single()
+    try {
+      const { data: ticketData } = await supabase
+        .from('tickets')
+        .select('*, establishments(*)')
+        .eq('id', ticketId)
+        .single()
 
-    if (ticketData) {
-      setTicket(ticketData)
-      setEstablishment(ticketData.establishments)
+      if (ticketData) {
+        setTicket(ticketData)
+        setEstablishment(ticketData.establishments)
 
-      const { data: gamesData } = await supabase
-        .from('games')
-        .select('*')
-        .eq('establishment_id', ticketData.establishment_id)
-        .eq('is_active', true)
+        const { data: gamesData } = await supabase
+          .from('games')
+          .select('*')
+          .eq('establishment_id', ticketData.establishment_id)
+          .eq('is_active', true)
 
-      if (gamesData) setGames(gamesData)
+        if (gamesData) setGames(gamesData)
 
-      const { data: pollsData } = await supabase
-        .from('polls')
-        .select('*')
-        .eq('establishment_id', ticketData.establishment_id)
-        .eq('is_active', true)
+        const { data: pollsData } = await supabase
+          .from('polls')
+          .select('*')
+          .eq('establishment_id', ticketData.establishment_id)
+          .eq('is_active', true)
 
-      if (pollsData) setPolls(pollsData)
+        if (pollsData) setPolls(pollsData)
+      }
+    } catch (error) {
+      console.error('Load data error:', error)
+    } finally {
+      setLoading(false)
     }
-
-    setLoading(false)
   }
 
   if (loading) {

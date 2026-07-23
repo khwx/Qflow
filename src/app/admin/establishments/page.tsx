@@ -26,38 +26,42 @@ export default function EstablishmentsPage() {
   }, [])
 
   const loadEstablishments = async () => {
-    const { data: ests } = await supabase
-      .from('establishments')
-      .select('*')
-      .order('name')
+    try {
+      const { data: ests } = await supabase
+        .from('establishments')
+        .select('*')
+        .order('name')
 
-    if (!ests) {
+      if (!ests) {
+        setLoading(false)
+        return
+      }
+
+      const estIds = ests.map((e: any) => e.id)
+
+      const { data: queueCounts } = await supabase
+        .from('queues')
+        .select('establishment_id')
+        .in('establishment_id', estIds)
+
+      const countMap: Record<string, number> = {}
+      if (queueCounts) {
+        queueCounts.forEach((q: any) => {
+          countMap[q.establishment_id] = (countMap[q.establishment_id] || 0) + 1
+        })
+      }
+
+      const enriched = ests.map((e: any) => ({
+        ...e,
+        queue_count: countMap[e.id] || 0,
+      }))
+
+      setEstablishments(enriched)
       setLoading(false)
-      return
+    } catch (error) {
+      console.error('Load establishments error:', error)
+      setLoading(false)
     }
-
-    const estIds = ests.map((e: any) => e.id)
-
-    const { data: queueCounts, error: qErr } = await supabase
-      .from('queues')
-      .select('establishment_id')
-      .in('establishment_id', estIds)
-
-    const countMap: Record<string, number> = {}
-    if (queueCounts) {
-      queueCounts.forEach((q: any) => {
-        countMap[q.establishment_id] = (countMap[q.establishment_id] || 0) + 1
-      })
-    }
-
-    const enriched = ests.map((e: any) => ({
-      ...e,
-      queue_count: countMap[e.id] || 0,
-    }))
-
-    setEstablishments(enriched)
-    setLoading(false)
-    toast.success(`${enriched.length} estabelecimento(s) carregado(s)`)
   }
 
   const formatDate = (dateStr: string) => {
