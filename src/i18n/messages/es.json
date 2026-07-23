@@ -82,7 +82,8 @@
     "no_polls": "No hay encuestas disponibles",
     "no_polls_desc": "¡Participa y gana puntos!",
     "ticket_not_found": "Entrada no encontrada",
-    "ticket_not_found_desc": "Por favor, inténtalo de nuevo"
+    "ticket_not_found_desc": "Por favor, inténtalo de nuevo",
+    "please_proceed": "Dirígete al mostrador"
   },
   "called": {
     "title": "¡Es tu turno!",

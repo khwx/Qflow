@@ -82,7 +82,8 @@
     "no_polls": "कोई सर्वेक्षण उपलब्ध नहीं",
     "no_polls_desc": "भाग लें और अंक अर्जित करें!",
     "ticket_not_found": "टिकट नहीं मिला",
-    "ticket_not_found_desc": "कृपया पुनः प्रयास करें"
+    "ticket_not_found_desc": "कृपया पुनः प्रयास करें",
+    "please_proceed": "काउंटर पर आएं"
   },
   "called": {
     "title": "आपकी बारी है!",

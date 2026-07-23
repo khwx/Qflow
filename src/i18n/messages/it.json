@@ -82,7 +82,8 @@
     "no_polls": "Nessun sondaggio disponibile",
     "no_polls_desc": "Partecipa e guadagna punti!",
     "ticket_not_found": "Biglietto non trovato",
-    "ticket_not_found_desc": "Per favore riprova"
+    "ticket_not_found_desc": "Per favore riprova",
+    "please_proceed": "Recati allo sportello"
   },
   "called": {
     "title": "È il tuo turno!",

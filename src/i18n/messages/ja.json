@@ -82,7 +82,8 @@
     "no_polls": "利用可能なアンケートなし",
     "no_polls_desc": "参加してポイントを獲得しましょう！",
     "ticket_not_found": "チケットが見つかりません",
-    "ticket_not_found_desc": "もう一度お試しください"
+    "ticket_not_found_desc": "もう一度お試しください",
+    "please_proceed": "カウンターへお越しください"
   },
   "called": {
     "title": "あなたの番です！",

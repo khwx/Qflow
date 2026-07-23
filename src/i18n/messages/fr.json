@@ -82,7 +82,8 @@
     "no_polls": "Aucun sondage disponible",
     "no_polls_desc": "Participez et gagnez des points !",
     "ticket_not_found": "Ticket non trouvé",
-    "ticket_not_found_desc": "Veuillez réessayer"
+    "ticket_not_found_desc": "Veuillez réessayer",
+    "please_proceed": "Veuillez vous présenter au comptoir"
   },
   "called": {
     "title": "C'est votre tour !",

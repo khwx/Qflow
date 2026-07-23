@@ -82,7 +82,8 @@
     "no_polls": "Keine Umfragen verfügbar",
     "no_polls_desc": "Nehmen Sie teil und verdienen Sie Punkte!",
     "ticket_not_found": "Ticket nicht gefunden",
-    "ticket_not_found_desc": "Bitte versuchen Sie es erneut"
+    "ticket_not_found_desc": "Bitte versuchen Sie es erneut",
+    "please_proceed": "Bitte begeben Sie sich zum Schalter"
   },
   "called": {
     "title": "Sie sind dran!",

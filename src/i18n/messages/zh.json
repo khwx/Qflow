@@ -82,7 +82,8 @@
     "no_polls": "暂无可用投票",
     "no_polls_desc": "参与投票赢取积分！",
     "ticket_not_found": "未找到票",
-    "ticket_not_found_desc": "请重试"
+    "ticket_not_found_desc": "请重试",
+    "please_proceed": "请前往柜台"
   },
   "called": {
     "title": "轮到您了！",

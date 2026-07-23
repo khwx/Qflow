@@ -82,7 +82,8 @@
     "no_polls": "لا توجد استطلاعات متاحة",
     "no_polls_desc": "شارك واكسب نقاطاً!",
     "ticket_not_found": "التذكرة غير موجودة",
-    "ticket_not_found_desc": "يرجى المحاولة مرة أخرى"
+    "ticket_not_found_desc": "يرجى المحاولة مرة أخرى",
+    "please_proceed": "توجه إلى المنضدة"
   },
   "called": {
     "title": "حان دورك!",

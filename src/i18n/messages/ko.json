@@ -82,7 +82,8 @@
     "no_polls": "사용 가능한 설문 없음",
     "no_polls_desc": "참여하여 포인트를 획득하세요!",
     "ticket_not_found": "티켓을 찾을 수 없습니다",
-    "ticket_not_found_desc": "다시 시도해 주세요"
+    "ticket_not_found_desc": "다시 시도해 주세요",
+    "please_proceed": "카운터로 오세요"
   },
   "called": {
     "title": "차례입니다!",

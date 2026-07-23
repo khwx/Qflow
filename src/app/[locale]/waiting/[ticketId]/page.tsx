@@ -3,8 +3,8 @@
 import { use, useState, useEffect } from 'react'
 import { useTranslations } from 'next-intl'
 import { createClientComponentClient } from '@/lib/supabase'
-import { Ticket, Game, Poll } from '@/types'
-import { Gamepad2, ClipboardList, ShoppingCart, Trophy, Star } from 'lucide-react'
+import { Ticket, Game, Poll, Queue } from '@/types'
+import { Gamepad2, ClipboardList, ShoppingCart, Trophy, Star, Clock, Users } from 'lucide-react'
 import GameModal from '@/components/client/GameModal'
 import PollComponent from '@/components/client/PollComponent'
 import OrderComponent from '@/components/client/OrderComponent'
@@ -22,12 +22,15 @@ export default function WaitingPage({ params }: { params: Promise<{ locale: stri
 
   const [ticket, setTicket] = useState<Ticket | null>(null)
   const [establishment, setEstablishment] = useState<any>(null)
+  const [queue, setQueue] = useState<Queue | null>(null)
   const [games, setGames] = useState<Game[]>([])
   const [polls, setPolls] = useState<Poll[]>([])
   const [activeTab, setActiveTab] = useState<Tab>('games')
   const [loading, setLoading] = useState(true)
   const [selectedGame, setSelectedGame] = useState<Game | null>(null)
   const [customerPoints, setCustomerPoints] = useState(0)
+  const [waitingSince, setWaitingSince] = useState<Date | null>(null)
+  const [elapsedMinutes, setElapsedMinutes] = useState(0)
   const supabase = createClientComponentClient()
 
   useEffect(() => {
@@ -58,13 +61,16 @@ export default function WaitingPage({ params }: { params: Promise<{ locale: stri
     try {
       const { data: ticketData } = await supabase
         .from('tickets')
-        .select('*, establishments(*)')
+        .select('*, establishments(*), queues(*)')
         .eq('id', ticketId)
         .single()
 
       if (ticketData) {
         setTicket(ticketData)
         setEstablishment(ticketData.establishments)
+        setQueue(ticketData.queues as Queue)
+        setWaitingSince(new Date(ticketData.created_at))
+        setElapsedMinutes(0)
 
         const { data: gamesData } = await supabase
           .from('games')
@@ -88,6 +94,36 @@ export default function WaitingPage({ params }: { params: Promise<{ locale: stri
       setLoading(false)
     }
   }
+
+  const getQueuePosition = () => {
+    if (!ticket || !queue) return null
+    const ticketNum = parseInt(ticket.ticket_number.split('-')[1] || '0')
+    const currentNum = queue.current_number
+    if (ticketNum > currentNum) {
+      return ticketNum - currentNum
+    }
+    return 0
+  }
+
+  const getProgressPercent = () => {
+    if (!ticket || !queue) return 0
+    const ticketNum = parseInt(ticket.ticket_number.split('-')[1] || '0')
+    const maxNum = queue.current_number + 10
+    if (ticketNum >= queue.current_number) return Math.min(100, ((queue.current_number / ticketNum) * 100))
+    return 0
+  }
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      if (waitingSince) {
+        const now = new Date()
+        const diff = Math.floor((now.getTime() - waitingSince.getTime()) / 60000)
+        setElapsedMinutes(diff)
+      }
+    }, 60000)
+
+    return () => clearInterval(timer)
+  }, [waitingSince])
 
   if (loading) {
     return (
@@ -154,22 +190,55 @@ export default function WaitingPage({ params }: { params: Promise<{ locale: stri
               <div className="space-y-4">
                 <div className="flex justify-between items-center">
                   <span className="text-gray-600 dark:text-gray-400">{t('current_ticket')}</span>
-                  <span className="font-semibold text-indigo-600 dark:text-indigo-400">{ticket.ticket_number}</span>
+                  <span className="font-semibold text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-900/30 px-3 py-1 rounded-lg">
+                    {ticket.ticket_number}
+                  </span>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-gray-600 dark:text-gray-400">{t('position')}</span>
-                  <span className="font-semibold text-gray-900 dark:text-white">#{ticket.ticket_number.split('-')[1]}</span>
+                  <span className="text-gray-600 dark:text-gray-400 flex items-center gap-2">
+                    <Users className="h-4 w-4" />
+                    {t('position')}
+                  </span>
+                  <span className="font-bold text-lg">
+                    #{getQueuePosition()}
+                  </span>
                 </div>
+                {queue?.estimated_wait_minutes && (
+                  <div className="flex justify-between items-center">
+                    <span className="text-gray-600 dark:text-gray-400 flex items-center gap-2">
+                      <Clock className="h-4 w-4" />
+                      {tTicket('estimated_wait')}
+                    </span>
+                    <span className="font-semibold text-gray-900 dark:text-white">
+                      ~{queue.estimated_wait_minutes} {tTicket('min')}
+                    </span>
+                  </div>
+                )}
                 <div className="flex justify-between items-center">
                   <span className="text-gray-600 dark:text-gray-400">{t('status_label')}</span>
-                  <span className="px-3 py-1 bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-400 rounded-full text-sm font-medium">
+                  <span className="px-3 py-1 bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-400 rounded-full text-sm font-medium animate-pulse-slow">
                     {t('waiting')}
                   </span>
                 </div>
               </div>
+
+              {queue && (
+                <div className="mt-6 pt-6 border-t border-gray-200 dark:border-gray-700">
+                  <div className="flex justify-between items-center mb-2">
+                    <span className="text-xs text-gray-500 dark:text-gray-400">Progresso</span>
+                    <span className="text-xs text-gray-500 dark:text-gray-400">{Math.round(getProgressPercent())}%</span>
+                  </div>
+                  <div className="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+                    <div
+                      className="h-full bg-gradient-to-r from-indigo-500 to-purple-600 transition-all duration-500"
+                      style={{ width: `${getProgressPercent()}%` }}
+                    />
+                  </div>
+                </div>
+              )}
             </div>
 
-            <div className="bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 rounded-2xl shadow-sm p-6 text-white">
+            <div className="bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 rounded-2xl shadow-sm p-6 text-white animate-scale-in">
               <div className="flex items-center gap-3 mb-4">
                 <div className="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center">
                   <Star className="h-5 w-5" />
@@ -179,7 +248,7 @@ export default function WaitingPage({ params }: { params: Promise<{ locale: stri
               <p className="text-sm text-white/80 mb-4">
                 {t('earn_points_desc')}
               </p>
-              <div className="bg-white/10 rounded-xl p-3 text-center">
+              <div className="bg-white/10 rounded-xl p-3 text-center backdrop-blur-sm">
                 <p className="text-2xl font-bold">{customerPoints}</p>
                 <p className="text-xs text-white/70">pontos ganhos</p>
               </div>

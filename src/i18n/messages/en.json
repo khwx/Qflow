@@ -82,7 +82,8 @@
     "no_polls": "No polls available",
     "no_polls_desc": "Participate and earn points!",
     "ticket_not_found": "Ticket not found",
-    "ticket_not_found_desc": "Please try again"
+    "ticket_not_found_desc": "Please try again",
+    "please_proceed": "Please proceed to the counter"
   },
   "called": {
     "title": "It's your turn!",

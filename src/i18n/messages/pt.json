@@ -82,7 +82,8 @@
     "no_polls": "Nenhuma enquete disponível",
     "no_polls_desc": "Participe e ganhe pontos!",
     "ticket_not_found": "Senha não encontrada",
-    "ticket_not_found_desc": "Por favor, tente novamente"
+    "ticket_not_found_desc": "Por favor, tente novamente",
+    "please_proceed": "Dirija-se ao balcão"
   },
   "called": {
     "title": "É a sua vez!",
