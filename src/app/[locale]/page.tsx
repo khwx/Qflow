@@ -70,24 +70,24 @@ export default function Home({ params }: { params: Promise<{ locale: string }> }
       </nav>
 
       <main className="container mx-auto px-6 py-12 sm:py-20">
-        <div className="text-center">
-          <h1 className="text-3xl sm:text-5xl font-bold text-white mb-6">
+        <div className="text-center animate-fade-in">
+          <h1 className="text-3xl sm:text-5xl font-bold text-white mb-6 animate-slide-up">
             {t('title')}
           </h1>
-          <p className="text-lg sm:text-xl text-white/80 mb-12 max-w-2xl mx-auto">
+          <p className="text-lg sm:text-xl text-white/80 mb-12 max-w-2xl mx-auto animate-slide-up" style={{ animationDelay: '100ms' }}>
             {t('subtitle')}
           </p>
 
-          <div className="flex flex-col sm:flex-row justify-center gap-4 mb-12 sm:mb-20">
+          <div className="flex flex-col sm:flex-row justify-center gap-4 mb-12 sm:mb-20 animate-slide-up" style={{ animationDelay: '200ms' }}>
             <Link
               href="/enter"
-              className="rounded-xl bg-white px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-semibold text-indigo-600 hover:bg-gray-100 transition shadow-lg"
+              className="rounded-xl bg-white px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-semibold text-indigo-600 hover:bg-gray-100 transition shadow-lg hover:scale-105 active:scale-95"
             >
               {t('cta_enter')}
             </Link>
             <Link
               href="/establishment"
-              className="rounded-xl bg-white/20 px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-semibold text-white hover:bg-white/30 transition backdrop-blur"
+              className="rounded-xl bg-white/20 px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-semibold text-white hover:bg-white/30 transition backdrop-blur hover:scale-105 active:scale-95"
             >
               {t('cta_create')}
             </Link>
@@ -99,31 +99,37 @@ export default function Home({ params }: { params: Promise<{ locale: string }> }
             icon={<QrCode className="h-12 w-12" />}
             title={tFeatures('qr_title')}
             description={tFeatures('qr_desc')}
+            index={0}
           />
           <FeatureCard
             icon={<Clock className="h-12 w-12" />}
             title={tFeatures('realtime_title')}
             description={tFeatures('realtime_desc')}
+            index={1}
           />
           <FeatureCard
             icon={<Gamepad2 className="h-12 w-12" />}
             title={tFeatures('games_title')}
             description={tFeatures('games_desc')}
+            index={2}
           />
           <FeatureCard
             icon={<Smartphone className="h-12 w-12" />}
             title={tFeatures('mobile_title')}
             description={tFeatures('mobile_desc')}
+            index={3}
           />
           <FeatureCard
             icon={<BarChart3 className="h-12 w-12" />}
             title={tFeatures('tv_title')}
             description={tFeatures('tv_desc')}
+            index={4}
           />
           <FeatureCard
             icon={<QrCode className="h-12 w-12" />}
             title={tFeatures('multi_title')}
             description={tFeatures('multi_desc')}
+            index={5}
           />
         </div>
 
@@ -132,9 +138,9 @@ export default function Home({ params }: { params: Promise<{ locale: string }> }
             {tSteps('title')}
           </h2>
           <div className="grid md:grid-cols-3 gap-4 sm:gap-8 max-w-4xl mx-auto">
-            <StepCard number={1} title={tSteps('scan')} description={tSteps('scan_desc')} />
-            <StepCard number={2} title={tSteps('wait')} description={tSteps('wait_desc')} />
-            <StepCard number={3} title={tSteps('called')} description={tSteps('called_desc')} />
+            <StepCard number={1} title={tSteps('scan')} description={tSteps('scan_desc')} index={0} />
+            <StepCard number={2} title={tSteps('wait')} description={tSteps('wait_desc')} index={1} />
+            <StepCard number={3} title={tSteps('called')} description={tSteps('called_desc')} index={2} />
           </div>
         </div>
 
@@ -148,28 +154,36 @@ export default function Home({ params }: { params: Promise<{ locale: string }> }
   )
 }
 
-function FeatureCard({ icon, title, description }: {
+function FeatureCard({ icon, title, description, index }: {
   icon: React.ReactNode
   title: string
   description: string
+  index: number
 }) {
   return (
-    <div className="rounded-2xl bg-white/10 backdrop-blur p-6 text-white">
-      <div className="mb-4">{icon}</div>
+    <div
+      className="rounded-2xl bg-white/10 backdrop-blur-sm p-6 text-white animate-slide-up hover:scale-105 transition-transform"
+      style={{ animationDelay: `${index * 100}ms` }}
+    >
+      <div className="mb-4 p-2 bg-white/20 rounded-xl w-fit">{icon}</div>
       <h3 className="text-xl font-semibold mb-2">{title}</h3>
       <p className="text-white/80">{description}</p>
     </div>
   )
 }
 
-function StepCard({ number, title, description }: {
+function StepCard({ number, title, description, index }: {
   number: number
   title: string
   description: string
+  index: number
 }) {
   return (
-    <div className="rounded-2xl bg-white/10 backdrop-blur p-6 text-white">
-      <div className="w-12 h-12 rounded-full bg-white text-indigo-600 flex items-center justify-center text-xl font-bold mb-4">
+    <div
+      className="rounded-2xl bg-white/10 backdrop-blur-sm p-6 text-white animate-slide-up hover:scale-105 transition-transform"
+      style={{ animationDelay: `${index * 150}ms` }}
+    >
+      <div className="w-12 h-12 rounded-full bg-white text-indigo-600 flex items-center justify-center text-xl font-bold mb-4 shadow-lg">
         {number}
       </div>
       <h3 className="text-xl font-semibold mb-2">{title}</h3>
