@@ -33,35 +33,35 @@ export default function Home({ params }: { params: Promise<{ locale: string }> }
           <QrCode className="h-8 w-8" />
           <span className="text-2xl font-bold">QFlow</span>
         </div>
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-2 sm:gap-4">
           <button
             onClick={handleAuthClick}
-            className="rounded-lg bg-white/10 px-4 py-2 text-white hover:bg-white/20 transition"
+            className="rounded-lg bg-white/10 px-3 py-2 sm:px-4 text-white hover:bg-white/20 transition text-sm sm:text-base"
           >
             {user ? tAuth('login_title') : (
               <>
-                <LogIn className="h-4 w-4 inline mr-2" />
-                {tAuth('login_button')}
+                <LogIn className="h-4 w-4 inline sm:mr-2" />
+                <span className="hidden sm:inline">{tAuth('login_button')}</span>
               </>
             )}
           </button>
           {user && (
             <button
               onClick={async () => { await signOut(); router.push('/') }}
-              className="rounded-lg bg-white/10 px-4 py-2 text-white hover:bg-white/20 transition"
+              className="rounded-lg bg-white/10 px-3 py-2 sm:px-4 text-white hover:bg-white/20 transition text-sm sm:text-base"
             >
               {tAuth('logout', { default: 'Logout' })}
             </button>
           )}
           <Link
             href="/admin"
-            className="rounded-lg bg-white/10 px-4 py-2 text-white hover:bg-white/20 transition"
+            className="hidden sm:inline-flex rounded-lg bg-white/10 px-4 py-2 text-white hover:bg-white/20 transition"
           >
             {t('admin')}
           </Link>
           <Link
             href="/tv-display"
-            className="rounded-lg bg-white/10 px-4 py-2 text-white hover:bg-white/20 transition"
+            className="hidden md:inline-flex rounded-lg bg-white/10 px-4 py-2 text-white hover:bg-white/20 transition"
           >
             {t('tv_display')}
           </Link>
@@ -69,25 +69,25 @@ export default function Home({ params }: { params: Promise<{ locale: string }> }
         </div>
       </nav>
 
-      <main className="container mx-auto px-6 py-20">
+      <main className="container mx-auto px-6 py-12 sm:py-20">
         <div className="text-center">
-          <h1 className="text-5xl font-bold text-white mb-6">
+          <h1 className="text-3xl sm:text-5xl font-bold text-white mb-6">
             {t('title')}
           </h1>
-          <p className="text-xl text-white/80 mb-12 max-w-2xl mx-auto">
+          <p className="text-lg sm:text-xl text-white/80 mb-12 max-w-2xl mx-auto">
             {t('subtitle')}
           </p>
 
-          <div className="flex flex-wrap justify-center gap-4 mb-20">
+          <div className="flex flex-col sm:flex-row justify-center gap-4 mb-12 sm:mb-20">
             <Link
               href="/enter"
-              className="rounded-xl bg-white px-8 py-4 text-lg font-semibold text-indigo-600 hover:bg-gray-100 transition shadow-lg"
+              className="rounded-xl bg-white px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-semibold text-indigo-600 hover:bg-gray-100 transition shadow-lg"
             >
               {t('cta_enter')}
             </Link>
             <Link
               href="/establishment"
-              className="rounded-xl bg-white/20 px-8 py-4 text-lg font-semibold text-white hover:bg-white/30 transition backdrop-blur"
+              className="rounded-xl bg-white/20 px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-semibold text-white hover:bg-white/30 transition backdrop-blur"
             >
               {t('cta_create')}
             </Link>
@@ -127,18 +127,18 @@ export default function Home({ params }: { params: Promise<{ locale: string }> }
           />
         </div>
 
-        <div className="text-center mt-20">
-          <h2 className="text-3xl font-bold text-white mb-4">
+        <div className="text-center mt-12 sm:mt-20">
+          <h2 className="text-2xl sm:text-3xl font-bold text-white mb-4">
             {tSteps('title')}
           </h2>
-          <div className="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto">
+          <div className="grid md:grid-cols-3 gap-4 sm:gap-8 max-w-4xl mx-auto">
             <StepCard number={1} title={tSteps('scan')} description={tSteps('scan_desc')} />
             <StepCard number={2} title={tSteps('wait')} description={tSteps('wait_desc')} />
             <StepCard number={3} title={tSteps('called')} description={tSteps('called_desc')} />
           </div>
         </div>
 
-        <footer className="text-center mt-20 pb-8">
+        <footer className="text-center mt-12 sm:mt-20 pb-8">
           <p className="text-white/60">
             {tFooter('made_with')}
           </p>
