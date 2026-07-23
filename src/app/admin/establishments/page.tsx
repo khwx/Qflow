@@ -77,7 +77,7 @@ export default function EstablishmentsPage() {
       <div className="flex items-center justify-center min-h-[60vh]">
         <div className="flex flex-col items-center gap-4">
           <div className="h-10 w-10 border-4 border-indigo-600 border-t-transparent rounded-full animate-spin" />
-          <p className="text-gray-600 font-medium">Carregando estabelecimentos...</p>
+          <p className="text-gray-600 dark:text-gray-400 font-medium">Carregando estabelecimentos...</p>
         </div>
       </div>
     )
@@ -87,12 +87,12 @@ export default function EstablishmentsPage() {
     <div>
       <div className="flex justify-between items-center mb-6">
         <div>
-          <h2 className="text-2xl font-bold text-gray-900">Estabelecimentos</h2>
-          <p className="text-gray-600">Todos os estabelecimentos cadastrados</p>
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Estabelecimentos</h2>
+          <p className="text-gray-600 dark:text-gray-400">Todos os estabelecimentos cadastrados</p>
         </div>
         <Link
           href="/establishment"
-          className="flex items-center gap-2 bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition-colors"
+          className="flex items-center gap-2 bg-indigo-600 text-white hover:bg-indigo-700 px-4 py-2 rounded-lg hover:bg-indigo-700 transition-colors"
         >
           <Plus className="h-5 w-5" />
           Novo Estabelecimento
@@ -100,18 +100,18 @@ export default function EstablishmentsPage() {
       </div>
 
       {establishments.length === 0 ? (
-        <div className="bg-white rounded-xl shadow-sm p-12 text-center">
+        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700 dark:border-gray-700 p-12 text-center">
           <Building2 className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-          <p className="text-gray-500">Nenhum estabelecimento cadastrado ainda</p>
+          <p className="text-gray-500 dark:text-gray-400">Nenhum estabelecimento cadastrado ainda</p>
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {establishments.map((est) => (
-            <div key={est.id} className="bg-white rounded-xl shadow-sm p-6 flex flex-col">
+            <div key={est.id} className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700 dark:border-gray-700 p-6 flex flex-col">
               <div className="flex items-start justify-between mb-4">
                 <div className="flex-1 min-w-0">
-                  <h3 className="font-semibold text-gray-900 text-lg truncate">{est.name}</h3>
-                  <p className="text-sm text-gray-500 font-mono">{est.slug}</p>
+                  <h3 className="font-semibold text-gray-900 dark:text-white text-lg truncate">{est.name}</h3>
+                  <p className="text-sm text-gray-500 dark:text-gray-400 font-mono">{est.slug}</p>
                 </div>
                 <span
                   className={
@@ -124,7 +124,7 @@ export default function EstablishmentsPage() {
                 </span>
               </div>
 
-              <div className="space-y-2 text-sm text-gray-600 mb-4 flex-1">
+              <div className="space-y-2 text-sm text-gray-600 dark:text-gray-400 mb-4 flex-1">
                 <div className="flex items-center gap-2">
                   <Building2 className="h-4 w-4 text-gray-400" />
                   <span>Categoria: {est.category}</span>
@@ -150,14 +150,14 @@ export default function EstablishmentsPage() {
                 <Link
                   href={`/qr/${est.slug}`}
                   target="_blank"
-                  className="flex-1 flex items-center justify-center gap-1.5 bg-gray-50 text-gray-700 px-3 py-2 rounded-lg hover:bg-gray-100 transition-colors text-sm font-medium"
+                  className="flex-1 flex items-center justify-center gap-1.5 bg-gray-50 dark:bg-gray-700 text-gray-700 px-3 py-2 rounded-lg hover:bg-gray-100 transition-colors text-sm font-medium"
                 >
                   <QrCode className="h-4 w-4" />
                   QR Code
                 </Link>
                 <Link
                   href={`/admin/settings?est=${est.slug}`}
-                  className="flex-1 flex items-center justify-center gap-1.5 bg-gray-50 text-gray-700 px-3 py-2 rounded-lg hover:bg-gray-100 transition-colors text-sm font-medium"
+                  className="flex-1 flex items-center justify-center gap-1.5 bg-gray-50 dark:bg-gray-700 text-gray-700 px-3 py-2 rounded-lg hover:bg-gray-100 transition-colors text-sm font-medium"
                 >
                   <Settings className="h-4 w-4" />
                   Config

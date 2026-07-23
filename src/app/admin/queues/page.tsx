@@ -143,7 +143,7 @@ function QueuesContent() {
   if (!estSlug || !establishment) {
     return (
       <div className="text-center py-12">
-        <p className="text-gray-500 text-lg mb-4">Nenhum estabelecimento selecionado</p>
+        <p className="text-gray-500 dark:text-gray-400 text-lg mb-4">Nenhum estabelecimento selecionado</p>
         <Link
           href="/admin/establishments"
           className="text-indigo-600 hover:text-indigo-800 underline"
@@ -158,12 +158,12 @@ function QueuesContent() {
     <div>
       <div className="flex justify-between items-center mb-6">
         <div>
-          <h2 className="text-2xl font-bold text-gray-900">Filas</h2>
-          <p className="text-gray-600">Gerencie as filas de {establishment.name}</p>
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Filas</h2>
+          <p className="text-gray-600 dark:text-gray-400">Gerencie as filas de {establishment.name}</p>
         </div>
         <button
           onClick={() => setShowForm(!showForm)}
-          className="flex items-center gap-2 bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700"
+          className="flex items-center gap-2 bg-indigo-600 text-white hover:bg-indigo-700 px-4 py-2 rounded-lg hover:bg-indigo-700"
         >
           <Plus className="h-5 w-5" />
           Nova Fila
@@ -171,7 +171,7 @@ function QueuesContent() {
       </div>
 
       {showForm && (
-        <form onSubmit={createQueue} className="bg-white rounded-xl shadow-sm p-6 mb-6">
+        <form onSubmit={createQueue} className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700 dark:border-gray-700 p-6 mb-6">
           <div className="grid md:grid-cols-3 gap-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -214,7 +214,7 @@ function QueuesContent() {
           <div className="flex gap-3 mt-4">
             <button
               type="submit"
-              className="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700"
+              className="bg-indigo-600 text-white hover:bg-indigo-700 px-4 py-2 rounded-lg hover:bg-indigo-700"
             >
               Criar Fila
             </button>
@@ -236,12 +236,12 @@ function QueuesContent() {
           const called = queueTickets.filter(t => t.status === 'called')
           
           return (
-            <div key={queue.id} className="bg-white rounded-xl shadow-sm p-6">
+            <div key={queue.id} className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700 dark:border-gray-700 p-6">
               <div className="flex justify-between items-start mb-4">
                 <div>
-                  <h3 className="text-lg font-semibold text-gray-900">{queue.name}</h3>
+                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white">{queue.name}</h3>
                   {queue.description && (
-                    <p className="text-sm text-gray-600">{queue.description}</p>
+                    <p className="text-sm text-gray-600 dark:text-gray-400">{queue.description}</p>
                   )}
                 </div>
                 <div className="flex gap-2">
@@ -263,17 +263,17 @@ function QueuesContent() {
               </div>
 
               <div className="grid grid-cols-3 gap-4 mb-4">
-                <div className="bg-gray-50 rounded-lg p-3 text-center">
+                <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-3 text-center">
                   <p className="text-2xl font-bold text-blue-600">{waiting.length}</p>
-                  <p className="text-sm text-gray-600">Aguardando</p>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">Aguardando</p>
                 </div>
-                <div className="bg-gray-50 rounded-lg p-3 text-center">
+                <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-3 text-center">
                   <p className="text-2xl font-bold text-green-600">{called.length}</p>
-                  <p className="text-sm text-gray-600">Chamados</p>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">Chamados</p>
                 </div>
-                <div className="bg-gray-50 rounded-lg p-3 text-center">
-                  <p className="text-2xl font-bold text-gray-900">{queue.current_number}</p>
-                  <p className="text-sm text-gray-600">Última Senha</p>
+                <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-3 text-center">
+                  <p className="text-2xl font-bold text-gray-900 dark:text-white">{queue.current_number}</p>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">Última Senha</p>
                 </div>
               </div>
 

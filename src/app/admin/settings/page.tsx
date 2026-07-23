@@ -150,14 +150,14 @@ function SettingsContent() {
       <div className="flex flex-col items-center justify-center min-h-[60vh] text-center">
         <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-8 max-w-md">
           <AlertCircle className="h-12 w-12 text-yellow-500 mx-auto mb-4" />
-          <h2 className="text-xl font-semibold text-gray-900 mb-2">Nenhum estabelecimento selecionado</h2>
-          <p className="text-gray-600 mb-4">
+          <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">Nenhum estabelecimento selecionado</h2>
+          <p className="text-gray-600 dark:text-gray-400 mb-4">
             Acesse as configurações com o parâmetro{' '}
             <code className="bg-gray-100 px-1 rounded">?est=slug</code> para editar os dados.
           </p>
           <Link
             href="/admin/establishments"
-            className="inline-flex items-center gap-2 bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition-colors"
+            className="inline-flex items-center gap-2 bg-indigo-600 text-white hover:bg-indigo-700 px-4 py-2 rounded-lg hover:bg-indigo-700 transition-colors"
           >
             Selecionar Estabelecimento
           </Link>
@@ -178,13 +178,13 @@ function SettingsContent() {
     <div>
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h2 className="text-2xl font-bold text-gray-900">Configurações</h2>
-          <p className="text-gray-600">Personalize seu sistema</p>
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Configurações</h2>
+          <p className="text-gray-600 dark:text-gray-400">Personalize seu sistema</p>
         </div>
         <button
           onClick={handleSave}
           disabled={saving}
-          className="inline-flex items-center gap-2 bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition-colors text-sm disabled:opacity-50"
+          className="inline-flex items-center gap-2 bg-indigo-600 text-white hover:bg-indigo-700 px-4 py-2 rounded-lg hover:bg-indigo-700 transition-colors text-sm disabled:opacity-50"
         >
           {saving ? (
             <Loader2 className="h-4 w-4 animate-spin" />
@@ -196,8 +196,8 @@ function SettingsContent() {
       </div>
 
       <div className="space-y-6">
-        <div className="bg-white rounded-xl shadow-sm p-6">
-          <h3 className="font-semibold text-gray-900 mb-4">Informações Básicas</h3>
+        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700 dark:border-gray-700 p-6">
+          <h3 className="font-semibold text-gray-900 dark:text-white mb-4">Informações Básicas</h3>
 
           <div className="space-y-4">
             <div>
@@ -290,8 +290,8 @@ function SettingsContent() {
 
             <div className="flex items-center justify-between py-2">
               <div>
-                <p className="font-medium text-gray-900">Estabelecimento Ativo</p>
-                <p className="text-sm text-gray-600">Habilitar ou desabilitar o estabelecimento</p>
+                <p className="font-medium text-gray-900 dark:text-white">Estabelecimento Ativo</p>
+                <p className="text-sm text-gray-600 dark:text-gray-400">Habilitar ou desabilitar o estabelecimento</p>
               </div>
               <button
                 onClick={() => updateField('is_active', String(!settings.is_active))}
@@ -309,14 +309,14 @@ function SettingsContent() {
           </div>
         </div>
 
-        <div className="bg-white rounded-xl shadow-sm p-6">
-          <h3 className="font-semibold text-gray-900 mb-4">Funcionalidades</h3>
+        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700 dark:border-gray-700 p-6">
+          <h3 className="font-semibold text-gray-900 dark:text-white mb-4">Funcionalidades</h3>
 
           <div className="space-y-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="font-medium text-gray-900">Som de Notificação</p>
-                <p className="text-sm text-gray-600">Reproduzir som quando chamar senha</p>
+                <p className="font-medium text-gray-900 dark:text-white">Som de Notificação</p>
+                <p className="text-sm text-gray-600 dark:text-gray-400">Reproduzir som quando chamar senha</p>
               </div>
               <button
                 onClick={() => updateField('notification_sound', String(!settings.notification_sound))}
@@ -334,8 +334,8 @@ function SettingsContent() {
 
             <div className="flex items-center justify-between">
               <div>
-                <p className="font-medium text-gray-900">Chamada Automática</p>
-                <p className="text-sm text-gray-600">Chamar automaticamente quando a senha chegar</p>
+                <p className="font-medium text-gray-900 dark:text-white">Chamada Automática</p>
+                <p className="text-sm text-gray-600 dark:text-gray-400">Chamar automaticamente quando a senha chegar</p>
               </div>
               <button
                 onClick={() => updateField('auto_call', String(!settings.auto_call))}
@@ -353,8 +353,8 @@ function SettingsContent() {
 
             <div className="flex items-center justify-between">
               <div>
-                <p className="font-medium text-gray-900">QR Code</p>
-                <p className="text-sm text-gray-600">Habilitar entrada via QR Code</p>
+                <p className="font-medium text-gray-900 dark:text-white">QR Code</p>
+                <p className="text-sm text-gray-600 dark:text-gray-400">Habilitar entrada via QR Code</p>
               </div>
               <button
                 onClick={() => updateField('qr_code_enabled', String(!settings.qr_code_enabled))}
@@ -372,8 +372,8 @@ function SettingsContent() {
 
             <div className="flex items-center justify-between">
               <div>
-                <p className="font-medium text-gray-900">Gamificação</p>
-                <p className="text-sm text-gray-600">Habilitar jogos e pontos</p>
+                <p className="font-medium text-gray-900 dark:text-white">Gamificação</p>
+                <p className="text-sm text-gray-600 dark:text-gray-400">Habilitar jogos e pontos</p>
               </div>
               <button
                 onClick={() => updateField('points_enabled', String(!settings.points_enabled))}
@@ -391,8 +391,8 @@ function SettingsContent() {
           </div>
         </div>
 
-        <div className="bg-white rounded-xl shadow-sm p-6">
-          <h3 className="font-semibold text-gray-900 mb-4">Integrações</h3>
+        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700 dark:border-gray-700 p-6">
+          <h3 className="font-semibold text-gray-900 dark:text-white mb-4">Integrações</h3>
 
           <div className="space-y-4">
             <div>

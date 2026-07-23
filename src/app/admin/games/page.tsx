@@ -103,7 +103,7 @@ function GamesContent() {
   if (!estSlug || !establishment) {
     return (
       <div className="text-center py-12">
-        <p className="text-gray-500 text-lg mb-4">Nenhum estabelecimento selecionado</p>
+        <p className="text-gray-500 dark:text-gray-400 text-lg mb-4">Nenhum estabelecimento selecionado</p>
         <Link
           href="/admin/establishments"
           className="text-indigo-600 hover:text-indigo-800 underline"
@@ -118,12 +118,12 @@ function GamesContent() {
     <div>
       <div className="flex justify-between items-center mb-6">
         <div>
-          <h2 className="text-2xl font-bold text-gray-900">Jogos</h2>
-          <p className="text-gray-600">Gerencie os jogos de {establishment.name}</p>
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Jogos</h2>
+          <p className="text-gray-600 dark:text-gray-400">Gerencie os jogos de {establishment.name}</p>
         </div>
         <button
           onClick={() => setShowForm(!showForm)}
-          className="flex items-center gap-2 bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700"
+          className="flex items-center gap-2 bg-indigo-600 text-white hover:bg-indigo-700 px-4 py-2 rounded-lg hover:bg-indigo-700"
         >
           <Plus className="h-5 w-5" />
           Novo Jogo
@@ -131,7 +131,7 @@ function GamesContent() {
       </div>
 
       {showForm && (
-        <form onSubmit={createGame} className="bg-white rounded-xl shadow-sm p-6 mb-6">
+        <form onSubmit={createGame} className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700 dark:border-gray-700 p-6 mb-6">
           <div className="grid md:grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -188,7 +188,7 @@ function GamesContent() {
           <div className="flex gap-3 mt-4">
             <button
               type="submit"
-              className="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700"
+              className="bg-indigo-600 text-white hover:bg-indigo-700 px-4 py-2 rounded-lg hover:bg-indigo-700"
             >
               Criar Jogo
             </button>
@@ -205,11 +205,11 @@ function GamesContent() {
 
       <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {games.map((game) => (
-          <div key={game.id} className="bg-white rounded-xl shadow-sm p-6">
+          <div key={game.id} className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700 dark:border-gray-700 p-6">
             <div className="flex justify-between items-start mb-4">
               <div>
-                <h3 className="font-semibold text-gray-900">{game.name}</h3>
-                <p className="text-sm text-gray-600">{game.description}</p>
+                <h3 className="font-semibold text-gray-900 dark:text-white">{game.name}</h3>
+                <p className="text-sm text-gray-600 dark:text-gray-400">{game.description}</p>
               </div>
               <button
                 onClick={() => toggleGame(game)}
@@ -221,7 +221,7 @@ function GamesContent() {
             
             <div className="flex justify-between items-center">
               <div>
-                <p className="text-sm text-gray-600">Tipo: {game.type}</p>
+                <p className="text-sm text-gray-600 dark:text-gray-400">Tipo: {game.type}</p>
                 <p className="text-sm text-indigo-600 font-medium">+{game.points_reward} pts</p>
               </div>
               <button
@@ -237,7 +237,7 @@ function GamesContent() {
 
       {games.length === 0 && (
         <div className="text-center py-12">
-          <p className="text-gray-500">Nenhum jogo criado ainda</p>
+          <p className="text-gray-500 dark:text-gray-400">Nenhum jogo criado ainda</p>
         </div>
       )}
     </div>
