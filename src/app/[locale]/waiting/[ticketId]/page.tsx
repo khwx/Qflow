@@ -107,16 +107,22 @@ export default function WaitingPage({ params }: { params: Promise<{ locale: stri
 
   if (ticket.status === 'called') {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-green-50 to-emerald-100 flex items-center justify-center p-6">
-        <div className="bg-white rounded-2xl shadow-xl p-8 text-center max-w-lg">
-          <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-            <span className="text-3xl">🔔</span>
+      <div className="min-h-screen bg-gradient-to-br from-green-50 via-emerald-50 to-teal-50 flex items-center justify-center p-6 animate-fade-in">
+        <div className="bg-white rounded-3xl shadow-2xl p-10 text-center max-w-lg animate-scale-in">
+          <div className="w-24 h-24 bg-gradient-to-br from-green-400 to-emerald-500 rounded-full flex items-center justify-center mx-auto mb-6 animate-bounce-slow">
+            <span className="text-4xl">🔔</span>
           </div>
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">{tCalled('title')}</h1>
-          <p className="text-gray-600 mb-6">{tCalled('subtitle')}</p>
-          <div className="bg-indigo-50 rounded-xl p-4 mb-6">
-            <p className="text-sm text-gray-600">{tTicket('your_ticket')}</p>
-            <p className="text-3xl font-bold text-indigo-600">{ticket.ticket_number}</p>
+          <h1 className="text-4xl font-bold text-gray-900 mb-3">{tCalled('title')}</h1>
+          <p className="text-xl text-gray-600 mb-8">{tCalled('subtitle')}</p>
+          <div className="bg-gradient-to-r from-indigo-50 to-purple-50 rounded-2xl p-6 mb-8">
+            <p className="text-sm text-gray-500 mb-2">{tTicket('your_ticket')}</p>
+            <p className="text-5xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+              {ticket.ticket_number}
+            </p>
+          </div>
+          <div className="flex items-center justify-center gap-2 text-gray-500">
+            <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
+            <span className="text-sm">{t('please_proceed', { default: 'Please proceed to the counter' })}</span>
           </div>
         </div>
       </div>
@@ -124,16 +130,18 @@ export default function WaitingPage({ params }: { params: Promise<{ locale: stri
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <header className="bg-white shadow-sm sticky top-0 z-10">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+      <header className="bg-white dark:bg-gray-800 shadow-sm sticky top-0 z-10 border-b border-gray-200 dark:border-gray-700">
         <div className="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
           <div>
-            <h1 className="font-semibold text-gray-900">{establishment?.name}</h1>
-            <p className="text-sm text-gray-600">{tTicket('your_ticket')}: {ticket.ticket_number}</p>
+            <h1 className="font-semibold text-gray-900 dark:text-white">{establishment?.name}</h1>
+            <p className="text-sm text-gray-600 dark:text-gray-400">{tTicket('your_ticket')}: {ticket.ticket_number}</p>
           </div>
-          <div className="flex items-center gap-2 bg-yellow-50 px-4 py-2 rounded-lg">
-            <Trophy className="h-5 w-5 text-yellow-600" />
-            <span className="font-semibold text-yellow-700">{customerPoints} pts</span>
+          <div className="flex items-center gap-3">
+            <div className="bg-gradient-to-r from-yellow-400 to-orange-400 px-4 py-2 rounded-xl flex items-center gap-2 shadow-sm">
+              <Trophy className="h-5 w-5 text-white" />
+              <span className="font-bold text-white">{customerPoints} pts</span>
+            </div>
           </div>
         </div>
       </header>
@@ -141,40 +149,46 @@ export default function WaitingPage({ params }: { params: Promise<{ locale: stri
       <div className="max-w-7xl mx-auto px-4 py-6">
         <div className="grid lg:grid-cols-3 gap-6">
           <div className="lg:col-span-1">
-            <div className="bg-white rounded-xl shadow-sm p-6 mb-6">
-              <h2 className="font-semibold text-gray-900 mb-4">{t('status')}</h2>
+            <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm p-6 mb-6 border border-gray-200 dark:border-gray-700">
+              <h2 className="font-semibold text-gray-900 dark:text-white mb-4">{t('status')}</h2>
               <div className="space-y-4">
                 <div className="flex justify-between items-center">
-                  <span className="text-gray-600">{t('current_ticket')}</span>
-                  <span className="font-semibold text-indigo-600">{ticket.ticket_number}</span>
+                  <span className="text-gray-600 dark:text-gray-400">{t('current_ticket')}</span>
+                  <span className="font-semibold text-indigo-600 dark:text-indigo-400">{ticket.ticket_number}</span>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-gray-600">{t('position')}</span>
-                  <span className="font-semibold">#{ticket.ticket_number.split('-')[1]}</span>
+                  <span className="text-gray-600 dark:text-gray-400">{t('position')}</span>
+                  <span className="font-semibold text-gray-900 dark:text-white">#{ticket.ticket_number.split('-')[1]}</span>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-gray-600">{t('status_label')}</span>
-                  <span className="px-2 py-1 bg-yellow-100 text-yellow-700 rounded-full text-sm">
+                  <span className="text-gray-600 dark:text-gray-400">{t('status_label')}</span>
+                  <span className="px-3 py-1 bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-400 rounded-full text-sm font-medium">
                     {t('waiting')}
                   </span>
                 </div>
               </div>
             </div>
 
-            <div className="bg-gradient-to-br from-indigo-500 to-purple-600 rounded-xl shadow-sm p-6 text-white">
+            <div className="bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 rounded-2xl shadow-sm p-6 text-white">
               <div className="flex items-center gap-3 mb-4">
-                <Star className="h-6 w-6" />
+                <div className="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center">
+                  <Star className="h-5 w-5" />
+                </div>
                 <h3 className="font-semibold">{t('earn_points')}</h3>
               </div>
               <p className="text-sm text-white/80 mb-4">
                 {t('earn_points_desc')}
               </p>
+              <div className="bg-white/10 rounded-xl p-3 text-center">
+                <p className="text-2xl font-bold">{customerPoints}</p>
+                <p className="text-xs text-white/70">pontos ganhos</p>
+              </div>
             </div>
           </div>
 
           <div className="lg:col-span-2">
-              <div className="bg-white rounded-xl shadow-sm overflow-hidden">
-                <div className="flex border-b overflow-x-auto">
+              <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm overflow-hidden border border-gray-200 dark:border-gray-700">
+                <div className="flex border-b border-gray-200 dark:border-gray-700 overflow-x-auto">
                 <TabButton
                   icon={<Gamepad2 className="h-5 w-5" />}
                   label={t('games')}
@@ -199,7 +213,7 @@ export default function WaitingPage({ params }: { params: Promise<{ locale: stri
 
               <div className="p-6">
                 {activeTab === 'games' && (
-                  <div>
+                  <div className="animate-fade-in">
                     {games.length === 0 ? (
                       <EmptyState
                         icon={<Gamepad2 className="h-12 w-12" />}
@@ -208,17 +222,18 @@ export default function WaitingPage({ params }: { params: Promise<{ locale: stri
                       />
                     ) : (
                       <div className="grid sm:grid-cols-2 gap-4">
-                        {games.map((game) => (
+                        {games.map((game, index) => (
                           <button
                             key={game.id}
                             onClick={() => setSelectedGame(game)}
-                            className="p-4 rounded-xl border-2 border-gray-200 hover:border-indigo-500 text-left transition"
+                            className="p-5 rounded-2xl border-2 border-gray-200 dark:border-gray-600 hover:border-indigo-500 dark:hover:border-indigo-400 text-left transition-all hover:shadow-lg hover:scale-[1.02] active:scale-[0.98] animate-slide-up"
+                            style={{ animationDelay: `${index * 50}ms` }}
                           >
-                            <h3 className="font-semibold text-gray-900 mb-1">{game.name}</h3>
+                            <h3 className="font-semibold text-gray-900 dark:text-white mb-2">{game.name}</h3>
                             {game.description && (
-                              <p className="text-sm text-gray-600 mb-3">{game.description}</p>
+                              <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">{game.description}</p>
                             )}
-                            <div className="flex items-center gap-2 text-sm text-indigo-600">
+                            <div className="flex items-center gap-2 text-sm font-medium text-indigo-600 dark:text-indigo-400">
                               <Trophy className="h-4 w-4" />
                               <span>+{game.points_reward} {tGames('points')}</span>
                             </div>
@@ -230,7 +245,7 @@ export default function WaitingPage({ params }: { params: Promise<{ locale: stri
                 )}
 
                 {activeTab === 'polls' && (
-                  <div>
+                  <div className="animate-fade-in">
                     {polls.length === 0 ? (
                       <EmptyState
                         icon={<ClipboardList className="h-12 w-12" />}
@@ -253,10 +268,12 @@ export default function WaitingPage({ params }: { params: Promise<{ locale: stri
                 )}
 
                 {activeTab === 'orders' && (
-                  <OrderComponent
-                    ticketId={ticket.id}
-                    establishmentId={ticket.establishment_id}
-                  />
+                  <div className="animate-fade-in">
+                    <OrderComponent
+                      ticketId={ticket.id}
+                      establishmentId={ticket.establishment_id}
+                    />
+                  </div>
                 )}
               </div>
             </div>
@@ -290,14 +307,21 @@ function TabButton({ icon, label, active, onClick, count }: {
     <button
       onClick={onClick}
       className={cn(
-        'flex-1 flex items-center justify-center gap-2 px-4 py-3 font-medium transition',
-        active ? 'text-indigo-600 border-b-2 border-indigo-600' : 'text-gray-500 hover:text-gray-700'
+        'flex-1 flex items-center justify-center gap-2 px-4 py-4 font-medium transition-all',
+        active
+          ? 'text-indigo-600 dark:text-indigo-400 border-b-2 border-indigo-600 dark:border-indigo-400 bg-indigo-50 dark:bg-indigo-900/20'
+          : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700/50'
       )}
     >
       {icon}
       <span>{label}</span>
       {count !== undefined && count > 0 && (
-        <span className="bg-indigo-100 text-indigo-700 text-xs px-2 py-0.5 rounded-full">
+        <span className={cn(
+          'text-xs px-2 py-0.5 rounded-full font-medium',
+          active
+            ? 'bg-indigo-100 dark:bg-indigo-800 text-indigo-700 dark:text-indigo-300'
+            : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400'
+        )}>
           {count}
         </span>
       )}
@@ -311,10 +335,12 @@ function EmptyState({ icon, title, description }: {
   description: string
 }) {
   return (
-    <div className="text-center py-12">
-      <div className="text-gray-400 flex justify-center mb-4">{icon}</div>
-      <h3 className="font-semibold text-gray-900 mb-1">{title}</h3>
-      <p className="text-sm text-gray-600">{description}</p>
+    <div className="text-center py-16">
+      <div className="w-20 h-20 bg-gray-100 dark:bg-gray-700 rounded-full flex items-center justify-center mx-auto mb-6">
+        <div className="text-gray-400 dark:text-gray-500">{icon}</div>
+      </div>
+      <h3 className="font-semibold text-gray-900 dark:text-white mb-2">{title}</h3>
+      <p className="text-sm text-gray-600 dark:text-gray-400 max-w-sm mx-auto">{description}</p>
     </div>
   )
 }
