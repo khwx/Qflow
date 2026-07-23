@@ -52,13 +52,13 @@ export default function GameModal({ game, ticketId, onClose, onComplete }: GameM
   }
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-6 z-50">
-      <div className="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full">
-        <h2 className="text-2xl font-bold text-center mb-4">{game.name}</h2>
-        <p className="text-center text-gray-600 mb-6">{game.description}</p>
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-6 z-50 animate-fade-in">
+      <div className="bg-white dark:bg-gray-800 rounded-3xl shadow-2xl p-8 max-w-md w-full animate-scale-in">
+        <h2 className="text-2xl font-bold text-center mb-4 text-gray-900 dark:text-white">{game.name}</h2>
+        <p className="text-center text-gray-600 dark:text-gray-400 mb-6">{game.description}</p>
         <button
           onClick={() => completeGame(100)}
-          className="w-full bg-indigo-600 text-white py-3 rounded-lg font-semibold hover:bg-indigo-700"
+          className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-3 rounded-xl font-semibold hover:from-indigo-700 hover:to-purple-700 transition-all shadow-lg"
         >
           {t('play_demo')}
         </button>
@@ -106,11 +106,11 @@ function MemoryGame({ game, onComplete, onClose }: {
   }
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-6 z-50">
-      <div className="bg-white rounded-2xl shadow-2xl p-6 max-w-md w-full">
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-6 z-50 animate-fade-in">
+      <div className="bg-white dark:bg-gray-800 rounded-3xl shadow-2xl p-6 max-w-md w-full animate-scale-in">
         <div className="flex justify-between items-center mb-4">
-          <h2 className="text-xl font-bold">{game.name}</h2>
-          <button onClick={onClose} className="text-gray-500 hover:text-gray-700">
+          <h2 className="text-xl font-bold text-gray-900 dark:text-white">{game.name}</h2>
+          <button onClick={onClose} className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 p-1">
             <X className="h-6 w-6" />
           </button>
         </div>
@@ -121,11 +121,11 @@ function MemoryGame({ game, onComplete, onClose }: {
               key={index}
               onClick={() => handleCardClick(index)}
               className={`
-                aspect-square rounded-lg text-3xl flex items-center justify-center
-                transition-all duration-300 transform hover:scale-105
+                aspect-square rounded-xl text-3xl flex items-center justify-center
+                transition-all duration-300 transform
                 ${flipped.includes(index) || matched.includes(index)
-                  ? 'bg-indigo-100 rotate-0'
-                  : 'bg-indigo-600 rotate-180'
+                  ? 'bg-indigo-100 dark:bg-indigo-900/30 rotate-0 scale-100'
+                  : 'bg-gradient-to-br from-indigo-500 to-purple-600 rotate-180 hover:scale-105'
                 }
               `}
             >
@@ -134,7 +134,7 @@ function MemoryGame({ game, onComplete, onClose }: {
           ))}
         </div>
 
-        <div className="text-center text-sm text-gray-600">
+        <div className="text-center text-sm text-gray-600 dark:text-gray-400">
           {t('moves', { count: moves })}
         </div>
       </div>
@@ -176,29 +176,29 @@ function QuizGame({ game, onComplete, onClose }: {
   }
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-6 z-50">
-      <div className="bg-white rounded-2xl shadow-2xl p-6 max-w-md w-full">
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-6 z-50 animate-fade-in">
+      <div className="bg-white dark:bg-gray-800 rounded-3xl shadow-2xl p-6 max-w-md w-full animate-scale-in">
         <div className="flex justify-between items-center mb-4">
-          <h2 className="text-xl font-bold">{game.name}</h2>
-          <button onClick={onClose} className="text-gray-500 hover:text-gray-700">
+          <h2 className="text-xl font-bold text-gray-900 dark:text-white">{game.name}</h2>
+          <button onClick={onClose} className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 p-1">
             <X className="h-6 w-6" />
           </button>
         </div>
 
         <div className="mb-4">
-          <div className="flex justify-between text-sm text-gray-600 mb-2">
+          <div className="flex justify-between text-sm text-gray-600 dark:text-gray-400 mb-2">
             <span>{t('question', { current: current + 1, total: questions.length })}</span>
             <span>{t('points', { count: score })}</span>
           </div>
-          <div className="w-full bg-gray-200 rounded-full h-2">
+          <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
             <div
-              className="bg-indigo-600 h-2 rounded-full transition-all"
+              className="bg-gradient-to-r from-indigo-500 to-purple-600 h-2 rounded-full transition-all duration-300"
               style={{ width: `${((current + 1) / questions.length) * 100}%` }}
             />
           </div>
         </div>
 
-        <h3 className="text-lg font-semibold mb-4">{questions[current].q}</h3>
+        <h3 className="text-lg font-semibold mb-4 text-gray-900 dark:text-white">{questions[current].q}</h3>
 
         <div className="space-y-2">
           {questions[current].options.map((option, index) => (
@@ -207,14 +207,14 @@ function QuizGame({ game, onComplete, onClose }: {
               onClick={() => handleAnswer(index)}
               disabled={selected !== null}
               className={`
-                w-full p-3 rounded-lg text-left transition
+                w-full p-4 rounded-xl text-left transition-all transform
                 ${selected === null
-                  ? 'bg-gray-100 hover:bg-gray-200'
+                  ? 'bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 hover:scale-[1.02]'
                   : selected === index
                     ? index === questions[current].answer
-                      ? 'bg-green-100 border-2 border-green-500'
-                      : 'bg-red-100 border-2 border-red-500'
-                    : 'bg-gray-100 opacity-50'
+                      ? 'bg-green-100 dark:bg-green-900/30 border-2 border-green-500 text-green-700 dark:text-green-400'
+                      : 'bg-red-100 dark:bg-red-900/30 border-2 border-red-500 text-red-700 dark:text-red-400'
+                    : 'bg-gray-100 dark:bg-gray-700 opacity-50'
                 }
               `}
             >
@@ -260,18 +260,18 @@ function SpinWheelGame({ game, onComplete, onClose }: {
   }
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-6 z-50">
-      <div className="bg-white rounded-2xl shadow-2xl p-6 max-w-md w-full text-center">
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-6 z-50 animate-fade-in">
+      <div className="bg-white dark:bg-gray-800 rounded-3xl shadow-2xl p-6 max-w-md w-full animate-scale-in">
         <div className="flex justify-between items-center mb-4">
-          <h2 className="text-xl font-bold">{game.name}</h2>
-          <button onClick={onClose} className="text-gray-500 hover:text-gray-700">
+          <h2 className="text-xl font-bold text-gray-900 dark:text-white">{game.name}</h2>
+          <button onClick={onClose} className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 p-1">
             <X className="h-6 w-6" />
           </button>
         </div>
 
         <div className="relative w-64 h-64 mx-auto mb-6">
           <div
-            className="absolute inset-0 rounded-full border-8 border-indigo-600 transition-transform duration-3000"
+            className="absolute inset-0 rounded-full border-8 border-indigo-600 transition-transform duration-[3000ms] ease-out shadow-2xl"
             style={{ transform: `rotate(${rotation}deg)` }}
           >
             {segments.map((segment, i) => (
@@ -284,7 +284,7 @@ function SpinWheelGame({ game, onComplete, onClose }: {
                 }}
               >
                 <div
-                  className="absolute top-4 left-4 text-xs font-semibold text-white"
+                  className="absolute top-4 left-4 text-xs font-bold text-white drop-shadow-md"
                   style={{ transform: `rotate(${45 + (360 / segments.length) * i}deg)` }}
                 >
                   {segment.label}
@@ -293,14 +293,16 @@ function SpinWheelGame({ game, onComplete, onClose }: {
             ))}
           </div>
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
-            <Trophy className="h-8 w-8 text-yellow-500" />
+            <div className="w-12 h-12 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full flex items-center justify-center shadow-lg">
+              <Trophy className="h-6 w-6 text-white" />
+            </div>
           </div>
         </div>
 
         <button
           onClick={spin}
           disabled={spinning}
-          className="bg-indigo-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-indigo-700 disabled:opacity-50"
+          className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-8 py-3 rounded-xl font-semibold hover:from-indigo-700 hover:to-purple-700 disabled:opacity-50 transition-all shadow-lg"
         >
           {spinning ? t('spinning') : t('spin')}
         </button>
