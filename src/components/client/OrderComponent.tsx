@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { createClientComponentClient } from '@/lib/supabase'
 import { OrderItem } from '@/types'
-import { Plus, Minus, ShoppingCart } from 'lucide-react'
+import { Plus, Minus, ShoppingCart, CheckCircle2 } from 'lucide-react'
 
 interface OrderComponentProps {
   ticketId: string
@@ -69,13 +69,13 @@ export default function OrderComponent({ ticketId, establishmentId }: OrderCompo
 
   if (submitted) {
     return (
-      <div className="text-center py-12">
-        <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-          <ShoppingCart className="h-8 w-8 text-green-600" />
+      <div className="text-center py-12 animate-scale-in">
+        <div className="w-16 h-16 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
+          <CheckCircle2 className="h-8 w-8 text-green-500" />
         </div>
-        <h3 className="text-xl font-semibold text-gray-900 mb-2">Pedido Enviado!</h3>
-        <p className="text-gray-600 mb-4">Seu pedido está sendo preparado</p>
-        <p className="text-2xl font-bold text-indigo-600">
+        <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">Pedido Enviado!</h3>
+        <p className="text-gray-600 dark:text-gray-400 mb-4">Seu pedido está sendo preparado</p>
+        <p className="text-2xl font-bold text-indigo-600 dark:text-indigo-400">
           Total: {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(total)}
         </p>
       </div>
@@ -86,59 +86,62 @@ export default function OrderComponent({ ticketId, establishmentId }: OrderCompo
     <div>
       <div className="grid md:grid-cols-2 gap-6">
         <div>
-          <h3 className="font-semibold text-gray-900 mb-4">Cardápio</h3>
+          <h3 className="font-semibold text-gray-900 dark:text-white mb-4">Cardápio</h3>
           <div className="space-y-2">
             {menuItems.map((item) => (
               <button
                 key={item.id}
                 onClick={() => addItem(item)}
-                className="w-full p-3 rounded-lg bg-gray-50 hover:bg-indigo-50 text-left flex justify-between items-center transition"
+                className="w-full p-4 rounded-xl bg-gray-50 dark:bg-gray-700 hover:bg-indigo-50 dark:hover:bg-indigo-900/30 text-left flex justify-between items-center transition-all hover:scale-[1.02] active:scale-[0.98]"
               >
                 <div>
-                  <p className="font-medium text-gray-900">{item.name}</p>
-                  <p className="text-sm text-gray-600">
+                  <p className="font-medium text-gray-900 dark:text-white">{item.name}</p>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">
                     {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(item.price)}
                   </p>
                 </div>
-                <Plus className="h-5 w-5 text-indigo-600" />
+                <div className="w-8 h-8 bg-indigo-100 dark:bg-indigo-900/30 rounded-full flex items-center justify-center">
+                  <Plus className="h-4 w-4 text-indigo-600 dark:text-indigo-400" />
+                </div>
               </button>
             ))}
           </div>
         </div>
 
         <div>
-          <h3 className="font-semibold text-gray-900 mb-4">Seu Pedido</h3>
+          <h3 className="font-semibold text-gray-900 dark:text-white mb-4">Seu Pedido</h3>
           
           {items.length === 0 ? (
-            <p className="text-gray-500 text-center py-8">
-              Adicione itens do cardápio
-            </p>
+            <div className="text-center py-8 bg-gray-50 dark:bg-gray-700/50 rounded-2xl">
+              <ShoppingCart className="h-8 w-8 text-gray-400 dark:text-gray-500 mx-auto mb-2" />
+              <p className="text-gray-500 dark:text-gray-400">Adicione itens do cardápio</p>
+            </div>
           ) : (
             <div className="space-y-3 mb-4">
               {items.map((item) => (
                 <div
                   key={item.id}
-                  className="flex items-center justify-between p-3 bg-gray-50 rounded-lg"
+                  className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-xl"
                 >
                   <div>
-                    <p className="font-medium text-gray-900">{item.name}</p>
-                    <p className="text-sm text-gray-600">
+                    <p className="font-medium text-gray-900 dark:text-white">{item.name}</p>
+                    <p className="text-sm text-gray-600 dark:text-gray-400">
                       {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(item.price * item.quantity)}
                     </p>
                   </div>
                   <div className="flex items-center gap-2">
                     <button
                       onClick={() => removeItem(item.name)}
-                      className="p-1 rounded-full bg-gray-200 hover:bg-gray-300"
+                      className="p-1.5 rounded-full bg-gray-200 dark:bg-gray-600 hover:bg-gray-300 dark:hover:bg-gray-500 transition-colors"
                     >
-                      <Minus className="h-4 w-4" />
+                      <Minus className="h-4 w-4 text-gray-700 dark:text-gray-300" />
                     </button>
-                    <span className="w-8 text-center font-medium">{item.quantity}</span>
+                    <span className="w-8 text-center font-medium text-gray-900 dark:text-white">{item.quantity}</span>
                     <button
                       onClick={() => addItem({ id: item.id, name: item.name, price: item.price })}
-                      className="p-1 rounded-full bg-indigo-100 hover:bg-indigo-200"
+                      className="p-1.5 rounded-full bg-indigo-100 dark:bg-indigo-900/30 hover:bg-indigo-200 dark:hover:bg-indigo-800/50 transition-colors"
                     >
-                      <Plus className="h-4 w-4 text-indigo-600" />
+                      <Plus className="h-4 w-4 text-indigo-600 dark:text-indigo-400" />
                     </button>
                   </div>
                 </div>
@@ -148,7 +151,7 @@ export default function OrderComponent({ ticketId, establishmentId }: OrderCompo
 
           <div className="space-y-3">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                 Observações
               </label>
               <textarea
@@ -156,14 +159,14 @@ export default function OrderComponent({ ticketId, establishmentId }: OrderCompo
                 onChange={(e) => setNotes(e.target.value)}
                 placeholder="Alguma observação?"
                 rows={2}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500"
+                className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-indigo-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition"
               />
             </div>
 
-            <div className="border-t pt-3">
+            <div className="border-t border-gray-200 dark:border-gray-700 pt-3">
               <div className="flex justify-between items-center mb-4">
-                <span className="font-semibold text-gray-900">Total</span>
-                <span className="text-xl font-bold text-indigo-600">
+                <span className="font-semibold text-gray-900 dark:text-white">Total</span>
+                <span className="text-xl font-bold text-indigo-600 dark:text-indigo-400">
                   {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(total)}
                 </span>
               </div>
@@ -171,7 +174,7 @@ export default function OrderComponent({ ticketId, establishmentId }: OrderCompo
               <button
                 onClick={submitOrder}
                 disabled={items.length === 0 || loading}
-                className="w-full bg-indigo-600 text-white py-3 rounded-lg font-semibold hover:bg-indigo-700 disabled:opacity-50 transition"
+                className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-3 rounded-xl font-semibold hover:from-indigo-700 hover:to-purple-700 disabled:opacity-50 transition-all shadow-lg hover:scale-[1.02] active:scale-[0.98]"
               >
                 {loading ? 'Enviando...' : 'Enviar Pedido'}
               </button>
