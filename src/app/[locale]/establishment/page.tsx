@@ -53,27 +53,29 @@ export default function CreateEstablishmentPage() {
 
     return (
       <div className="min-h-screen bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-500 flex items-center justify-center p-6">
-        <div className="w-full max-w-md">
-          <div className="bg-white rounded-2xl shadow-2xl p-8 text-center">
-            <CheckCircle2 className="h-16 w-16 text-green-500 mx-auto mb-4" />
-            <h1 className="text-2xl font-bold text-gray-900 mb-2">{t('success_title')}</h1>
-            <p className="text-gray-600 mb-6">{t('success_desc')}</p>
+        <div className="w-full max-w-md animate-scale-in">
+          <div className="bg-white dark:bg-gray-800 rounded-3xl shadow-2xl p-8 text-center border border-gray-200 dark:border-gray-700">
+            <div className="w-20 h-20 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center mx-auto mb-6 animate-bounce-slow">
+              <CheckCircle2 className="h-10 w-10 text-green-500" />
+            </div>
+            <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">{t('success_title')}</h1>
+            <p className="text-gray-600 dark:text-gray-400 mb-6">{t('success_desc')}</p>
 
-            <div className="bg-gray-50 rounded-lg p-4 mb-6">
-              <p className="text-sm text-gray-500 mb-1">{t('name_label')}</p>
-              <p className="font-semibold text-gray-900">{created.name}</p>
-              <p className="text-sm text-gray-500 mt-2 mb-1">{t('slug_display')}</p>
-              <p className="font-mono text-lg font-bold text-indigo-600">{created.slug}</p>
+            <div className="bg-gray-50 dark:bg-gray-700 rounded-xl p-4 mb-6">
+              <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">{t('name_label')}</p>
+              <p className="font-semibold text-gray-900 dark:text-white">{created.name}</p>
+              <p className="text-sm text-gray-500 dark:text-gray-400 mt-2 mb-1">{t('slug_display')}</p>
+              <p className="font-mono text-lg font-bold text-indigo-600 dark:text-indigo-400">{created.slug}</p>
             </div>
 
-            <div className="bg-gray-50 rounded-lg p-6 mb-6 flex justify-center">
+            <div className="bg-gray-50 dark:bg-gray-700 rounded-xl p-6 mb-6 flex justify-center">
               <QRCodeSVG value={enterUrl} size={180} />
             </div>
 
             <div className="flex flex-col gap-3">
               <Link
                 href={`/qr/${created.slug}`}
-                className="w-full bg-indigo-600 text-white py-3 rounded-lg font-semibold hover:bg-indigo-700 transition flex items-center justify-center gap-2"
+                className="w-full bg-indigo-600 text-white py-3 rounded-xl font-semibold hover:bg-indigo-700 transition flex items-center justify-center gap-2 shadow-lg hover:scale-105 active:scale-95"
               >
                 {t('show_qr')}
                 <ExternalLink className="h-4 w-4" />
@@ -82,7 +84,7 @@ export default function CreateEstablishmentPage() {
                 onClick={() => {
                   window.location.href = `/admin/dashboard?est=${created.id}`
                 }}
-                className="w-full bg-gray-100 text-gray-700 py-3 rounded-lg font-semibold hover:bg-gray-200 transition"
+                className="w-full bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 py-3 rounded-xl font-semibold hover:bg-gray-200 dark:hover:bg-gray-600 transition hover:scale-105 active:scale-95"
               >
                 {t('go_dashboard')}
               </button>
@@ -95,16 +97,18 @@ export default function CreateEstablishmentPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-500 flex items-center justify-center p-6">
-      <div className="w-full max-w-md">
-        <div className="text-center mb-8">
-          <Building2 className="h-16 w-16 text-white mx-auto mb-4" />
+      <div className="w-full max-w-md animate-fade-in">
+        <div className="text-center mb-8 animate-slide-up">
+          <div className="w-20 h-20 bg-white/20 rounded-2xl flex items-center justify-center mx-auto mb-4">
+            <Building2 className="h-16 w-16 text-white" />
+          </div>
           <h1 className="text-3xl font-bold text-white mb-2">{t('title')}</h1>
           <p className="text-white/80">{t('subtitle')}</p>
         </div>
 
-        <form onSubmit={handleSubmit} className="bg-white rounded-2xl shadow-2xl p-8">
+        <form onSubmit={handleSubmit} className="bg-white dark:bg-gray-800 rounded-3xl shadow-2xl p-8 border border-gray-200 dark:border-gray-700 animate-slide-up" style={{ animationDelay: '100ms' }}>
           <div className="mb-6">
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
               {t('name_label')}
             </label>
             <input
@@ -115,13 +119,13 @@ export default function CreateEstablishmentPage() {
                 setSlug(e.target.value.toLowerCase().replace(/\s+/g, '-'))
               }}
               placeholder={t('name_placeholder')}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500"
+              className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-indigo-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition"
               required
             />
           </div>
 
           <div className="mb-6">
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
               {t('slug_label')}
             </label>
             <div className="relative">
@@ -131,23 +135,23 @@ export default function CreateEstablishmentPage() {
                 value={slug}
                 onChange={(e) => setSlug(e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, ''))}
                 placeholder={t('slug_placeholder')}
-                className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 uppercase"
+                className="w-full pl-10 pr-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-indigo-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white uppercase transition"
                 required
               />
             </div>
-            <p className="text-xs text-gray-500 mt-1">
+            <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">
               {t('slug_hint')}
             </p>
           </div>
 
           <div className="mb-6">
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
               {t('category')}
             </label>
             <select
               value={category}
               onChange={(e) => setCategory(e.target.value)}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500"
+              className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-indigo-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition"
             >
               <option value="general">{t('cat_general')}</option>
               <option value="restaurant">{t('cat_restaurant')}</option>
@@ -161,7 +165,7 @@ export default function CreateEstablishmentPage() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-indigo-600 text-white py-3 rounded-lg font-semibold hover:bg-indigo-700 disabled:opacity-50 transition"
+            className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-3 rounded-xl font-semibold hover:from-indigo-700 hover:to-purple-700 disabled:opacity-50 transition-all shadow-lg hover:scale-[1.02] active:scale-[0.98]"
           >
             {loading ? t('creating') : t('create')}
           </button>
