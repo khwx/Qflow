@@ -148,7 +148,7 @@ export default function WaitingPage({ params }: { params: Promise<{ locale: stri
           <div className="w-24 h-24 bg-gradient-to-br from-green-400 to-emerald-500 rounded-full flex items-center justify-center mx-auto mb-6 animate-bounce-slow">
             <span className="text-4xl">🔔</span>
           </div>
-          <h1 className="text-4xl font-bold text-gray-900 mb-3">{tCalled('title')}</h1>
+          <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-3">{tCalled('title')}</h1>
           <p className="text-xl text-gray-600 mb-8">{tCalled('subtitle')}</p>
           <div className="bg-gradient-to-r from-indigo-50 to-purple-50 rounded-2xl p-6 mb-8">
             <p className="text-sm text-gray-500 mb-2">{tTicket('your_ticket')}</p>
