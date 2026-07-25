@@ -1,10 +1,10 @@
 'use client'
 
-import { use, useState, useEffect } from 'react'
+import { use, useState, useEffect, useRef } from 'react'
 import { useTranslations } from 'next-intl'
 import { createClientComponentClient } from '@/lib/supabase'
 import { Ticket, Game, Poll, Queue } from '@/types'
-import { Gamepad2, ClipboardList, ShoppingCart, Trophy, Star, Clock, Users } from 'lucide-react'
+import { Gamepad2, ClipboardList, ShoppingCart, Trophy, Star, Clock, Users, Volume2, VolumeX } from 'lucide-react'
 import GameModal from '@/components/client/GameModal'
 import PollComponent from '@/components/client/PollComponent'
 import OrderComponent from '@/components/client/OrderComponent'
@@ -31,6 +31,8 @@ export default function WaitingPage({ params }: { params: Promise<{ locale: stri
   const [customerPoints, setCustomerPoints] = useState(0)
   const [waitingSince, setWaitingSince] = useState<Date | null>(null)
   const [elapsedMinutes, setElapsedMinutes] = useState(0)
+  const [soundEnabled, setSoundEnabled] = useState(true)
+  const [soundPlayed, setSoundPlayed] = useState(false)
   const supabase = createClientComponentClient()
 
   useEffect(() => {
@@ -56,8 +58,7 @@ export default function WaitingPage({ params }: { params: Promise<{ locale: stri
       supabase.removeChannel(channel)
     }
   }, [])
-
-  const loadData = async () => {
+   const loadData = async () => {
     try {
       const { data: ticketData } = await supabase
         .from('tickets')
