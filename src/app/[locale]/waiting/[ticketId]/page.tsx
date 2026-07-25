@@ -144,7 +144,7 @@ export default function WaitingPage({ params }: { params: Promise<{ locale: stri
   if (ticket.status === 'called') {
     return (
       <div className="min-h-screen bg-gradient-to-br from-green-50 via-emerald-50 to-teal-50 flex items-center justify-center p-6 animate-fade-in">
-        <div className="bg-white rounded-3xl shadow-2xl p-10 text-center max-w-lg animate-scale-in">
+        <div className="bg-white dark:bg-gray-800 rounded-3xl shadow-2xl p-10 text-center max-w-lg animate-scale-in border border-gray-200 dark:border-gray-700">
           <div className="w-24 h-24 bg-gradient-to-br from-green-400 to-emerald-500 rounded-full flex items-center justify-center mx-auto mb-6 animate-bounce-slow">
             <span className="text-4xl">🔔</span>
           </div>
