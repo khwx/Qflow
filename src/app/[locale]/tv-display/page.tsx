@@ -200,13 +200,13 @@ export default function TVDisplayPage() {
         </div>
       </header>
 
-      <main className="p-6 sm:p-8">
+      <main className="p-4 sm:p-6 lg:p-8">
         {queues.length === 0 ? (
           <div className="text-center py-20">
             <p className="text-2xl text-white/60">{t('no_queue')}</p>
           </div>
         ) : (
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
             {queues.map((queue) => {
               const queueTickets = tickets.filter(ticket => ticket.queue_id === queue.id)
               const waiting = queueTickets.filter(ticket => ticket.status === 'waiting')
