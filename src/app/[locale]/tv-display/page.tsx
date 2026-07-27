@@ -5,6 +5,7 @@ import { useTranslations } from 'next-intl'
 import { createClientComponentClient } from '@/lib/supabase'
 import { Ticket } from '@/types'
 import { Volume2, VolumeX, Clock, Users, CheckCircle } from 'lucide-react'
+import { cn } from '@/lib/utils'
 
 export default function TVDisplayPage() {
   const t = useTranslations('tv_display')
@@ -255,17 +256,30 @@ export default function TVDisplayPage() {
                   <div className="bg-white/5 rounded-xl p-4">
                     <p className="text-white/60 mb-3 text-sm font-medium">{t('next_tickets')}</p>
                     <div className="space-y-2 max-h-48 overflow-y-auto">
-                      {waiting.slice(0, 8).map((ticket, i) => (
-                        <div
-                          key={ticket.id}
-                          className="flex justify-between items-center py-2 px-3 bg-white/5 rounded-lg"
-                        >
-                          <span className="text-xl font-mono font-bold">{ticket.ticket_number}</span>
-                          <span className={`text-sm font-medium ${i === 0 ? 'text-green-400' : 'text-white/40'}`}>
-                            {i === 0 ? t('now') : `+${i + 1}`}
-                          </span>
-                        </div>
-                      ))}
+                       {waiting.slice(0, 8).map((ticket, i) => (
+                         <div
+                           key={ticket.id}
+                           className={cn(
+                             'flex justify-between items-center py-2 px-3 rounded-lg',
+                             i === 0
+                               ? 'bg-white/10 border border-white/20'
+                               : 'bg-white/5'
+                           )}
+                         >
+                           <span className={cn(
+                             'text-xl font-mono font-bold',
+                             i === 0 ? 'text-white' : 'text-white/60'
+                           )}>
+                             {ticket.ticket_number}
+                           </span>
+                           <span className={cn(
+                             'text-sm font-medium',
+                             i === 0 ? 'text-green-400 bg-green-400/20 px-2 py-0.5 rounded-full' : 'text-white/40'
+                           )}>
+                             {i === 0 ? t('now') : `+${i + 1}`}
+                           </span>
+                         </div>
+                       ))}
                       {waiting.length === 0 && (
                         <p className="text-white/30 text-center py-4">
                           {t('no_queue')}
