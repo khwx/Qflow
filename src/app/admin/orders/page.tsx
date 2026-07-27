@@ -164,7 +164,7 @@ function OrdersContent() {
         </div>
         <button
           onClick={() => loadOrders(establishment.id)}
-          className="inline-flex items-center gap-2 bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition-colors text-sm"
+          className="inline-flex items-center gap-2 bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-4 py-2 rounded-xl hover:from-indigo-700 hover:to-purple-700 transition-all shadow-sm hover:scale-105"
         >
           <RefreshCw className="h-4 w-4" />
           Atualizar
@@ -231,23 +231,23 @@ function OrdersContent() {
                     {timeAgo(order.created_at)}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="flex gap-2">
+                    <div className="flex gap-1.5">
                       {nextStatus && (
                         <button
                           onClick={() => updateStatus(order.id, nextStatus)}
-                          className="p-2 text-green-600 hover:bg-green-50 dark:hover:bg-green-900/30 rounded-lg transition-colors"
-                          title="Avançar"
+                          className="px-2.5 py-1 text-xs font-semibold bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 rounded-lg hover:bg-green-200 dark:hover:bg-green-900/50 transition-colors"
+                          title="Avançar para próximo status"
                         >
-                          <Check className="h-4 w-4" />
+                          → Avançar
                         </button>
                       )}
                       {canCancel && (
                         <button
                           onClick={() => updateStatus(order.id, 'cancelled')}
-                          className="p-2 text-red-600 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-lg transition-colors"
-                          title="Cancelar"
+                          className="px-2.5 py-1 text-xs font-semibold bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400 rounded-lg hover:bg-red-200 dark:hover:bg-red-900/50 transition-colors"
+                          title="Cancelar pedido"
                         >
-                          <X className="h-4 w-4" />
+                          Cancelar
                         </button>
                       )}
                     </div>
