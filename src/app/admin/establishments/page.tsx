@@ -84,7 +84,7 @@ export default function EstablishmentsPage() {
   }
 
   return (
-    <div>
+    <div className="animate-fade-in">
       <div className="flex justify-between items-center mb-6">
         <div>
           <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Estabelecimentos</h2>
@@ -92,7 +92,7 @@ export default function EstablishmentsPage() {
         </div>
         <Link
           href="/establishment"
-          className="flex items-center gap-2 bg-indigo-600 text-white hover:bg-indigo-700 px-4 py-2 rounded-lg hover:bg-indigo-700 transition-colors"
+          className="flex items-center gap-2 bg-gradient-to-r from-indigo-600 to-purple-600 text-white hover:from-indigo-700 hover:to-purple-700 px-4 py-2 rounded-xl transition-all shadow-sm hover:scale-105"
         >
           <Plus className="h-5 w-5" />
           Novo Estabelecimento
@@ -100,14 +100,14 @@ export default function EstablishmentsPage() {
       </div>
 
       {establishments.length === 0 ? (
-        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700 dark:border-gray-700 p-12 text-center">
+        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700 p-12 text-center">
           <Building2 className="h-12 w-12 text-gray-400 mx-auto mb-4" />
           <p className="text-gray-500 dark:text-gray-400">Nenhum estabelecimento cadastrado ainda</p>
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {establishments.map((est) => (
-            <div key={est.id} className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700 dark:border-gray-700 p-6 flex flex-col">
+            <div key={est.id} className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700 p-6 flex flex-col">
               <div className="flex items-start justify-between mb-4">
                 <div className="flex-1 min-w-0">
                   <h3 className="font-semibold text-gray-900 dark:text-white text-lg truncate">{est.name}</h3>
@@ -116,8 +116,8 @@ export default function EstablishmentsPage() {
                 <span
                   className={
                     est.is_active
-                      ? 'px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-700'
-                      : 'px-2 py-1 rounded-full text-xs font-medium bg-red-100 text-red-700'
+                      ? 'px-2 py-1 rounded-full text-xs font-medium bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400'
+                      : 'px-2 py-1 rounded-full text-xs font-medium bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400'
                   }
                 >
                   {est.is_active ? 'Ativo' : 'Inativo'}
@@ -139,10 +139,10 @@ export default function EstablishmentsPage() {
                 </div>
               </div>
 
-              <div className="flex gap-2 pt-4 border-t">
+              <div className="flex gap-2 pt-4 border-t border-gray-200 dark:border-gray-700">
                 <Link
                   href={`/admin/dashboard?est=${est.slug}`}
-                  className="flex-1 flex items-center justify-center gap-1.5 bg-indigo-50 text-indigo-700 px-3 py-2 rounded-lg hover:bg-indigo-100 transition-colors text-sm font-medium"
+                  className="flex-1 flex items-center justify-center gap-1.5 bg-indigo-50 dark:bg-indigo-900/20 text-indigo-700 dark:text-indigo-400 px-3 py-2 rounded-xl hover:bg-indigo-100 dark:hover:bg-indigo-900/40 transition-colors text-sm font-medium"
                 >
                   <BarChart3 className="h-4 w-4" />
                   Dashboard
@@ -150,14 +150,14 @@ export default function EstablishmentsPage() {
                 <Link
                   href={`/qr/${est.slug}`}
                   target="_blank"
-                  className="flex-1 flex items-center justify-center gap-1.5 bg-gray-50 dark:bg-gray-700 text-gray-700 px-3 py-2 rounded-lg hover:bg-gray-100 transition-colors text-sm font-medium"
+                  className="flex-1 flex items-center justify-center gap-1.5 bg-gray-50 dark:bg-gray-700 text-gray-700 dark:text-gray-300 px-3 py-2 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors text-sm font-medium"
                 >
                   <QrCode className="h-4 w-4" />
                   QR Code
                 </Link>
                 <Link
                   href={`/admin/settings?est=${est.slug}`}
-                  className="flex-1 flex items-center justify-center gap-1.5 bg-gray-50 dark:bg-gray-700 text-gray-700 px-3 py-2 rounded-lg hover:bg-gray-100 transition-colors text-sm font-medium"
+                  className="flex-1 flex items-center justify-center gap-1.5 bg-gray-50 dark:bg-gray-700 text-gray-700 dark:text-gray-300 px-3 py-2 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors text-sm font-medium"
                 >
                   <Settings className="h-4 w-4" />
                   Config
