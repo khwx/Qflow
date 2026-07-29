@@ -138,14 +138,14 @@ function AdminShellInner({
 
       {sidebarOpen && (
         <div
-          className="fixed inset-0 bg-black/50 z-40 md:hidden"
+          className="fixed inset-0 bg-black/50 z-40 md:hidden animate-fade-in"
           onClick={() => setSidebarOpen(false)}
         />
       )}
 
       <aside
         className={cn(
-          'fixed inset-y-0 left-0 w-64 bg-white dark:bg-gray-800 shadow-lg z-50 transform transition-transform duration-200 ease-in-out',
+          'fixed inset-y-0 left-0 w-64 bg-white dark:bg-gray-800 shadow-lg z-50 transform transition-transform duration-300 ease-out',
           'md:relative md:translate-x-0 md:z-auto md:block',
           sidebarOpen ? 'translate-x-0' : '-translate-x-full'
         )}
@@ -153,13 +153,15 @@ function AdminShellInner({
         <div className="md:hidden flex items-center justify-end p-4 border-b border-gray-200 dark:border-gray-700">
           <button
             onClick={() => setSidebarOpen(false)}
-            className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition"
+            className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
             aria-label="Close menu"
           >
             <X className="h-5 w-5 text-gray-700 dark:text-gray-300" />
           </button>
         </div>
-        {sidebarContent}
+        <div className="overflow-y-auto max-h-screen">
+          {sidebarContent}
+        </div>
       </aside>
 
       <main className="md:ml-0 min-h-screen">
@@ -184,7 +186,7 @@ function AdminShellInner({
           </div>
         </header>
 
-        <div className="p-4 sm:p-8">
+        <div className="p-4 sm:p-8 animate-fade-in">
           {children}
         </div>
       </main>
