@@ -229,6 +229,7 @@
     "serving": "正在服务",
     "next_tickets": "下一个号码",
     "no_queue": "当前无排队号码",
+    "no_queues": "No queues found",
     "updated": "实时更新",
     "now": "现在"
   },

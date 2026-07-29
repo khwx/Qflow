@@ -229,6 +229,7 @@
     "serving": "جاري الخدمة",
     "next_tickets": "التذاكر التالية",
     "no_queue": "لا توجد تذاكر في الطابور",
+    "no_queues": "No queues found",
     "updated": "يُحدَّث في الوقت الحقيقي",
     "now": "الآن"
   },

@@ -229,6 +229,7 @@
     "serving": "서비스 중",
     "next_tickets": "다음 번호",
     "no_queue": "줄에 번호가 없습니다",
+    "no_queues": "No queues found",
     "updated": "실시간 업데이트",
     "now": "지금"
   },

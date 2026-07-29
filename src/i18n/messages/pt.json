@@ -229,6 +229,7 @@
     "serving": "Em atendimento",
     "next_tickets": "Próximas senhas",
     "no_queue": "Nenhuma senha na fila",
+    "no_queues": "Nenhuma fila encontrada",
     "updated": "Atualizado em tempo real",
     "now": "Agora"
   },

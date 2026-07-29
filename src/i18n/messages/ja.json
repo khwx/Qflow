@@ -229,6 +229,7 @@
     "serving": "サービス中",
     "next_tickets": "次の番号",
     "no_queue": "キューに番号がありません",
+    "no_queues": "No queues found",
     "updated": "リアルタイムで更新",
     "now": "今"
   },

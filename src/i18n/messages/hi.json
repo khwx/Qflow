@@ -229,6 +229,7 @@
     "serving": "सेवा में",
     "next_tickets": "अगले टिकट",
     "no_queue": "क्यू में कोई टिकट नहीं",
+    "no_queues": "No queues found",
     "updated": "रियल-टाइम में अपडेट",
     "now": "अभी"
   },

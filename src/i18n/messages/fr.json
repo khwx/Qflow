@@ -229,6 +229,7 @@
     "serving": "En service",
     "next_tickets": "Prochains tickets",
     "no_queue": "Aucun ticket en file",
+    "no_queues": "Aucune file disponible",
     "updated": "Mis à jour en temps réel",
     "now": "Maintenant"
   },

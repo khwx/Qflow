@@ -229,6 +229,7 @@
     "serving": "Wird bedient",
     "next_tickets": "Nächste Tickets",
     "no_queue": "Keine Tickets in der Schlange",
+    "no_queues": "Keine Warteschlangen gefunden",
     "updated": "In Echtzeit aktualisiert",
     "now": "Jetzt"
   },

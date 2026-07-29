@@ -229,6 +229,7 @@
     "serving": "Atendiendo",
     "next_tickets": "Próximos turnos",
     "no_queue": "No hay turnos en la cola",
+    "no_queues": "No hay filas disponibles",
     "updated": "Actualizado en tiempo real",
     "now": "Ahora"
   },
