@@ -225,29 +225,35 @@ export default function TVDisplayPage() {
                   </div>
 
                   {called.length > 0 && (
-                    <div className="bg-gradient-to-r from-green-500/30 to-emerald-500/30 border-2 border-green-400 rounded-xl p-6 mb-6 animate-pulse">
-                      <div className="flex items-center gap-3 mb-3">
-                        <CheckCircle className="h-8 w-8 text-green-400" />
+                    <div className="bg-gradient-to-r from-green-500/30 to-emerald-500/30 border-2 border-green-400 rounded-xl p-6 mb-6 shadow-[0_0_30px_rgba(34,197,94,0.3)] animate-pulse">
+                      <div className="flex items-center gap-3 mb-4">
+                        <div className="w-10 h-10 bg-green-400/20 rounded-full flex items-center justify-center">
+                          <CheckCircle className="h-6 w-6 text-green-400" />
+                        </div>
                         <p className="text-green-300 text-xl font-semibold">{t('call')}</p>
                       </div>
-                      <div className="space-y-2">
+                      <div className="flex flex-wrap gap-4">
                         {called.map(ticket => (
-                          <p key={ticket.id} className="text-6xl font-bold text-green-400 animate-bounce">
-                            {ticket.ticket_number}
-                          </p>
+                          <div key={ticket.id} className="bg-green-400/20 rounded-xl px-8 py-4 animate-bounce">
+                            <p className="text-6xl font-bold text-green-400">
+                              {ticket.ticket_number}
+                            </p>
+                          </div>
                         ))}
                       </div>
                     </div>
                   )}
 
                   {serving.length > 0 && (
-                    <div className="bg-yellow-500/20 border-2 border-yellow-400/50 rounded-xl p-4 mb-6">
-                      <p className="text-yellow-300 text-lg mb-3">{t('serving')}</p>
-                      <div className="space-y-2">
+                    <div className="bg-gradient-to-r from-yellow-500/20 to-amber-500/20 border border-yellow-400/40 rounded-xl p-4 mb-6">
+                      <p className="text-yellow-300 text-lg mb-3 font-medium">{t('serving')}</p>
+                      <div className="flex flex-wrap gap-3">
                         {serving.map(ticket => (
-                          <p key={ticket.id} className="text-4xl font-bold text-yellow-400">
-                            {ticket.ticket_number}
-                          </p>
+                          <div key={ticket.id} className="bg-yellow-400/15 rounded-xl px-6 py-3">
+                            <p className="text-4xl font-bold text-yellow-400">
+                              {ticket.ticket_number}
+                            </p>
+                          </div>
                         ))}
                       </div>
                     </div>
@@ -281,9 +287,11 @@ export default function TVDisplayPage() {
                          </div>
                        ))}
                       {waiting.length === 0 && (
-                        <p className="text-white/30 text-center py-4">
-                          {t('no_queue')}
-                        </p>
+                        <div className="text-center py-4">
+                          <p className="text-white/30 text-sm">
+                            {t('no_queue')}
+                          </p>
+                        </div>
                       )}
                     </div>
                   </div>
