@@ -32,7 +32,7 @@ export default function WaitingPage({ params }: { params: Promise<{ locale: stri
   const [waitingSince, setWaitingSince] = useState<Date | null>(null)
   const [elapsedMinutes, setElapsedMinutes] = useState(0)
   const [soundEnabled, setSoundEnabled] = useState(true)
-  const [soundPlayed, setSoundPlayed] = useState(false)
+  const soundPlayedRef = useRef(false)
   const supabase = createClientComponentClient()
 
   useEffect(() => {
@@ -49,16 +49,43 @@ export default function WaitingPage({ params }: { params: Promise<{ locale: stri
           filter: `id=eq.${ticketId}`,
         },
         (payload) => {
-          setTicket(payload.new as Ticket)
+          const newTicket = payload.new as Ticket
+          if (newTicket.status === 'called' && soundEnabled && !soundPlayedRef.current) {
+            soundPlayedRef.current = true
+            playNotificationSound()
+          }
+          setTicket(newTicket)
         }
       )
       .subscribe()
 
-    return () => {
+  return () => {
       supabase.removeChannel(channel)
     }
-  }, [])
-   const loadData = async () => {
+  }, [soundEnabled])
+
+  const playNotificationSound = () => {
+    try {
+      const audioCtx = new (window.AudioContext || (window as any).webkitAudioContext)()
+      const notes = [523.25, 659.25, 783.99]
+      notes.forEach((freq, i) => {
+        const osc = audioCtx.createOscillator()
+        const gain = audioCtx.createGain()
+        osc.connect(gain)
+        gain.connect(audioCtx.destination)
+        osc.frequency.value = freq
+        osc.type = 'sine'
+        gain.gain.setValueAtTime(0.3, audioCtx.currentTime + i * 0.15)
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + i * 0.15 + 0.4)
+        osc.start(audioCtx.currentTime + i * 0.15)
+        osc.stop(audioCtx.currentTime + i * 0.15 + 0.4)
+      })
+    } catch {
+      // Audio not supported
+    }
+  }
+
+  const loadData = async () => {
     try {
       const { data: ticketData } = await supabase
         .from('tickets')
@@ -175,6 +202,13 @@ export default function WaitingPage({ params }: { params: Promise<{ locale: stri
             <p className="text-sm text-gray-600 dark:text-gray-400">{tTicket('your_ticket')}: {ticket.ticket_number}</p>
           </div>
           <div className="flex items-center gap-3">
+            <button
+              onClick={() => setSoundEnabled(!soundEnabled)}
+              className="p-2 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors text-gray-600 dark:text-gray-400"
+              title={soundEnabled ? 'Sound on' : 'Sound off'}
+            >
+              {soundEnabled ? <Volume2 className="h-5 w-5" /> : <VolumeX className="h-5 w-5" />}
+            </button>
             <div className="bg-gradient-to-r from-yellow-400 to-orange-400 px-4 py-2 rounded-xl flex items-center gap-2 shadow-sm">
               <Trophy className="h-5 w-5 text-white" />
               <span className="font-bold text-white">{customerPoints} pts</span>
