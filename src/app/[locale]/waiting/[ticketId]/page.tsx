@@ -171,20 +171,20 @@ export default function WaitingPage({ params }: { params: Promise<{ locale: stri
 
   if (ticket.status === 'called') {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-green-50 via-emerald-50 to-teal-50 flex items-center justify-center p-6 animate-fade-in">
+      <div className="min-h-screen bg-gradient-to-br from-green-50 via-emerald-50 to-teal-50 dark:from-green-900/30 dark:via-emerald-900/30 dark:to-teal-900/30 flex items-center justify-center p-6 animate-fade-in">
         <div className="bg-white dark:bg-gray-800 rounded-3xl shadow-2xl p-10 text-center max-w-lg animate-scale-in border border-gray-200 dark:border-gray-700">
           <div className="w-24 h-24 bg-gradient-to-br from-green-400 to-emerald-500 rounded-full flex items-center justify-center mx-auto mb-6 animate-bounce-slow">
             <span className="text-4xl">🔔</span>
           </div>
           <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-3">{tCalled('title')}</h1>
-          <p className="text-xl text-gray-600 mb-8">{tCalled('subtitle')}</p>
-          <div className="bg-gradient-to-r from-indigo-50 to-purple-50 rounded-2xl p-6 mb-8">
-            <p className="text-sm text-gray-500 mb-2">{tTicket('your_ticket')}</p>
+          <p className="text-xl text-gray-600 dark:text-gray-300 mb-8">{tCalled('subtitle')}</p>
+          <div className="bg-gradient-to-r from-indigo-50 to-purple-50 dark:from-indigo-900/30 dark:to-purple-900/30 rounded-2xl p-6 mb-8">
+            <p className="text-sm text-gray-500 dark:text-gray-400 mb-2">{tTicket('your_ticket')}</p>
             <p className="text-5xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
               {ticket.ticket_number}
             </p>
           </div>
-          <div className="flex items-center justify-center gap-2 text-gray-500">
+          <div className="flex items-center justify-center gap-2 text-gray-500 dark:text-gray-400">
             <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
             <span className="text-sm">{t('please_proceed', { default: 'Please proceed to the counter' })}</span>
           </div>
