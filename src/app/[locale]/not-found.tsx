@@ -14,13 +14,14 @@ export default function NotFoundPage({
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-500 flex items-center justify-center p-6">
-      <div className="text-center text-white">
-        <h1 className="text-6xl font-bold mb-4">404</h1>
-        <h2 className="text-2xl font-semibold mb-2">{t('title')}</h2>
-        <p className="text-lg text-white/80 mb-8">{t('message')}</p>
+      <div className="text-center text-white animate-fade-in">
+        <h1 className="text-6xl font-bold mb-4 animate-scale-in">404</h1>
+        <h2 className="text-2xl font-semibold mb-2 animate-slide-up">{t('title')}</h2>
+        <p className="text-lg text-white/80 mb-8 animate-slide-up" style={{ animationDelay: '100ms' }}>{t('message')}</p>
         <Link
           href={`/${locale}`}
-          className="inline-flex items-center gap-2 bg-white text-indigo-600 font-medium px-6 py-3 rounded-full hover:bg-white/90 transition-colors"
+          className="inline-flex items-center gap-2 bg-white text-indigo-600 font-medium px-6 py-3 rounded-full hover:bg-white/90 transition-colors animate-slide-up hover:scale-105 active:scale-95"
+          style={{ animationDelay: '200ms' }}
         >
           {t('go_home')}
         </Link>
