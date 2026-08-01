@@ -3,7 +3,7 @@ import { cn } from '@/lib/utils'
 export function Skeleton({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
   return (
     <div
-      className={cn('animate-pulse rounded-lg bg-gray-200', className)}
+      className={cn('animate-pulse rounded-lg bg-gray-200 dark:bg-gray-700', className)}
       {...props}
     />
   )
@@ -11,7 +11,7 @@ export function Skeleton({ className, ...props }: React.HTMLAttributes<HTMLDivEl
 
 export function CardSkeleton() {
   return (
-    <div className="bg-white rounded-xl shadow-sm p-6">
+    <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 border border-gray-200 dark:border-gray-700">
       <div className="flex items-center justify-between mb-4">
         <Skeleton className="h-10 w-10 rounded-lg" />
         <Skeleton className="h-4 w-20" />
@@ -24,11 +24,11 @@ export function CardSkeleton() {
 
 export function TableSkeleton({ rows = 5 }: { rows?: number }) {
   return (
-    <div className="bg-white rounded-xl shadow-sm overflow-hidden">
-      <div className="p-4 border-b">
+    <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm overflow-hidden border border-gray-200 dark:border-gray-700">
+      <div className="p-4 border-b border-gray-200 dark:border-gray-700">
         <Skeleton className="h-6 w-40" />
       </div>
-      <div className="divide-y">
+      <div className="divide-y divide-gray-200 dark:divide-gray-700">
         {Array.from({ length: rows }).map((_, i) => (
           <div key={i} className="p-4 flex items-center gap-4">
             <Skeleton className="h-10 w-10 rounded-full" />
@@ -53,7 +53,7 @@ export function DashboardSkeleton() {
         ))}
       </div>
       <div className="grid lg:grid-cols-2 gap-6">
-        <div className="bg-white rounded-xl shadow-sm p-6">
+        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 border border-gray-200 dark:border-gray-700">
           <Skeleton className="h-6 w-40 mb-4" />
           <div className="space-y-3">
             {Array.from({ length: 6 }).map((_, i) => (
@@ -65,7 +65,7 @@ export function DashboardSkeleton() {
             ))}
           </div>
         </div>
-        <div className="bg-white rounded-xl shadow-sm p-6">
+        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 border border-gray-200 dark:border-gray-700">
           <Skeleton className="h-6 w-40 mb-4" />
           <div className="space-y-4">
             {Array.from({ length: 5 }).map((_, i) => (
