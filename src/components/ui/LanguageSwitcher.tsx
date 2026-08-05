@@ -47,13 +47,13 @@ export default function LanguageSwitcher({ locale }: { locale: string }) {
       </button>
 
       {isOpen && (
-        <div className="absolute right-0 mt-2 py-2 bg-white rounded-xl shadow-xl z-50 min-w-[180px]">
+        <div className="absolute right-0 mt-2 py-2 bg-white dark:bg-gray-800 rounded-xl shadow-xl border border-gray-200 dark:border-gray-700 z-50 min-w-[180px]">
           {locales.map((loc) => (
             <button
               key={loc}
               onClick={() => handleLanguageChange(loc)}
-              className={`w-full flex items-center gap-3 px-4 py-2 text-left hover:bg-gray-100 transition ${
-                loc === currentLocale ? 'bg-indigo-50 text-indigo-600' : 'text-gray-700'
+              className={`w-full flex items-center gap-3 px-4 py-2 text-left hover:bg-gray-100 dark:hover:bg-gray-700 transition ${
+                loc === currentLocale ? 'bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400' : 'text-gray-700 dark:text-gray-300'
               }`}
             >
               <span className="text-lg">{localeFlags[loc]}</span>

@@ -182,14 +182,14 @@ function DashboardContent() {
         </div>
         <button
           onClick={() => loadDashboard()}
-          className="inline-flex items-center gap-2 bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition-colors text-sm"
+          className="inline-flex items-center gap-2 bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-4 py-2 rounded-xl hover:from-indigo-700 hover:to-purple-700 transition-all shadow-sm hover:scale-105 text-sm"
         >
           <RefreshCw className="h-4 w-4" />
           Atualizar
         </button>
       </div>
 
-      <p className="text-xs text-gray-400 text-right mb-6">
+      <p className="text-xs text-gray-400 dark:text-gray-500 text-right mb-6">
         Última atualização: {lastRefresh.toLocaleTimeString('pt-BR')}
       </p>
 
