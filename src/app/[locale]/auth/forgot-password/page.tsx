@@ -46,7 +46,7 @@ export default function ForgotPasswordPage() {
             <p className="text-gray-600 dark:text-gray-400 mb-6">{t('email_sent_desc', { default: 'We sent you a password reset link. Please check your inbox.' })}</p>
             <Link
               href="/auth/login"
-              className="inline-flex items-center gap-2 bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition"
+              className="inline-flex items-center gap-2 bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-4 py-2 rounded-xl hover:from-indigo-700 hover:to-purple-700 transition-all shadow-sm hover:scale-105"
             >
               <ArrowLeft className="h-4 w-4" />
               {t('back_to_login', { default: 'Back to login' })}

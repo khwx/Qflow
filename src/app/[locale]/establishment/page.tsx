@@ -75,7 +75,7 @@ export default function CreateEstablishmentPage() {
             <div className="flex flex-col gap-3">
               <Link
                 href={`/qr/${created.slug}`}
-                className="w-full bg-indigo-600 text-white py-3 rounded-xl font-semibold hover:bg-indigo-700 transition flex items-center justify-center gap-2 shadow-lg hover:scale-105 active:scale-95"
+                className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-3 rounded-xl font-semibold hover:from-indigo-700 hover:to-purple-700 transition flex items-center justify-center gap-2 shadow-lg hover:scale-105 active:scale-95"
               >
                 {t('show_qr')}
                 <ExternalLink className="h-4 w-4" />
