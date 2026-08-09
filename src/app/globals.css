@@ -97,6 +97,10 @@ body {
   outline-offset: 2px;
 }
 
+.dark *:focus-visible {
+  outline-color: #818cf8;
+}
+
 /* Smooth transitions */
 * {
   transition-property: background-color, border-color, color, fill, stroke;
