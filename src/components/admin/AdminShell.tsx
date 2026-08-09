@@ -196,17 +196,17 @@ function AdminShellInner({
 
 function AdminShellSkeleton() {
   return (
-    <div className="min-h-screen bg-gray-50">
-      <aside className="fixed inset-y-0 left-0 w-64 bg-white shadow-lg">
-        <div className="flex items-center gap-2 p-6 border-b">
-          <QrCode className="h-8 w-8 text-indigo-600" />
-          <span className="text-xl font-bold text-gray-900">QFlow</span>
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+      <aside className="fixed inset-y-0 left-0 w-64 bg-white dark:bg-gray-800 shadow-lg border-r border-gray-200 dark:border-gray-700">
+        <div className="flex items-center gap-2 p-6 border-b border-gray-200 dark:border-gray-700">
+          <QrCode className="h-8 w-8 text-indigo-600 dark:text-indigo-400" />
+          <span className="text-xl font-bold text-gray-900 dark:text-white">QFlow</span>
         </div>
         <nav className="p-4 space-y-1">
           {navigation.map((item) => (
             <div
               key={item.name}
-              className="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-700"
+              className="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-700 dark:text-gray-300"
             >
               <item.icon className="h-5 w-5" />
               <span className="font-medium">{item.name}</span>
@@ -215,15 +215,15 @@ function AdminShellSkeleton() {
         </nav>
       </aside>
       <main className="md:ml-64">
-        <div className="bg-white shadow-sm border-b">
+        <div className="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700">
           <div className="px-8 py-4">
-            <div className="h-8 w-48 bg-gray-200 rounded animate-pulse" />
+            <div className="h-8 w-48 bg-gray-200 dark:bg-gray-700 rounded animate-pulse" />
           </div>
         </div>
         <div className="p-8">
           <div className="animate-pulse space-y-4">
-            <div className="h-32 bg-gray-200 rounded" />
-            <div className="h-32 bg-gray-200 rounded" />
+            <div className="h-32 bg-gray-200 dark:bg-gray-700 rounded" />
+            <div className="h-32 bg-gray-200 dark:bg-gray-700 rounded" />
           </div>
         </div>
       </main>
