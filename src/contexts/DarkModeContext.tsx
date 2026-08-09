@@ -10,16 +10,12 @@ interface DarkModeContextType {
 const DarkModeContext = createContext<DarkModeContextType | undefined>(undefined)
 
 export function DarkModeProvider({ children }: { children: ReactNode }) {
-  const [isDark, setIsDark] = useState(false)
-
-  useEffect(() => {
+  const [isDark, setIsDark] = useState(() => {
+    if (typeof window === 'undefined') return false
     const saved = localStorage.getItem('darkMode')
-    if (saved !== null) {
-      setIsDark(saved === 'true')
-    } else {
-      setIsDark(window.matchMedia('(prefers-color-scheme: dark)').matches)
-    }
-  }, [])
+    if (saved !== null) return saved === 'true'
+    return window.matchMedia('(prefers-color-scheme: dark)').matches
+  })
 
   useEffect(() => {
     localStorage.setItem('darkMode', String(isDark))

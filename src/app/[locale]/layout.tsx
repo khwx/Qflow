@@ -5,6 +5,7 @@ import { Toaster } from 'react-hot-toast'
 import { Geist } from 'next/font/google'
 import { locales, localeNames } from '@/i18n/config'
 import { AuthProvider } from '@/contexts/AuthContext'
+import { DarkModeProvider } from '@/contexts/DarkModeContext'
 import '../globals.css'
 
 const geist = Geist({
@@ -114,35 +115,40 @@ export default async function LocaleLayout({
 
   return (
     <html lang={locale} className={`${geist.variable} h-full antialiased`}>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: `(function(){try{var s=localStorage.getItem('darkMode');var d=s!==null?s==='true':matchMedia('(prefers-color-scheme: dark)').matches;if(d)document.documentElement.classList.add('dark')}catch(e){}})()` }} suppressHydrationWarning />
+      </head>
       <body className="min-h-full">
-        <AuthProvider>
-          <NextIntlClientProvider locale={locale} messages={messages}>
-            {children}
-            <Toaster
-              position="top-center"
-              toastOptions={{
-                className: 'bg-white dark:bg-gray-800 text-gray-900 dark:text-white border border-gray-200 dark:border-gray-700 shadow-lg',
-                style: {
-                  borderRadius: '12px',
-                  padding: '12px 16px',
-                  fontFamily: 'inherit',
-                },
-                success: {
-                  iconTheme: {
-                    primary: '#10b981',
-                    secondary: '#ffffff',
+        <DarkModeProvider>
+          <AuthProvider>
+            <NextIntlClientProvider locale={locale} messages={messages}>
+              {children}
+              <Toaster
+                position="top-center"
+                toastOptions={{
+                  className: 'bg-white dark:bg-gray-800 text-gray-900 dark:text-white border border-gray-200 dark:border-gray-700 shadow-lg',
+                  style: {
+                    borderRadius: '12px',
+                    padding: '12px 16px',
+                    fontFamily: 'inherit',
                   },
-                },
-                error: {
-                  iconTheme: {
-                    primary: '#ef4444',
-                    secondary: '#ffffff',
+                  success: {
+                    iconTheme: {
+                      primary: '#10b981',
+                      secondary: '#ffffff',
+                    },
                   },
-                },
-              }}
-            />
-          </NextIntlClientProvider>
-        </AuthProvider>
+                  error: {
+                    iconTheme: {
+                      primary: '#ef4444',
+                      secondary: '#ffffff',
+                    },
+                  },
+                }}
+              />
+            </NextIntlClientProvider>
+          </AuthProvider>
+        </DarkModeProvider>
       </body>
     </html>
   )
