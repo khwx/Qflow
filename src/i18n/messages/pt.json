@@ -231,7 +231,12 @@
     "no_queue": "Nenhuma senha na fila",
     "no_queues": "Nenhuma fila encontrada",
     "updated": "Atualizado em tempo real",
-    "now": "Agora"
+    "now": "Agora",
+    "connect": "Conectar",
+    "connecting": "Conectando...",
+    "not_found_title": "Estabelecimento não encontrado",
+    "not_found_desc": "Verifique o código e tente novamente.",
+    "try_again": "Tentar novamente"
   },
   "establishment": {
     "title": "Criar Estabelecimento",

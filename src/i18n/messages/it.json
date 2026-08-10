@@ -231,7 +231,12 @@
     "no_queue": "Nessun ticket in coda",
     "no_queues": "Nessuna fila trovata",
     "updated": "Aggiornato in tempo reale",
-    "now": "Adesso"
+    "now": "Adesso",
+    "connect": "Connetti",
+    "connecting": "Connessione...",
+    "not_found_title": "Struttura non trovata",
+    "not_found_desc": "Controlla il codice e riprova.",
+    "try_again": "Riprova"
   },
   "establishment": {
     "title": "Crea Struttura",

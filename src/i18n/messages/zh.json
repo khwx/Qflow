@@ -231,7 +231,12 @@
     "no_queue": "当前无排队号码",
     "no_queues": "No queues found",
     "updated": "实时更新",
-    "now": "现在"
+    "now": "现在",
+    "connect": "连接",
+    "connecting": "连接中...",
+    "not_found_title": "未找到机构",
+    "not_found_desc": "请检查代码并重试。",
+    "try_again": "重试"
   },
   "establishment": {
     "title": "创建商户",

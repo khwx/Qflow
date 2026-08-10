@@ -231,7 +231,12 @@
     "no_queue": "No hay turnos en la cola",
     "no_queues": "No hay filas disponibles",
     "updated": "Actualizado en tiempo real",
-    "now": "Ahora"
+    "now": "Ahora",
+    "connect": "Conectar",
+    "connecting": "Conectando...",
+    "not_found_title": "Establecimiento no encontrado",
+    "not_found_desc": "Verifica el código e inténtalo de nuevo.",
+    "try_again": "Intentar de nuevo"
   },
   "establishment": {
     "title": "Crear Establecimiento",

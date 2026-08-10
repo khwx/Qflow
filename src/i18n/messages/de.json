@@ -231,7 +231,12 @@
     "no_queue": "Keine Tickets in der Schlange",
     "no_queues": "Keine Warteschlangen gefunden",
     "updated": "In Echtzeit aktualisiert",
-    "now": "Jetzt"
+    "now": "Jetzt",
+    "connect": "Verbinden",
+    "connecting": "Verbinden...",
+    "not_found_title": "Einrichtung nicht gefunden",
+    "not_found_desc": "Überprüfen Sie den Code und versuchen Sie es erneut.",
+    "try_again": "Erneut versuchen"
   },
   "establishment": {
     "title": "Betrieb Erstellen",

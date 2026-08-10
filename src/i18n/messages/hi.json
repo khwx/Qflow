@@ -231,7 +231,12 @@
     "no_queue": "क्यू में कोई टिकट नहीं",
     "no_queues": "No queues found",
     "updated": "रियल-टाइम में अपडेट",
-    "now": "अभी"
+    "now": "अभी",
+    "connect": "कनेक्ट",
+    "connecting": "कनेक्ट हो रहा है...",
+    "not_found_title": "संस्थान नहीं मिला",
+    "not_found_desc": "कोड जांचें और पुनः प्रयास करें।",
+    "try_again": "पुनः प्रयास करें"
   },
   "establishment": {
     "title": "प्रतिष्ठान बनाएं",

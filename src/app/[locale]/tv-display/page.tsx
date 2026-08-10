@@ -15,9 +15,16 @@ export default function TVDisplayPage() {
   const [tickets, setTickets] = useState<Ticket[]>([])
   const [soundEnabled, setSoundEnabled] = useState(true)
   const [currentTime, setCurrentTime] = useState(new Date())
+  const [notFound, setNotFound] = useState(false)
+  const [connecting, setConnecting] = useState(false)
   const supabase = createClientComponentClient()
   const channelRef = useRef<ReturnType<typeof supabase.channel> | null>(null)
   const audioRef = useRef<HTMLAudioElement | null>(null)
+  const soundEnabledRef = useRef(soundEnabled)
+  const ticketsRef = useRef<Ticket[]>([])
+
+  soundEnabledRef.current = soundEnabled
+  useEffect(() => { ticketsRef.current = tickets }, [tickets])
 
   useEffect(() => {
     const timer = setInterval(() => setCurrentTime(new Date()), 1000)
@@ -32,16 +39,20 @@ export default function TVDisplayPage() {
   }, [soundEnabled])
 
   const loadEstablishment = async (slug: string) => {
-    const { data: est } = await supabase
+    setNotFound(false)
+    const { data: est, error } = await supabase
       .from('establishments')
       .select('*')
       .eq('slug', slug.toLowerCase())
       .eq('is_active', true)
       .single()
 
-    if (est) {
-      setEstablishment(est)
+    if (error || !est) {
+      setNotFound(true)
+      setEstablishment(null)
+      return null
     }
+    setEstablishment(est)
     return est
   }
 
@@ -76,10 +87,10 @@ export default function TVDisplayPage() {
         .order('created_at')
 
       if (ticketData) {
-        const prevCalled = tickets.filter(t => t.status === 'called').length
+        const prevCalled = ticketsRef.current.filter(t => t.status === 'called').length
         const newCalled = ticketData.filter(t => t.status === 'called').length
 
-        if (newCalled > prevCalled && soundEnabled && audioRef.current) {
+        if (newCalled > prevCalled && soundEnabledRef.current && audioRef.current) {
           audioRef.current.play().catch(() => {})
         }
 
@@ -92,17 +103,25 @@ export default function TVDisplayPage() {
     if (!code) return
 
     let cancelled = false
+    setConnecting(true)
 
     const setup = async () => {
       const est = await loadEstablishment(code)
-      if (cancelled || !est) return
+      if (cancelled || !est) {
+        setConnecting(false)
+        return
+      }
 
       await Promise.all([
         loadQueues(est.id),
         loadTickets(est.id),
       ])
 
-      if (cancelled) return
+      if (cancelled) {
+        setConnecting(false)
+        return
+      }
+      setConnecting(false)
 
       if (channelRef.current) {
         supabase.removeChannel(channelRef.current)
@@ -150,7 +169,9 @@ export default function TVDisplayPage() {
               type="text"
               value={code}
               onChange={(e) => setCode(e.target.value.toUpperCase())}
+              onKeyDown={(e) => e.key === 'Enter' && code && setCode(code)}
               placeholder="MERCADO01"
+              aria-label={t('title')}
               className="w-full px-6 py-4 bg-white/10 border-2 border-white/30 rounded-xl text-white placeholder-white/40 uppercase tracking-[0.3em] text-center text-3xl font-bold focus:outline-none focus:border-white/60 transition"
               maxLength={10}
               autoFocus
@@ -167,12 +188,32 @@ export default function TVDisplayPage() {
     )
   }
 
-  if (!establishment) {
+  if (notFound && !connecting) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900 flex items-center justify-center p-6">
+        <div className="bg-white/10 backdrop-blur-xl rounded-3xl p-10 max-w-md w-full text-center border border-white/20 shadow-2xl animate-scale-in">
+          <div className="w-20 h-20 bg-red-500/30 rounded-full flex items-center justify-center mx-auto mb-4">
+            <span className="text-3xl" aria-hidden="true">⚠️</span>
+          </div>
+          <h1 className="text-2xl font-bold text-white mb-2">{t('not_found_title', { default: 'Estabelecimento não encontrado' })}</h1>
+          <p className="text-white/70 mb-6">{t('not_found_desc', { default: 'Verifique o código e tente novamente.' })}</p>
+          <button
+            onClick={() => { setCode(''); setNotFound(false) }}
+            className="w-full py-4 bg-white text-indigo-900 rounded-xl font-bold text-lg hover:bg-white/90 transition"
+          >
+            {t('try_again', { default: 'Tentar novamente' })}
+          </button>
+        </div>
+      </div>
+    )
+  }
+
+  if (connecting || !establishment) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900 flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-16 w-16 border-4 border-white/30 border-t-white mx-auto mb-4" />
-          <p className="text-white text-2xl">{t('no_queue')}</p>
+          <p className="text-white text-xl">{t('connecting', { default: 'Conectando...' })}</p>
         </div>
       </div>
     )

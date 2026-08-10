@@ -231,7 +231,12 @@
     "no_queue": "줄에 번호가 없습니다",
     "no_queues": "No queues found",
     "updated": "실시간 업데이트",
-    "now": "지금"
+    "now": "지금",
+    "connect": "연결",
+    "connecting": "연결 중...",
+    "not_found_title": "시설을 찾을 수 없습니다",
+    "not_found_desc": "코드를 확인하고 다시 시도하세요.",
+    "try_again": "다시 시도"
   },
   "establishment": {
     "title": "매장 만들기",

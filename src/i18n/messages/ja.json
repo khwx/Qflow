@@ -231,7 +231,12 @@
     "no_queue": "キューに番号がありません",
     "no_queues": "No queues found",
     "updated": "リアルタイムで更新",
-    "now": "今"
+    "now": "今",
+    "connect": "接続",
+    "connecting": "接続中...",
+    "not_found_title": "施設が見つかりません",
+    "not_found_desc": "コードを確認してもう一度お試しください。",
+    "try_again": "再試行"
   },
   "establishment": {
     "title": "店舗を作成",

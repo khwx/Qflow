@@ -231,7 +231,12 @@
     "no_queue": "Aucun ticket en file",
     "no_queues": "Aucune file disponible",
     "updated": "Mis à jour en temps réel",
-    "now": "Maintenant"
+    "now": "Maintenant",
+    "connect": "Connecter",
+    "connecting": "Connexion...",
+    "not_found_title": "Établissement introuvable",
+    "not_found_desc": "Vérifiez le code et réessayez.",
+    "try_again": "Réessayer"
   },
   "establishment": {
     "title": "Créer un Établissement",

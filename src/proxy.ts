@@ -13,14 +13,13 @@ export async function proxy(request: NextRequest) {
 
   const isAdminRoute = pathname.startsWith('/admin')
   const isApiRoute = pathname.startsWith('/api')
-  const isTvDisplay = pathname.startsWith('/tv-display')
   const hasLocale = locales.some((locale) => pathname.startsWith(`/${locale}/`) || pathname === `/${locale}`)
 
   if (isAdminRoute) {
     return NextResponse.next()
   }
 
-  if (!isApiRoute && !isTvDisplay && !hasLocale) {
+  if (!isApiRoute && !hasLocale) {
     return handleI18nRouting(request)
   }
 

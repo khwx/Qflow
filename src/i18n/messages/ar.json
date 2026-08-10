@@ -231,7 +231,12 @@
     "no_queue": "لا توجد تذاكر في الطابور",
     "no_queues": "No queues found",
     "updated": "يُحدَّث في الوقت الحقيقي",
-    "now": "الآن"
+    "now": "الآن",
+    "connect": "اتصال",
+    "connecting": "جارٍ الاتصال...",
+    "not_found_title": "المؤسسة غير موجودة",
+    "not_found_desc": "تحقق من الرمز وحاول مرة أخرى.",
+    "try_again": "حاول مرة أخرى"
   },
   "establishment": {
     "title": "إنشاء منشأة",
