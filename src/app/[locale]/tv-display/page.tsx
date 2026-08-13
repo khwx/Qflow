@@ -235,6 +235,8 @@ export default function TVDisplayPage() {
           </div>
           <button
             onClick={() => setSoundEnabled(!soundEnabled)}
+            aria-label={soundEnabled ? 'Desativar som' : 'Ativar som'}
+            aria-pressed={soundEnabled}
             className="p-3 bg-white/10 rounded-xl hover:bg-white/20 transition"
           >
             {soundEnabled ? <Volume2 className="h-6 w-6" /> : <VolumeX className="h-6 w-6" />}

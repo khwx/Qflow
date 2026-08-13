@@ -123,29 +123,37 @@ export default async function LocaleLayout({
           <AuthProvider>
             <NextIntlClientProvider locale={locale} messages={messages}>
               {children}
-              <Toaster
-                position="top-center"
-                toastOptions={{
-                  className: 'bg-white dark:bg-gray-800 text-gray-900 dark:text-white border border-gray-200 dark:border-gray-700 shadow-lg',
-                  style: {
-                    borderRadius: '12px',
-                    padding: '12px 16px',
-                    fontFamily: 'inherit',
+            <Toaster
+              position="top-center"
+              toastOptions={{
+                className: 'bg-white dark:bg-gray-800 text-gray-900 dark:text-white border border-gray-200 dark:border-gray-700 shadow-lg',
+                style: {
+                  borderRadius: '12px',
+                  padding: '12px 16px',
+                  fontFamily: 'inherit',
+                },
+                success: {
+                  iconTheme: {
+                    primary: '#10b981',
+                    secondary: '#ffffff',
                   },
-                  success: {
-                    iconTheme: {
-                      primary: '#10b981',
-                      secondary: '#ffffff',
-                    },
+                  ariaProps: {
+                    role: 'status',
+                    'aria-live': 'polite',
                   },
-                  error: {
-                    iconTheme: {
-                      primary: '#ef4444',
-                      secondary: '#ffffff',
-                    },
+                },
+                error: {
+                  iconTheme: {
+                    primary: '#ef4444',
+                    secondary: '#ffffff',
                   },
-                }}
-              />
+                  ariaProps: {
+                    role: 'alert',
+                    'aria-live': 'assertive',
+                  },
+                },
+              }}
+            />
             </NextIntlClientProvider>
           </AuthProvider>
         </DarkModeProvider>

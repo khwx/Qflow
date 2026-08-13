@@ -6,6 +6,7 @@ import { Ticket, Establishment } from '@/types'
 import toast from 'react-hot-toast'
 import { Check, X, Search, Play } from 'lucide-react'
 import { useSearchParams } from 'next/navigation'
+import { DashboardSkeleton } from '@/components/ui/Skeleton'
 import Link from 'next/link'
 
 function TicketsContent() {
@@ -122,7 +123,7 @@ function TicketsContent() {
   }
 
   if (loading) {
-    return <div className="animate-pulse">Carregando...</div>
+    return <DashboardSkeleton />
   }
 
   if (!estSlug || !establishment) {
@@ -173,7 +174,7 @@ function TicketsContent() {
         </div>
       </div>
 
-      <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm overflow-hidden border border-gray-200 dark:border-gray-700">
+      <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm overflow-x-auto border border-gray-200 dark:border-gray-700">
         <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
           <thead className="bg-gray-50 dark:bg-gray-700">
             <tr>

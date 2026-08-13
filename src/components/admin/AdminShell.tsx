@@ -91,6 +91,7 @@ function AdminShellInner({
       <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-gray-200 dark:border-gray-700 space-y-2">
         <button
           onClick={toggleDarkMode}
+          aria-label="Alternar modo escuro"
           className="w-full flex items-center gap-3 px-4 py-3 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg transition"
         >
           {isDark ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
@@ -110,8 +111,9 @@ function AdminShellInner({
           </div>
         )}
         <button
-          onClick={async () => { await signOut(); window.location.href = '/' }}
-          className="w-full flex items-center gap-3 px-4 py-3 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg transition"
+            onClick={async () => { await signOut(); window.location.href = '/' }}
+            aria-label="Sair"
+            className="w-full flex items-center gap-3 px-4 py-3 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg transition"
         >
           <LogOut className="h-5 w-5" />
           <span className="font-medium">{user ? 'Sair' : 'Exit'}</span>

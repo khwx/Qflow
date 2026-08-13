@@ -7,6 +7,7 @@ import toast from 'react-hot-toast'
 import { Plus, Play, Check, X, Trash2 } from 'lucide-react'
 import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
+import { Skeleton } from '@/components/ui/Skeleton'
 
 function QueuesContent() {
   const searchParams = useSearchParams()
@@ -137,7 +138,13 @@ function QueuesContent() {
   }
 
   if (loading) {
-    return <div className="animate-pulse">Carregando...</div>
+    return (
+      <div className="animate-pulse space-y-4">
+        <Skeleton className="h-12 w-48" />
+        <Skeleton className="h-32 w-full" />
+        <Skeleton className="h-32 w-full" />
+      </div>
+    )
   }
 
   if (!estSlug || !establishment) {
@@ -255,6 +262,7 @@ function QueuesContent() {
                   </button>
                   <button
                     onClick={() => deleteQueue(queue.id)}
+                    aria-label={`Excluir fila ${queue.name}`}
                     className="p-2 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-xl transition-colors"
                   >
                     <Trash2 className="h-4 w-4" />
@@ -295,6 +303,7 @@ function QueuesContent() {
                         {ticket.status === 'called' && (
                           <button
                             onClick={() => completeTicket(ticket)}
+                            aria-label={`Concluir senha ${ticket.ticket_number}`}
                             className="ml-2 text-green-600 dark:text-green-400 hover:text-green-800 dark:hover:text-green-300"
                           >
                             <Check className="h-4 w-4 inline" />

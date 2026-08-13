@@ -7,6 +7,7 @@ import { createClientComponentClient } from '@/lib/supabase'
 import { Order, Establishment } from '@/types'
 import toast from 'react-hot-toast'
 import { Package, Clock, Check, X, RefreshCw } from 'lucide-react'
+import { DashboardSkeleton } from '@/components/ui/Skeleton'
 
 function timeAgo(dateStr: string): string {
   const seconds = Math.floor((Date.now() - new Date(dateStr).getTime()) / 1000)
@@ -53,93 +54,97 @@ function getNextStatus(current: string): string | null {
 function OrdersContent() {
   const searchParams = useSearchParams()
   const estSlug = searchParams.get('est')
-  const [establishment, setEstablishment] = useState<Establishment | null>(null)
-  const [orders, setOrders] = useState<any[]>([])
-  const [filter, setFilter] = useState('all')
-  const [loading, setLoading] = useState(true)
-  const supabase = createClientComponentClient()
+   const [establishment, setEstablishment] = useState<Establishment | null>(null)
+   const [orders, setOrders] = useState<any[]>([])
+   const [filter, setFilter] = useState('all')
+   const [loading, setLoading] = useState(true)
+   const [refreshing, setRefreshing] = useState(false)
+   const supabase = createClientComponentClient()
+   let estLoaded = false
 
-  useEffect(() => {
-    if (estSlug) {
-      supabase
-        .from('establishments')
-        .select('*')
-        .eq('slug', estSlug)
-        .single()
-        .then(({ data }) => {
-          setEstablishment(data)
-          if (data) loadOrders(data.id)
-        })
-    } else {
-      setLoading(false)
-    }
-  }, [estSlug, supabase])
+   useEffect(() => {
+     if (!estSlug) {
+       setLoading(false)
+       return
+     }
 
-  useEffect(() => {
-    if (establishment) {
-      loadOrders(establishment.id)
-    }
-  }, [filter, establishment])
+     let cancelled = false
+     const init = async () => {
+       const { data: est } = await supabase
+         .from('establishments')
+         .select('*')
+         .eq('slug', estSlug)
+         .single()
 
-  useEffect(() => {
-    if (!establishment) return
-    const interval = setInterval(() => {
-      loadOrders(establishment.id)
-    }, 10000)
-    return () => clearInterval(interval)
-  }, [establishment])
+       if (cancelled || !est) return
+       setEstablishment(est)
+     }
+     init()
 
-  const loadOrders = async (establishmentId: string) => {
-    try {
-      setLoading(true)
-      let query = supabase
-        .from('orders')
-        .select('*, tickets(ticket_number, customer_name)')
-        .eq('establishment_id', establishmentId)
-        .order('created_at', { ascending: false })
+     return () => { cancelled = true }
+   }, [estSlug])
 
-      if (filter !== 'all') {
-        query = query.eq('status', filter)
-      }
+   const loadOrders = async (establishmentId: string, opts?: { background?: boolean }) => {
+     const isBg = opts?.background ?? false
+     if (!isBg) setLoading(true)
+     else setRefreshing(true)
+     let query = supabase
+       .from('orders')
+       .select('*, tickets(ticket_number, customer_name)')
+       .eq('establishment_id', establishmentId)
+       .order('created_at', { ascending: false })
 
-      const { data } = await query
+     if (filter !== 'all') {
+       query = query.eq('status', filter)
+     }
 
-      if (data) {
-        setOrders(data)
-      }
-    } catch (error) {
-      console.error('Load orders error:', error)
-    } finally {
-      setLoading(false)
-    }
-  }
+     try {
+       const { data } = await query
+       if (data) setOrders(data)
+     } catch (error) {
+       console.error('Load orders error:', error)
+     } finally {
+       if (!isBg) setLoading(false)
+       else setRefreshing(false)
+     }
+   }
 
-  const updateStatus = async (orderId: string, newStatus: string) => {
-    const statusLabels: Record<string, string> = {
-      pending: 'Pendente',
-      preparing: 'Preparando',
-      ready: 'Pronto',
-      delivered: 'Entregue',
-      cancelled: 'Cancelado',
-    }
+   useEffect(() => {
+     if (!establishment) return
+     const id = establishment.id
+     setFilter(filter) // trigger via dep
+     loadOrders(id)
+     const interval = setInterval(() => loadOrders(id, { background: true }), 10000)
+     return () => clearInterval(interval)
+   }, [establishment, filter])
 
-    const { error } = await supabase
-      .from('orders')
-      .update({ status: newStatus, updated_at: new Date().toISOString() })
-      .eq('id', orderId)
+   const updateStatus = async (orderId: string, newStatus: string) => {
+     const statusLabels: Record<string, string> = {
+       pending: 'Pendente',
+       preparing: 'Preparando',
+       ready: 'Pronto',
+       delivered: 'Entregue',
+       cancelled: 'Cancelado',
+     }
 
-    if (error) {
-      toast.error(error.message || 'Erro ao alterar status')
-      return
-    }
+     setOrders(prev => prev.map(o => o.id === orderId ? { ...o, status: newStatus } : o))
 
-    toast.success(`Status alterado para "${statusLabels[newStatus]}"`)
-    if (establishment) loadOrders(establishment.id)
-  }
+     const { error } = await supabase
+       .from('orders')
+       .update({ status: newStatus, updated_at: new Date().toISOString() })
+       .eq('id', orderId)
 
-  if (loading && !establishment) {
-    return <div className="animate-pulse">Carregando...</div>
-  }
+     if (error) {
+       toast.error(error.message || 'Erro ao alterar status')
+       return
+     }
+
+     toast.success(`Status alterado para ${statusLabels[newStatus]}`)
+   }
+
+   if (loading && !establishment) {
+     return <DashboardSkeleton />
+   }
 
   if (!estSlug || !establishment) {
     return (
@@ -188,7 +193,7 @@ function OrdersContent() {
         </div>
       </div>
 
-      <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm overflow-hidden border border-gray-200 dark:border-gray-700">
+      <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm overflow-x-auto border border-gray-200 dark:border-gray-700">
         <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
           <thead className="bg-gray-50 dark:bg-gray-700">
             <tr>
