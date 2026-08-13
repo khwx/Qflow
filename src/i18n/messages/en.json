@@ -196,7 +196,12 @@
     "description_placeholder": "Game description",
     "points_reward": "Reward Points",
     "create": "Create Game",
-    "no_games": "No games created yet"
+    "no_games": "No games created yet",
+    "game_activated": "Game activated successfully!",
+    "game_deactivated": "Game deactivated successfully!",
+    "error_updating_game": "Error updating game",
+    "activate_game": "Activate game",
+    "deactivate_game": "Deactivate game"
   },
   "settings_admin": {
     "title": "Settings",

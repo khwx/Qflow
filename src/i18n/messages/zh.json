@@ -196,7 +196,12 @@
     "description_placeholder": "游戏描述",
     "points_reward": "奖励积分",
     "create": "创建游戏",
-    "no_games": "暂未创建任何游戏"
+    "no_games": "暂未创建任何游戏",
+    "game_activated": "游戏已成功激活！",
+    "game_deactivated": "游戏已成功停用！",
+    "error_updating_game": "更新游戏时出错",
+    "activate_game": "激活游戏",
+    "deactivate_game": "停用游戏"
   },
   "settings_admin": {
     "title": "系统设置",

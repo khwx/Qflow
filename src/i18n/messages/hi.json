@@ -196,7 +196,12 @@
     "description_placeholder": "खेल का विवरण",
     "points_reward": "पुरस्कार अंक",
     "create": "खेल बनाएं",
-    "no_games": "अभी तक कोई खेल नहीं बनाया गया"
+    "no_games": "अभी तक कोई खेल नहीं बनाया गया",
+    "game_activated": "गेम सफलतापूर्वक सक्रिय कर लिया गया!",
+    "game_deactivated": "गेम सफलतापूर्वक असक्रिय कर लिया गया!",
+    "error_updating_game": "गेम अपडेट करते समय त्रुटि",
+    "activate_game": "गेम सक्रिय करें",
+    "deactivate_game": "गेम असक्रिय करें"
   },
   "settings_admin": {
     "title": "सेटिंग्स",

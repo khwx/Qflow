@@ -196,7 +196,12 @@
     "description_placeholder": "게임 설명",
     "points_reward": "보상 포인트",
     "create": "게임 만들기",
-    "no_games": "아직 생성된 게임이 없습니다"
+    "no_games": "아직 생성된 게임이 없습니다",
+    "game_activated": "게임이 성공적으로 활성화되었습니다!",
+    "game_deactivated": "게임이 성공적으로 비활성화되었습니다!",
+    "error_updating_game": "게임 업데이트 중 오류",
+    "activate_game": "게임 활성화",
+    "deactivate_game": "게임 비활성화"
   },
   "settings_admin": {
     "title": "설정",

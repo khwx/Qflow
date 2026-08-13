@@ -196,7 +196,12 @@
     "description_placeholder": "Descrizione del gioco",
     "points_reward": "Punti Ricompensa",
     "create": "Crea Gioco",
-    "no_games": "Nessun gioco creato ancora"
+    "no_games": "Nessun gioco creato ancora",
+    "game_activated": "Gioco attivato con successo!",
+    "game_deactivated": "Gioco disattivato con successo!",
+    "error_updating_game": "Errore durante l'aggiornamento del gioco",
+    "activate_game": "Attiva gioco",
+    "deactivate_game": "Disattiva gioco"
   },
   "settings_admin": {
     "title": "Impostazioni",

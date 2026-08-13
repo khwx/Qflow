@@ -196,7 +196,12 @@
     "description_placeholder": "ゲームの説明",
     "points_reward": "報酬ポイント",
     "create": "ゲームを作成",
-    "no_games": "まだゲームが作成されていません"
+    "no_games": "まだゲームが作成されていません",
+    "game_activated": "ゲームを正常に有効化しました！",
+    "game_deactivated": "ゲームを正常に無効化しました！",
+    "error_updating_game": "ゲームの更新中にエラーが発生しました",
+    "activate_game": "ゲームを有効化",
+    "deactivate_game": "ゲームを無効化"
   },
   "settings_admin": {
     "title": "設定",

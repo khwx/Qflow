@@ -196,7 +196,12 @@
     "description_placeholder": "وصف اللعبة",
     "points_reward": "نقاط المكافأة",
     "create": "إنشاء لعبة",
-    "no_games": "لم يتم إنشاء ألعاب بعد"
+    "no_games": "لم يتم إنشاء ألعاب بعد",
+    "game_activated": "تم تفعيل اللعبة بنجاح!",
+    "game_deactivated": "تم إلغاء تفعيل اللعبة بنجاح!",
+    "error_updating_game": "خطأ في تحديث اللعبة",
+    "activate_game": "تفعيل اللعبة",
+    "deactivate_game": "إلغاء تفعيل اللعبة"
   },
   "settings_admin": {
     "title": "الإعدادات",

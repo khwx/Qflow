@@ -196,7 +196,12 @@
     "description_placeholder": "Описание игры",
     "points_reward": "Баллы Награды",
     "create": "Создать Игру",
-    "no_games": "Игры ещё не созданы"
+    "no_games": "Игры ещё не созданы",
+    "game_activated": "Игра успешно активирована!",
+    "game_deactivated": "Игра успешно деактивирована!",
+    "error_updating_game": "Ошибка при обновлении игры",
+    "activate_game": "Активировать игру",
+    "deactivate_game": "Деактивировать игру"
   },
   "settings_admin": {
     "title": "Настройки",

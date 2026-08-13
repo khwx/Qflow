@@ -196,7 +196,12 @@
     "description_placeholder": "Spielbeschreibung",
     "points_reward": "Belohnungspunkte",
     "create": "Spiel Erstellen",
-    "no_games": "Noch keine Spiele erstellt"
+    "no_games": "Noch keine Spiele erstellt",
+    "game_activated": "Spiel erfolgreich aktiviert!",
+    "game_deactivated": "Spiel erfolgreich deaktiviert!",
+    "error_updating_game": "Fehler beim Aktualisieren des Spiels",
+    "activate_game": "Spiel aktivieren",
+    "deactivate_game": "Spiel deaktivieren"
   },
   "settings_admin": {
     "title": "Einstellungen",

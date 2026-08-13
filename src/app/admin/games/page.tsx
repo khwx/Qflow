@@ -76,17 +76,26 @@ function GamesContent() {
   }
 
   const toggleGame = async (game: Game) => {
+    const newActive = !game.is_active
+
+    setGames(prev =>
+      prev.map(g => g.id === game.id ? { ...g, is_active: newActive } : g)
+    )
+
     const { error } = await supabase
       .from('games')
-      .update({ is_active: !game.is_active })
+      .update({ is_active: newActive })
       .eq('id', game.id)
 
     if (error) {
-      toast.error(error.message || 'Erro ao alterar jogo')
+      setGames(prev =>
+        prev.map(g => g.id === game.id ? { ...g, is_active: game.is_active } : g)
+      )
+      toast.error(error.message || 'Erro ao atualizar jogo')
       return
     }
 
-    toast.success(game.is_active ? 'Jogo desativado' : 'Jogo ativado')
+    toast.success(newActive ? 'Jogo ativado com sucesso!' : 'Jogo desativado com sucesso!')
     if (establishment) loadGames(establishment.id)
   }
 
@@ -213,6 +222,8 @@ function GamesContent() {
               </div>
               <button
                 onClick={() => toggleGame(game)}
+                aria-label={game.is_active ? 'Desativar jogo' : 'Ativar jogo'}
+                aria-pressed={game.is_active}
                 className={game.is_active ? 'text-green-600 dark:text-green-400' : 'text-gray-400 dark:text-gray-500'}
               >
                 {game.is_active ? <ToggleRight className="h-6 w-6" /> : <ToggleLeft className="h-6 w-6" />}
@@ -226,6 +237,7 @@ function GamesContent() {
               </div>
               <button
                 onClick={() => deleteGame(game.id)}
+                aria-label={`Excluir jogo ${game.name}`}
                 className="p-2 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors"
               >
                 <Trash2 className="h-4 w-4" />
