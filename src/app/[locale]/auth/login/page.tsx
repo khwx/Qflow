@@ -8,6 +8,7 @@ import { useRouter } from '@/i18n/navigation'
 import { useAuth } from '@/contexts/AuthContext'
 import toast from 'react-hot-toast'
 import { Mail, Lock, LogIn } from 'lucide-react'
+import { useLocale } from 'next-intl'
 
 export default function LoginPage() {
   const t = useTranslations('auth')
@@ -16,6 +17,7 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false)
   const { signIn } = useAuth()
   const router = useRouter()
+  const locale = useLocale()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -29,7 +31,10 @@ export default function LoginPage() {
     }
 
     toast.success(t('login_success'))
-    window.location.href = '/admin/dashboard'
+    localStorage.setItem('locale', locale)
+
+    const redirect = new URLSearchParams(window.location.search).get('redirect')
+    window.location.href = redirect || `/${locale}/admin/dashboard`
   }
 
   return (

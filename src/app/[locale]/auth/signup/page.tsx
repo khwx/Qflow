@@ -3,7 +3,7 @@
 export const dynamic = 'force-dynamic'
 
 import { useState } from 'react'
-import { useTranslations } from 'next-intl'
+import { useTranslations, useLocale } from 'next-intl'
 import { useRouter } from '@/i18n/navigation'
 import { useAuth } from '@/contexts/AuthContext'
 import toast from 'react-hot-toast'
@@ -11,6 +11,7 @@ import { Mail, Lock, User, UserPlus } from 'lucide-react'
 
 export default function SignupPage() {
   const t = useTranslations('auth')
+  const locale = useLocale()
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -29,15 +30,22 @@ export default function SignupPage() {
       return
     }
 
-    const { error } = await signUp(email, password, name)
+    const { error, requiresEmailConfirmation } = await signUp(email, password, name)
     if (error) {
       toast.error(error.message)
       setLoading(false)
       return
     }
 
+    if (requiresEmailConfirmation) {
+      toast.success(t('signup_success'))
+      router.push('/auth/login')
+      return
+    }
+
     toast.success(t('signup_success'))
-    router.push('/auth/login')
+    localStorage.setItem('locale', locale)
+    router.push(`/${locale}/admin/dashboard`)
   }
 
   return (

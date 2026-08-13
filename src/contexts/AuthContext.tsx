@@ -8,7 +8,7 @@ interface AuthContextType {
   user: User | null
   loading: boolean
   signIn: (email: string, password: string) => Promise<{ error: Error | null }>
-  signUp: (email: string, password: string, name?: string) => Promise<{ error: Error | null }>
+  signUp: (email: string, password: string, name?: string) => Promise<{ error: Error | null; requiresEmailConfirmation?: boolean }>
   signOut: () => Promise<void>
   updatePassword: (password: string) => Promise<{ error: Error | null }>
 }
@@ -23,32 +23,22 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     let mounted = true
 
-    const initAuth = async () => {
-      try {
-        const { data: { session } } = await supabase.auth.getSession()
-        if (mounted) {
-          setUser(session?.user ?? null)
-          setLoading(false)
-        }
-
-        const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-          setUser(session?.user ?? null)
-        })
-
-        return () => subscription.unsubscribe()
-      } catch (error) {
-        console.error('Auth init error:', error)
-        if (mounted) {
-          setUser(null)
-          setLoading(false)
-        }
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      (_event, session) => {
+        if (mounted) setUser(session?.user ?? null)
       }
-    }
+    )
 
-    initAuth()
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (mounted) {
+        setUser(session?.user ?? null)
+        setLoading(false)
+      }
+    })
 
     return () => {
       mounted = false
+      subscription.unsubscribe()
     }
   }, [supabase])
 
@@ -63,16 +53,20 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const signUp = async (email: string, password: string, name?: string) => {
     try {
-      const { error } = await supabase.auth.signUp({
+      const { data, error } = await supabase.auth.signUp({
         email,
         password,
         options: {
           data: { name },
         },
       })
-      return { error: error ? new Error(error.message) : null }
+      if (error) {
+        return { error: new Error(error.message), requiresEmailConfirmation: false }
+      }
+      const requiresEmailConfirmation = !data.session && !!data.user
+      return { error: null, requiresEmailConfirmation }
     } catch (error) {
-      return { error: error as Error }
+      return { error: error as Error, requiresEmailConfirmation: false }
     }
   }
 

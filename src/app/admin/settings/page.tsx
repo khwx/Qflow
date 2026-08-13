@@ -294,7 +294,7 @@ function SettingsContent() {
                 <p className="text-sm text-gray-600 dark:text-gray-400">Habilitar ou desabilitar o estabelecimento</p>
               </div>
               <button
-                onClick={() => updateField('is_active', String(!settings.is_active))}
+                onClick={() => updateField('is_active', !settings.is_active)}
                 className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
                   settings.is_active ? 'bg-indigo-600' : 'bg-gray-300 dark:bg-gray-600'
                 }`}
@@ -319,7 +319,7 @@ function SettingsContent() {
                 <p className="text-sm text-gray-600 dark:text-gray-400">Reproduzir som quando chamar senha</p>
               </div>
               <button
-                onClick={() => updateField('notification_sound', String(!settings.notification_sound))}
+                onClick={() => updateField('notification_sound', !settings.notification_sound)}
                 className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
                   settings.notification_sound ? 'bg-indigo-600' : 'bg-gray-300 dark:bg-gray-600'
                 }`}
@@ -338,7 +338,7 @@ function SettingsContent() {
                 <p className="text-sm text-gray-600 dark:text-gray-400">Chamar automaticamente quando a senha chegar</p>
               </div>
               <button
-                onClick={() => updateField('auto_call', String(!settings.auto_call))}
+                onClick={() => updateField('auto_call', !settings.auto_call)}
                 className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
                   settings.auto_call ? 'bg-indigo-600' : 'bg-gray-300 dark:bg-gray-600'
                 }`}
@@ -357,7 +357,7 @@ function SettingsContent() {
                 <p className="text-sm text-gray-600 dark:text-gray-400">Habilitar entrada via QR Code</p>
               </div>
               <button
-                onClick={() => updateField('qr_code_enabled', String(!settings.qr_code_enabled))}
+                onClick={() => updateField('qr_code_enabled', !settings.qr_code_enabled)}
                 className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
                   settings.qr_code_enabled ? 'bg-indigo-600' : 'bg-gray-300 dark:bg-gray-600'
                 }`}
@@ -376,7 +376,7 @@ function SettingsContent() {
                 <p className="text-sm text-gray-600 dark:text-gray-400">Habilitar jogos e pontos</p>
               </div>
               <button
-                onClick={() => updateField('points_enabled', String(!settings.points_enabled))}
+                onClick={() => updateField('points_enabled', !settings.points_enabled)}
                 className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
                   settings.points_enabled ? 'bg-indigo-600' : 'bg-gray-300 dark:bg-gray-600'
                 }`}

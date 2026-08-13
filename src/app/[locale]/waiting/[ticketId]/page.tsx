@@ -33,36 +33,9 @@ export default function WaitingPage({ params }: { params: Promise<{ locale: stri
   const [elapsedMinutes, setElapsedMinutes] = useState(0)
   const [soundEnabled, setSoundEnabled] = useState(true)
   const soundPlayedRef = useRef(false)
+  const soundEnabledRef = useRef(true)
+  soundEnabledRef.current = soundEnabled
   const supabase = createClientComponentClient()
-
-  useEffect(() => {
-    loadData()
-
-    const channel = supabase
-      .channel('ticket-updates')
-      .on(
-        'postgres_changes',
-        {
-          event: 'UPDATE',
-          schema: 'public',
-          table: 'tickets',
-          filter: `id=eq.${ticketId}`,
-        },
-        (payload) => {
-          const newTicket = payload.new as Ticket
-          if (newTicket.status === 'called' && soundEnabled && !soundPlayedRef.current) {
-            soundPlayedRef.current = true
-            playNotificationSound()
-          }
-          setTicket(newTicket)
-        }
-      )
-      .subscribe()
-
-  return () => {
-      supabase.removeChannel(channel)
-    }
-  }, [soundEnabled])
 
   const playNotificationSound = () => {
     try {
@@ -84,6 +57,37 @@ export default function WaitingPage({ params }: { params: Promise<{ locale: stri
       // Audio not supported
     }
   }
+
+  useEffect(() => {
+    loadData()
+
+    const channel = supabase
+      .channel('ticket-updates')
+      .on(
+        'postgres_changes',
+        {
+          event: 'UPDATE',
+          schema: 'public',
+          table: 'tickets',
+          filter: `id=eq.${ticketId}`,
+        },
+        (payload) => {
+          const newTicket = payload.new as Ticket
+          if (newTicket.status === 'called' && !soundPlayedRef.current) {
+            soundPlayedRef.current = true
+            if (soundEnabledRef.current) {
+              playNotificationSound()
+            }
+          }
+          setTicket(newTicket)
+        }
+      )
+      .subscribe()
+
+    return () => {
+      supabase.removeChannel(channel)
+    }
+  }, [ticketId])
 
   const loadData = async () => {
     try {
