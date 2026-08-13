@@ -10,16 +10,7 @@ import type { Ticket as TicketType } from '@/types'
 
 const REFRESH_INTERVAL = 10000
 
-function timeAgo(dateStr: string): string {
-  const seconds = Math.floor((Date.now() - new Date(dateStr).getTime()) / 1000)
-  if (seconds < 60) return `há ${seconds}s`
-  const minutes = Math.floor(seconds / 60)
-  if (minutes < 60) return `há ${minutes}min`
-  const hours = Math.floor(minutes / 60)
-  if (hours < 24) return `há ${hours}h`
-  const days = Math.floor(hours / 24)
-  return `há ${days}d`
-}
+import { timeAgo } from '@/lib/utils'
 
 function getStatusLabel(status: string): string {
   const labels: Record<string, string> = {

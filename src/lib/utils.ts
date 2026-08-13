@@ -20,3 +20,14 @@ export function getEstimatedWait(current: number, serving: string | null, avgTim
   const position = serving ? Math.max(0, current - parseInt(serving.split('-')[1] || '0')) : current
   return position * avgTime
 }
+
+export function timeAgo(dateStr: string): string {
+  const seconds = Math.floor((Date.now() - new Date(dateStr).getTime()) / 1000)
+  if (seconds < 60) return `há ${seconds}s`
+  const minutes = Math.floor(seconds / 60)
+  if (minutes < 60) return `há ${minutes}min`
+  const hours = Math.floor(minutes / 60)
+  if (hours < 24) return `há ${hours}h`
+  const days = Math.floor(hours / 24)
+  return `há ${days}d`
+}

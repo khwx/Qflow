@@ -229,6 +229,7 @@ function TicketsContent() {
                     {(ticket.status === 'called' || ticket.status === 'serving') && (
                       <button
                         onClick={() => updateStatus(ticket.id, 'completed')}
+                        aria-label="Concluir senha"
                         className="p-2 text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/30 rounded-lg transition-colors"
                         title="Concluir"
                       >
@@ -238,6 +239,7 @@ function TicketsContent() {
                     {(ticket.status === 'waiting' || ticket.status === 'called') && (
                       <button
                         onClick={() => updateStatus(ticket.id, 'cancelled')}
+                        aria-label="Cancelar senha"
                         className="p-2 text-red-600 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-lg transition-colors"
                         title="Cancelar"
                       >

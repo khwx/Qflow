@@ -9,16 +9,7 @@ import toast from 'react-hot-toast'
 import { Package, Clock, Check, X, RefreshCw } from 'lucide-react'
 import { DashboardSkeleton } from '@/components/ui/Skeleton'
 
-function timeAgo(dateStr: string): string {
-  const seconds = Math.floor((Date.now() - new Date(dateStr).getTime()) / 1000)
-  if (seconds < 60) return `há ${seconds}s`
-  const minutes = Math.floor(seconds / 60)
-  if (minutes < 60) return `há ${minutes}min`
-  const hours = Math.floor(minutes / 60)
-  if (hours < 24) return `há ${hours}h`
-  const days = Math.floor(hours / 24)
-  return `há ${days}d`
-}
+import { timeAgo } from '@/lib/utils'
 
 function getStatusBadge(status: string) {
   const styles = {
