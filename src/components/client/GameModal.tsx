@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { createClientComponentClient } from '@/lib/supabase'
 import { Game } from '@/types'
 import { X, Trophy } from 'lucide-react'
@@ -92,11 +92,12 @@ function MemoryGame({ game, onComplete, onClose }: {
     if (newFlipped.length === 2) {
       setMoves(m => m + 1)
       if (cards[newFlipped[0]] === cards[newFlipped[1]]) {
-        setMatched([...matched, ...newFlipped])
+        const newMatched = [...matched, ...newFlipped]
+        setMatched(newMatched)
         setFlipped([])
-        
-        if (matched.length + 2 === cards.length) {
-          const points = Math.max(0, 100 - moves * 5)
+
+        if (newMatched.length === cards.length) {
+          const points = Math.max(0, 100 - (moves + 1) * 5)
           setTimeout(() => onComplete(points), 500)
         }
       } else {
@@ -110,7 +111,7 @@ function MemoryGame({ game, onComplete, onClose }: {
       <div className="bg-white dark:bg-gray-800 rounded-3xl shadow-2xl p-6 max-w-md w-full animate-scale-in">
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-xl font-bold text-gray-900 dark:text-white">{game.name}</h2>
-          <button onClick={onClose} className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 p-1">
+          <button onClick={onClose} aria-label="Fechar" className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 p-1 rounded-lg transition-colors">
             <X className="h-6 w-6" />
           </button>
         </div>
@@ -160,16 +161,15 @@ function QuizGame({ game, onComplete, onClose }: {
 
   const handleAnswer = (index: number) => {
     setSelected(index)
-    if (index === questions[current].answer) {
-      setScore(s => s + 1)
-    }
+    const newScore = score + (index === questions[current].answer ? 1 : 0)
+    setScore(newScore)
 
     setTimeout(() => {
       if (current + 1 < questions.length) {
         setCurrent(c => c + 1)
         setSelected(null)
       } else {
-        const points = Math.round((score / questions.length) * 100)
+        const points = Math.round((newScore / questions.length) * 100)
         onComplete(points)
       }
     }, 1000)
@@ -180,7 +180,7 @@ function QuizGame({ game, onComplete, onClose }: {
       <div className="bg-white dark:bg-gray-800 rounded-3xl shadow-2xl p-6 max-w-md w-full animate-scale-in">
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-xl font-bold text-gray-900 dark:text-white">{game.name}</h2>
-          <button onClick={onClose} className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 p-1">
+          <button onClick={onClose} aria-label="Fechar" className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 p-1 rounded-lg transition-colors">
             <X className="h-6 w-6" />
           </button>
         </div>
@@ -244,8 +244,12 @@ function SpinWheelGame({ game, onComplete, onClose }: {
     { label: '30 pts', value: 30 },
   ]
 
+  const [spinning, setSpinning] = useState(false)
+  const spinLockRef = useRef(false)
+
   const spin = () => {
-    if (spinning) return
+    if (spinning || spinLockRef.current) return
+    spinLockRef.current = true
     setSpinning(true)
     const newRotation = rotation + Math.random() * 360 + 720
     setRotation(newRotation)
@@ -256,6 +260,7 @@ function SpinWheelGame({ game, onComplete, onClose }: {
       const points = segments[segmentIndex].value
       onComplete(points)
       setSpinning(false)
+      spinLockRef.current = false
     }, 3000)
   }
 
@@ -264,7 +269,7 @@ function SpinWheelGame({ game, onComplete, onClose }: {
       <div className="bg-white dark:bg-gray-800 rounded-3xl shadow-2xl p-6 max-w-md w-full animate-scale-in">
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-xl font-bold text-gray-900 dark:text-white">{game.name}</h2>
-          <button onClick={onClose} className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 p-1">
+          <button onClick={onClose} aria-label="Fechar" className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 p-1 rounded-lg transition-colors">
             <X className="h-6 w-6" />
           </button>
         </div>
@@ -274,23 +279,30 @@ function SpinWheelGame({ game, onComplete, onClose }: {
             className="absolute inset-0 rounded-full border-8 border-indigo-600 transition-transform duration-[3000ms] ease-out shadow-2xl"
             style={{ transform: `rotate(${rotation}deg)` }}
           >
-            {segments.map((segment, i) => (
-              <div
-                key={i}
-                className="absolute w-1/2 h-1/2 origin-bottom-right"
-                style={{
-                  transform: `rotate(${(360 / segments.length) * i}deg)`,
-                  clipPath: 'polygon(0 0, 100% 0, 100% 100%)',
-                }}
-              >
-                <div
-                  className="absolute top-4 left-4 text-xs font-bold text-white drop-shadow-md"
-                  style={{ transform: `rotate(${45 + (360 / segments.length) * i}deg)` }}
-                >
-                  {segment.label}
-                </div>
-              </div>
-            ))}
+    {segments.map((segment, i) => {
+      const colors = ['from-red-500 to-pink-500', 'from-amber-500 to-orange-500', 'from-green-500 to-emerald-500', 'from-blue-500 to-indigo-500', 'from-purple-500 to-pink-500', 'from-cyan-500 to-blue-500']
+      return (
+        <div
+          key={i}
+          className={`absolute w-1/2 h-1/2 origin-bottom-right rounded-[100%_0_0_0]`}
+          style={{
+            transform: `rotate(${(360 / segments.length) * i}deg)`,
+            clipPath: 'polygon(0 0, 100% 0, 100% 100%)',
+          }}
+        >
+          <div
+            className={`w-full h-full bg-gradient-to-br ${colors[i % colors.length]} transition-transform`}
+            style={{ clipPath: 'polygon(0 0, 50% 100%, 0 100%)' }}
+          />
+          <div
+            className="absolute top-4 left-4 text-xs font-bold text-white drop-shadow-md origin-top-left"
+            style={{ transform: `rotate(${45 + (360 / segments.length) * i}deg)` }}
+          >
+            {segment.label}
+          </div>
+        </div>
+      )
+    })}
           </div>
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
             <div className="w-12 h-12 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full flex items-center justify-center shadow-lg">
