@@ -146,18 +146,18 @@ export default function QueuePage({ params }: { params: Promise<{ locale: string
                 <div className="w-8 h-8 bg-indigo-100 dark:bg-indigo-900/30 rounded-lg flex items-center justify-center">
                   <Clock className="h-4 w-4 text-indigo-600 dark:text-indigo-400" />
                 </div>
-                <span>{tTicket('estimated_wait')}: {getEstimatedWait(queues[0]?.current_number || 0, ticket.ticket_number)} {tTicket('min')}</span>
-              </div>
-              <div className="flex items-center gap-3 text-gray-700 dark:text-gray-300">
-                <div className="w-8 h-8 bg-purple-100 dark:bg-purple-900/30 rounded-lg flex items-center justify-center">
-                  <Users className="h-4 w-4 text-purple-600 dark:text-purple-400" />
-                </div>
-                <span>{tTicket('queue_position')}: {queues[0]?.current_number || 0}</span>
+                 <span>{tTicket('estimated_wait')}: {getEstimatedWait(selectedQueue!.current_number, ticket.ticket_number)} {tTicket('min')}</span>
+               </div>
+               <div className="flex items-center gap-3 text-gray-700 dark:text-gray-300">
+                 <div className="w-8 h-8 bg-purple-100 dark:bg-purple-900/30 rounded-lg flex items-center justify-center">
+                   <Users className="h-4 w-4 text-purple-600 dark:text-purple-400" />
+                 </div>
+                 <span>{tTicket('queue_position')}: {Math.max(0, parseInt(ticket.ticket_number.split('-')[1] || '0') - selectedQueue!.current_number)}</span>
               </div>
             </div>
 
             <button
-              onClick={() => router.push(`/waiting/${ticket.id}`)}
+              onClick={() => router.push(`/${locale}/waiting/${ticket.id}`)}
               className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-3 rounded-xl font-semibold hover:from-indigo-700 hover:to-purple-700 transition-all shadow-lg hover:scale-[1.02] active:scale-[0.98]"
             >
               {tTicket('waiting_room')}
