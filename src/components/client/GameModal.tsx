@@ -235,6 +235,7 @@ function SpinWheelGame({ game, onComplete, onClose }: {
   const t = useTranslations('games')
   const [spinning, setSpinning] = useState(false)
   const [rotation, setRotation] = useState(0)
+  const spinLockRef = useRef(false)
   const segments: { label: string; value: number }[] = (game.config as { segments?: { label: string; value: number }[] }).segments || [
     { label: '10 pts', value: 10 },
     { label: '20 pts', value: 20 },
@@ -243,9 +244,6 @@ function SpinWheelGame({ game, onComplete, onClose }: {
     { label: 'Tente de novo', value: 0 },
     { label: '30 pts', value: 30 },
   ]
-
-  const [spinning, setSpinning] = useState(false)
-  const spinLockRef = useRef(false)
 
   const spin = () => {
     if (spinning || spinLockRef.current) return
