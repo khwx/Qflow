@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/supabase'
+import { ticketSchema, validateBody } from '@/lib/validators'
 
 export async function GET(request: Request) {
   try {
@@ -34,8 +35,10 @@ export async function GET(request: Request) {
 
 export async function POST(request: Request) {
   try {
-    const body = await request.json()
-    const { queue_id, establishment_id, ticket_number, customer_name, customer_phone } = body
+    const result = await validateBody(request, ticketSchema)
+    if ('response' in result) return result.response
+    const { queue_id, establishment_id, ticket_number, customer_name, customer_phone } =
+      result.data
 
     const { data, error } = await createAdminClient()
       .from('tickets')

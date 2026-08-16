@@ -1,5 +1,6 @@
 import { NextResponse, type NextRequest } from 'next/server'
 import { createAdminClient } from '@/lib/supabase'
+import { ticketPatchSchema, validateBody } from '@/lib/validators'
 
 export async function GET(
   request: NextRequest,
@@ -29,10 +30,11 @@ export async function PATCH(
 ) {
   try {
     const { id } = await params
-    const body = await request.json()
+    const result = await validateBody(request, ticketPatchSchema)
+    if ('response' in result) return result.response
     const { data, error } = await createAdminClient()
       .from('tickets')
-      .update(body)
+      .update(result.data)
       .eq('id', id)
       .select()
       .single()

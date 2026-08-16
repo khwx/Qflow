@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/supabase'
+import { pollSchema, validateBody } from '@/lib/validators'
 
 export async function GET(request: Request) {
   try {
@@ -29,8 +30,9 @@ export async function GET(request: Request) {
 
 export async function POST(request: Request) {
   try {
-    const body = await request.json()
-    const { question, options, establishment_id, expires_at } = body
+    const result = await validateBody(request, pollSchema)
+    if ('response' in result) return result.response
+    const { question, options, establishment_id, expires_at } = result.data
 
     const { data, error } = await createAdminClient()
       .from('polls')

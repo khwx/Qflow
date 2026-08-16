@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/supabase'
+import { gameSchema, validateBody } from '@/lib/validators'
 
 export async function GET(request: Request) {
   try {
@@ -29,8 +30,10 @@ export async function GET(request: Request) {
 
 export async function POST(request: Request) {
   try {
-    const body = await request.json()
-    const { name, description, type, establishment_id, points_reward, config } = body
+    const result = await validateBody(request, gameSchema)
+    if ('response' in result) return result.response
+    const { name, description, type, establishment_id, points_reward, config } =
+      result.data
 
     const { data, error } = await createAdminClient()
       .from('games')
