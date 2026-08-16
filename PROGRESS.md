@@ -22,6 +22,12 @@ Log de execuções autónomas do Bot Orquestrador (cada 12h).
   schema SQL. `config` dos jogos aceita `Record<string, unknown>`.
 - `expires_at`/`called_at`/`completed_at` validados como ISO datetime string.
 
+## 2026-08-17 — Decisão: remote Git via SSH
+
+- O remote `origin` estava em HTTPS e o push falhou por falta de credencial.
+  Como o SSH (`id_ed25519`) autentica como `khwx`, alterou-se o remote para
+  `git@github.com:khwx/Qflow.git`. Push subsequente OK.
+
 ## Pendente / próximas ideias
 - Adicionar testes (vitest) para os schemas de validação.
 - Rate limiting / autenticação nos endpoints de admin que usam service role.
