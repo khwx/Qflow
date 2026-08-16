@@ -3,7 +3,7 @@
 import { use, useState, useEffect, useRef } from 'react'
 import { useTranslations } from 'next-intl'
 import { createClientComponentClient } from '@/lib/supabase'
-import { Ticket, Game, Poll, Queue } from '@/types'
+import { Ticket, Game, Poll, Queue, Establishment } from '@/types'
 import { Gamepad2, ClipboardList, ShoppingCart, Trophy, Star, Clock, Users, Volume2, VolumeX } from 'lucide-react'
 import GameModal from '@/components/client/GameModal'
 import PollComponent from '@/components/client/PollComponent'
@@ -21,7 +21,7 @@ export default function WaitingPage({ params }: { params: Promise<{ locale: stri
   const tTicket = useTranslations('ticket')
 
   const [ticket, setTicket] = useState<Ticket | null>(null)
-  const [establishment, setEstablishment] = useState<any>(null)
+  const [establishment, setEstablishment] = useState<Establishment | null>(null)
   const [queue, setQueue] = useState<Queue | null>(null)
   const [games, setGames] = useState<Game[]>([])
   const [polls, setPolls] = useState<Poll[]>([])
@@ -34,12 +34,13 @@ export default function WaitingPage({ params }: { params: Promise<{ locale: stri
   const [soundEnabled, setSoundEnabled] = useState(true)
   const soundPlayedRef = useRef(false)
   const soundEnabledRef = useRef(true)
-  soundEnabledRef.current = soundEnabled
+  useEffect(() => { soundEnabledRef.current = soundEnabled }, [soundEnabled])
   const supabase = createClientComponentClient()
 
   const playNotificationSound = () => {
     try {
-      const audioCtx = new (window.AudioContext || (window as any).webkitAudioContext)()
+      const AudioContextCtor = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext
+      const audioCtx = new AudioContextCtor()
       const notes = [523.25, 659.25, 783.99]
       notes.forEach((freq, i) => {
         const osc = audioCtx.createOscillator()
@@ -57,37 +58,6 @@ export default function WaitingPage({ params }: { params: Promise<{ locale: stri
       // Audio not supported
     }
   }
-
-  useEffect(() => {
-    loadData()
-
-    const channel = supabase
-      .channel('ticket-updates')
-      .on(
-        'postgres_changes',
-        {
-          event: 'UPDATE',
-          schema: 'public',
-          table: 'tickets',
-          filter: `id=eq.${ticketId}`,
-        },
-        (payload) => {
-          const newTicket = payload.new as Ticket
-          if (newTicket.status === 'called' && !soundPlayedRef.current) {
-            soundPlayedRef.current = true
-            if (soundEnabledRef.current) {
-              playNotificationSound()
-            }
-          }
-          setTicket(newTicket)
-        }
-      )
-      .subscribe()
-
-    return () => {
-      supabase.removeChannel(channel)
-    }
-  }, [ticketId])
 
   const loadData = async () => {
     try {
@@ -126,6 +96,37 @@ export default function WaitingPage({ params }: { params: Promise<{ locale: stri
       setLoading(false)
     }
   }
+
+  useEffect(() => {
+    queueMicrotask(loadData)
+
+    const channel = supabase
+      .channel('ticket-updates')
+      .on(
+        'postgres_changes',
+        {
+          event: 'UPDATE',
+          schema: 'public',
+          table: 'tickets',
+          filter: `id=eq.${ticketId}`,
+        },
+        (payload) => {
+          const newTicket = payload.new as Ticket
+          if (newTicket.status === 'called' && !soundPlayedRef.current) {
+            soundPlayedRef.current = true
+            if (soundEnabledRef.current) {
+              playNotificationSound()
+            }
+          }
+          setTicket(newTicket)
+        }
+      )
+      .subscribe()
+
+    return () => {
+      supabase.removeChannel(channel)
+    }
+  }, [ticketId])
 
   const getQueuePosition = () => {
     if (!ticket || !queue) return null

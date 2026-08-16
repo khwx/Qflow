@@ -22,20 +22,6 @@ function GamesContent() {
   })
   const supabase = createClientComponentClient()
 
-  useEffect(() => {
-    if (estSlug) {
-      supabase
-        .from('establishments')
-        .select('*')
-        .eq('slug', estSlug)
-        .single()
-        .then(({ data }) => {
-          setEstablishment(data)
-          if (data) loadGames(data.id)
-        })
-    }
-  }, [estSlug])
-
   const loadGames = async (establishmentId: string) => {
     try {
       const { data } = await supabase
@@ -49,6 +35,20 @@ function GamesContent() {
       console.error('Load games error:', error)
     }
   }
+
+  useEffect(() => {
+    if (estSlug) {
+      supabase
+        .from('establishments')
+        .select('*')
+        .eq('slug', estSlug)
+        .single()
+        .then(({ data }) => {
+          setEstablishment(data)
+          if (data) loadGames(data.id)
+        })
+    }
+  }, [estSlug])
 
   const createGame = async (e: React.FormEvent) => {
     e.preventDefault()

@@ -16,30 +16,8 @@ function TicketsContent() {
   const [tickets, setTickets] = useState<Ticket[]>([])
   const [filter, setFilter] = useState('all')
   const [search, setSearch] = useState('')
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(!estSlug)
   const supabase = createClientComponentClient()
-
-  useEffect(() => {
-    if (estSlug) {
-      supabase
-        .from('establishments')
-        .select('*')
-        .eq('slug', estSlug)
-        .single()
-        .then(({ data }) => {
-          setEstablishment(data)
-          if (data) loadTickets(data.id)
-        })
-    } else {
-      setLoading(false)
-    }
-  }, [estSlug])
-
-  useEffect(() => {
-    if (establishment) {
-      loadTickets(establishment.id)
-    }
-  }, [filter, establishment])
 
   const loadTickets = async (establishmentId: string) => {
     try {
@@ -59,7 +37,7 @@ function TicketsContent() {
       if (data) {
         let filtered = data
         if (search) {
-          filtered = data.filter((t: any) =>
+          filtered = data.filter((t: Ticket) =>
             t.ticket_number.toLowerCase().includes(search.toLowerCase()) ||
             t.customer_name?.toLowerCase().includes(search.toLowerCase())
           )
@@ -72,6 +50,26 @@ function TicketsContent() {
       setLoading(false)
     }
   }
+
+  useEffect(() => {
+    if (estSlug) {
+      supabase
+        .from('establishments')
+        .select('*')
+        .eq('slug', estSlug)
+        .single()
+        .then(({ data }) => {
+          setEstablishment(data)
+          if (data) queueMicrotask(() => loadTickets(data.id))
+        })
+    }
+  }, [estSlug])
+
+  useEffect(() => {
+    if (establishment) {
+      queueMicrotask(() => loadTickets(establishment.id))
+    }
+  }, [filter, establishment])
 
   const updateStatus = async (id: string, status: Ticket['status']) => {
     const statusLabels: Record<string, string> = {
@@ -187,7 +185,7 @@ function TicketsContent() {
             </tr>
           </thead>
           <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
-            {tickets.map((ticket: any) => (
+            {tickets.map((ticket: Ticket) => (
               <tr key={ticket.id} className="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
                 <td className="px-6 py-4 whitespace-nowrap">
                   <span className="text-lg font-bold text-indigo-600 dark:text-indigo-400">
@@ -195,7 +193,7 @@ function TicketsContent() {
                   </span>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
-                  {ticket.queues?.name || '-'}
+                   {(ticket as unknown as { queues: { name: string } | null }).queues?.name || '-'}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
                   {ticket.customer_name || '-'}

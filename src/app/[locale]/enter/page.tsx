@@ -17,8 +17,7 @@ export default function EnterPage() {
   useEffect(() => {
     const urlCode = searchParams.get('code')
     if (urlCode) {
-      setCode(urlCode.toUpperCase())
-      handleSubmit(new Event('submit') as any)
+      router.push(`/queue/${urlCode.toUpperCase()}`)
     }
   }, [])
 

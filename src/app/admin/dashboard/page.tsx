@@ -124,7 +124,7 @@ function DashboardContent() {
   }, [estSlug])
 
   useEffect(() => {
-    loadDashboard()
+    queueMicrotask(loadDashboard)
     const interval = setInterval(loadDashboard, REFRESH_INTERVAL)
     return () => clearInterval(interval)
   }, [loadDashboard])

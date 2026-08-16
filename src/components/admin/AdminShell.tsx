@@ -58,7 +58,7 @@ function AdminShellInner({
         .single()
         .then(({ data }) => setEstablishment(data))
     } else {
-      setEstablishment(null)
+      queueMicrotask(() => setEstablishment(null))
     }
   }, [estSlug, supabase])
 

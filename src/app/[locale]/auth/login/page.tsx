@@ -4,7 +4,7 @@ export const dynamic = 'force-dynamic'
 
 import { useState } from 'react'
 import { useTranslations } from 'next-intl'
-import { useRouter } from '@/i18n/navigation'
+import { useRouter, Link } from '@/i18n/navigation'
 import { useAuth } from '@/contexts/AuthContext'
 import toast from 'react-hot-toast'
 import { Mail, Lock, LogIn } from 'lucide-react'
@@ -93,10 +93,10 @@ export default function LoginPage() {
             </button>
 
            <p className="text-center text-sm text-gray-600 dark:text-gray-400 mt-6">
-             {t('no_account')}{' '}
-             <a href="/pt/auth/signup" className="text-indigo-600 dark:text-indigo-400 hover:underline font-medium">
-               {t('signup_link')}
-             </a>
+              {t('no_account')}{' '}
+              <Link href="/auth/signup" className="text-indigo-600 dark:text-indigo-400 hover:underline font-medium">
+                {t('signup_link')}
+              </Link>
            </p>
          </form>
       </div>

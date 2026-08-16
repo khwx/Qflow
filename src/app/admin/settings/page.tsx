@@ -11,7 +11,7 @@ function SettingsContent() {
   const searchParams = useSearchParams()
   const estSlug = searchParams.get('est')
 
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(!estSlug)
   const [saving, setSaving] = useState(false)
   const [settings, setSettings] = useState({
     name: '',
@@ -29,7 +29,6 @@ function SettingsContent() {
 
   useEffect(() => {
     if (!estSlug) {
-      setLoading(false)
       return
     }
 

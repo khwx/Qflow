@@ -20,13 +20,15 @@ export default function QRCodePage({
   const [establishmentName, setEstablishmentName] = useState('')
 
   useEffect(() => {
-    setQrUrl(`${window.location.origin}/enter?code=${slug}`)
-    const name = localStorage.getItem('establishment_name')
-    if (name) {
-      setEstablishmentName(name)
-    } else {
-      setEstablishmentName(slug.replace(/-/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase()))
-    }
+    queueMicrotask(() => {
+      setQrUrl(`${window.location.origin}/enter?code=${slug}`)
+      const name = localStorage.getItem('establishment_name')
+      if (name) {
+        setEstablishmentName(name)
+      } else {
+        setEstablishmentName(slug.replace(/-/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase()))
+      }
+    })
   }, [slug])
 
   const handleDownload = () => {

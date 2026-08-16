@@ -6,6 +6,10 @@ import { Game } from '@/types'
 import { X, Trophy } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 
+function shuffleArray(array: string[]) {
+  return [...array].sort(() => Math.random() - 0.5)
+}
+
 interface GameModalProps {
   game: Game
   ticketId: string
@@ -15,8 +19,6 @@ interface GameModalProps {
 
 export default function GameModal({ game, ticketId, onClose, onComplete }: GameModalProps) {
   const t = useTranslations('games')
-  const [score, setScore] = useState(0)
-  const [isComplete, setIsComplete] = useState(false)
   const supabase = createClientComponentClient()
 
   useEffect(() => {
@@ -36,7 +38,6 @@ export default function GameModal({ game, ticketId, onClose, onComplete }: GameM
     })
 
     onComplete(game.points_reward)
-    setIsComplete(true)
   }
 
   if (game.type === 'memory') {
@@ -74,14 +75,10 @@ function MemoryGame({ game, onComplete, onClose }: {
 }) {
   const t = useTranslations('games')
   const emojis = ['🎮', '🎯', '🎨', '🎭', '🎪', '🎬']
-  const [cards, setCards] = useState(() => shuffleArray([...emojis, ...emojis]).slice(0, 8))
+  const [cards] = useState(() => shuffleArray([...emojis, ...emojis]).slice(0, 8))
   const [flipped, setFlipped] = useState<number[]>([])
   const [matched, setMatched] = useState<number[]>([])
   const [moves, setMoves] = useState(0)
-
-  function shuffleArray(array: string[]) {
-    return array.sort(() => Math.random() - 0.5)
-  }
 
   const handleCardClick = (index: number) => {
     if (flipped.length === 2 || flipped.includes(index) || matched.includes(index)) return

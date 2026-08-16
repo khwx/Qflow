@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { createClientComponentClient } from '@/lib/supabase'
+import { Establishment } from '@/types'
 import toast from 'react-hot-toast'
 import { QrCode, Building2, BarChart3, Settings, Plus } from 'lucide-react'
 
@@ -21,10 +22,6 @@ export default function EstablishmentsPage() {
   const [loading, setLoading] = useState(true)
   const supabase = createClientComponentClient()
 
-  useEffect(() => {
-    loadEstablishments()
-  }, [])
-
   const loadEstablishments = async () => {
     try {
       const { data: ests } = await supabase
@@ -37,7 +34,7 @@ export default function EstablishmentsPage() {
         return
       }
 
-      const estIds = ests.map((e: any) => e.id)
+      const estIds = ests.map((e: Establishment) => e.id)
 
       const { data: queueCounts } = await supabase
         .from('queues')
@@ -46,12 +43,12 @@ export default function EstablishmentsPage() {
 
       const countMap: Record<string, number> = {}
       if (queueCounts) {
-        queueCounts.forEach((q: any) => {
+        queueCounts.forEach((q: { establishment_id: string }) => {
           countMap[q.establishment_id] = (countMap[q.establishment_id] || 0) + 1
         })
       }
 
-      const enriched = ests.map((e: any) => ({
+      const enriched = ests.map((e: Establishment) => ({
         ...e,
         queue_count: countMap[e.id] || 0,
       }))
@@ -63,6 +60,10 @@ export default function EstablishmentsPage() {
       setLoading(false)
     }
   }
+
+  useEffect(() => {
+    queueMicrotask(loadEstablishments)
+  }, [])
 
   const formatDate = (dateStr: string) => {
     return new Date(dateStr).toLocaleDateString('pt-BR', {

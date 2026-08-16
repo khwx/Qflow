@@ -25,19 +25,6 @@ export default function QueuePage({ params }: { params: Promise<{ locale: string
   const router = useRouter()
   const supabase = createClientComponentClient()
 
-  const validatePhone = (phone: string) => {
-    const cleaned = phone.replace(/\D/g, '')
-    return cleaned.length >= 10 && cleaned.length <= 11
-  }
-
-  useEffect(() => {
-    if (!code) {
-      router.push('/enter')
-      return
-    }
-    loadData()
-  }, [code])
-
   const loadData = async () => {
     const { data: est } = await supabase
       .from('establishments')
@@ -62,6 +49,19 @@ export default function QueuePage({ params }: { params: Promise<{ locale: string
     }
 
     setLoading(false)
+  }
+
+  useEffect(() => {
+    if (!code) {
+      router.push('/enter')
+      return
+    }
+    queueMicrotask(loadData)
+  }, [code])
+
+  const validatePhone = (phone: string) => {
+    const cleaned = phone.replace(/\D/g, '')
+    return cleaned.length >= 10 && cleaned.length <= 11
   }
 
   const takeTicket = async () => {

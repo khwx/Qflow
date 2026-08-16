@@ -15,26 +15,10 @@ function QueuesContent() {
   const [establishment, setEstablishment] = useState<Establishment | null>(null)
   const [queues, setQueues] = useState<Queue[]>([])
   const [tickets, setTickets] = useState<Ticket[]>([])
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(!estSlug)
   const [showForm, setShowForm] = useState(false)
   const [newQueue, setNewQueue] = useState({ name: '', description: '', estimated_wait_minutes: 5 })
   const supabase = createClientComponentClient()
-
-  useEffect(() => {
-    if (estSlug) {
-      supabase
-        .from('establishments')
-        .select('*')
-        .eq('slug', estSlug)
-        .single()
-        .then(({ data }) => {
-          setEstablishment(data)
-          if (data) loadData(data.id)
-        })
-    } else {
-      setLoading(false)
-    }
-  }, [estSlug])
 
   const loadData = async (establishmentId: string) => {
     try {
@@ -65,6 +49,20 @@ function QueuesContent() {
       setLoading(false)
     }
   }
+
+  useEffect(() => {
+    if (estSlug) {
+      supabase
+        .from('establishments')
+        .select('*')
+        .eq('slug', estSlug)
+        .single()
+        .then(({ data }) => {
+          setEstablishment(data)
+          if (data) queueMicrotask(() => loadData(data.id))
+        })
+    }
+  }, [estSlug])
 
   const createQueue = async (e: React.FormEvent) => {
     e.preventDefault()

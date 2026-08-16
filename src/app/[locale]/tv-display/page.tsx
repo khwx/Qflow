@@ -3,15 +3,15 @@
 import { useState, useEffect, useRef } from 'react'
 import { useTranslations } from 'next-intl'
 import { createClientComponentClient } from '@/lib/supabase'
-import { Ticket } from '@/types'
+import { Ticket, Establishment, Queue } from '@/types'
 import { Volume2, VolumeX, Clock, Users, CheckCircle } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 export default function TVDisplayPage() {
   const t = useTranslations('tv_display')
   const [code, setCode] = useState('')
-  const [establishment, setEstablishment] = useState<any>(null)
-  const [queues, setQueues] = useState<any[]>([])
+  const [establishment, setEstablishment] = useState<Establishment | null>(null)
+  const [queues, setQueues] = useState<Queue[]>([])
   const [tickets, setTickets] = useState<Ticket[]>([])
   const [soundEnabled, setSoundEnabled] = useState(true)
   const [currentTime, setCurrentTime] = useState(new Date())
@@ -23,7 +23,7 @@ export default function TVDisplayPage() {
   const soundEnabledRef = useRef(soundEnabled)
   const ticketsRef = useRef<Ticket[]>([])
 
-  soundEnabledRef.current = soundEnabled
+  useEffect(() => { soundEnabledRef.current = soundEnabled }, [soundEnabled])
   useEffect(() => { ticketsRef.current = tickets }, [tickets])
 
   useEffect(() => {
@@ -64,7 +64,7 @@ export default function TVDisplayPage() {
       .eq('is_active', true)
 
     if (queueData) {
-      setQueues(queueData)
+      setQueues(queueData as Queue[])
       return queueData
     }
     return []
@@ -103,7 +103,7 @@ export default function TVDisplayPage() {
     if (!code) return
 
     let cancelled = false
-    setConnecting(true)
+    queueMicrotask(() => setConnecting(true))
 
     const setup = async () => {
       const est = await loadEstablishment(code)

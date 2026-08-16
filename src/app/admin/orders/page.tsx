@@ -33,11 +33,13 @@ function getStatusBadge(status: string) {
   )
 }
 
-function getNextStatus(current: string): string | null {
-  const flow: Record<string, string> = {
+function getNextStatus(current: Order['status']): Order['status'] | null {
+  const flow: Record<Order['status'], Order['status']> = {
     pending: 'preparing',
     preparing: 'ready',
     ready: 'delivered',
+    delivered: 'delivered',
+    cancelled: 'cancelled',
   }
   return flow[current] || null
 }
@@ -46,16 +48,14 @@ function OrdersContent() {
   const searchParams = useSearchParams()
   const estSlug = searchParams.get('est')
    const [establishment, setEstablishment] = useState<Establishment | null>(null)
-   const [orders, setOrders] = useState<any[]>([])
+   const [orders, setOrders] = useState<Order[]>([])
    const [filter, setFilter] = useState('all')
-   const [loading, setLoading] = useState(true)
+   const [loading, setLoading] = useState(!estSlug)
    const [refreshing, setRefreshing] = useState(false)
    const supabase = createClientComponentClient()
-   let estLoaded = false
 
    useEffect(() => {
      if (!estSlug) {
-       setLoading(false)
        return
      }
 
@@ -102,14 +102,13 @@ function OrdersContent() {
 
    useEffect(() => {
      if (!establishment) return
-     const id = establishment.id
-     setFilter(filter) // trigger via dep
-     loadOrders(id)
-     const interval = setInterval(() => loadOrders(id, { background: true }), 10000)
+    const id = establishment.id
+      queueMicrotask(() => loadOrders(id))
+      const interval = setInterval(() => loadOrders(id, { background: true }), 10000)
      return () => clearInterval(interval)
    }, [establishment, filter])
 
-   const updateStatus = async (orderId: string, newStatus: string) => {
+   const updateStatus = async (orderId: string, newStatus: Order['status']) => {
      const statusLabels: Record<string, string> = {
        pending: 'Pendente',
        preparing: 'Preparando',
@@ -198,8 +197,8 @@ function OrdersContent() {
             </tr>
           </thead>
           <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
-            {orders.map((order: any) => {
-              const ticket = order.tickets as { ticket_number: string; customer_name: string | null } | null
+            {orders.map((order: Order) => {
+              const ticket = (order as unknown as { tickets: { ticket_number: string; customer_name: string | null } | null }).tickets
               const itemsSummary = order.items?.map((item: Order['items'][0]) => `${item.name} x${item.quantity}`).join(', ') || '—'
               const nextStatus = getNextStatus(order.status)
               const canCancel = order.status !== 'delivered' && order.status !== 'cancelled'
