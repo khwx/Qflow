@@ -67,3 +67,22 @@ Log de execuções autónomas do Bot Orquestrador (cada 12h).
 ## Pendente / próximas ideias
 - Autenticação (auth) nos endpoints de admin que usam service role.
 - Migrar o state do rate limiter para um store partilhado em produção.
+
+## 2026-08-17 — API REST completa + validação auth/forgot-password
+
+- **Tarefa**: completar a API com endpoints PATCH/DELETE para todos os recursos
+  (establishments, queues, orders, polls, games) e adicionar validação Zod ao
+  endpoint `auth/forgot-password` que só fazia check manual de email.
+- **Solução**:
+  - Adicionados `establishmentPatchSchema`, `queuePatchSchema`,
+    `orderPatchSchema`, `pollPatchSchema`, `gamePatchSchema`,
+    `forgotPasswordSchema` em `src/lib/validators.ts`.
+  - Criadas rotas dinâmicas `[id]` com `GET`/`PATCH`/`DELETE` para todos os 5
+    recursos, todas com rate limiting e validação Zod.
+  - Atualizado `auth/forgot-password` para usar `validateBody` +
+    `forgotPasswordSchema` + rate limiting (5 req/min por IP).
+  - Adicionados 18 testes novos em `validators.test.ts` cobrindo todos os patch
+    schemas (empty body rejection, partial updates, enum validation) e
+    `forgotPasswordSchema` (valid/invalid/missing email).
+- **Verificação**: `tsc --noEmit` ✓, `eslint` ✓ (0 erros), `vitest run` ✓
+  (42/42), `next build` ✓.
