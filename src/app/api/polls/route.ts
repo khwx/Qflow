@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/supabase'
+import { rateLimit } from '@/lib/rateLimit'
 import { pollSchema, validateBody } from '@/lib/validators'
 
 export async function GET(request: Request) {
@@ -29,6 +30,8 @@ export async function GET(request: Request) {
 }
 
 export async function POST(request: Request) {
+  const limited = rateLimit(request, { keyPrefix: 'polls' })
+  if (limited.response) return limited.response
   try {
     const result = await validateBody(request, pollSchema)
     if ('response' in result) return result.response

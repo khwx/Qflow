@@ -1,5 +1,6 @@
 import { NextResponse, type NextRequest } from 'next/server'
 import { createAdminClient } from '@/lib/supabase'
+import { rateLimit } from '@/lib/rateLimit'
 import { ticketPatchSchema, validateBody } from '@/lib/validators'
 
 export async function GET(
@@ -28,6 +29,8 @@ export async function PATCH(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  const limited = rateLimit(request, { keyPrefix: 'tickets' })
+  if (limited.response) return limited.response
   try {
     const { id } = await params
     const result = await validateBody(request, ticketPatchSchema)
@@ -53,6 +56,8 @@ export async function DELETE(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  const limited = rateLimit(request, { keyPrefix: 'tickets' })
+  if (limited.response) return limited.response
   try {
     const { id } = await params
     const { error } = await createAdminClient()

@@ -44,5 +44,26 @@ Log de execuções autónomas do Bot Orquestrador (cada 12h).
 - **Verificação**: `vitest run` ✓ (20/20), `tsc --noEmit` ✓, `eslint` ✓
   (0 erros — só warnings pré-existentes em routes).
 
+## 2026-08-17 — Rate limiting nos endpoints de mutação (API)
+
+- **Tarefa pendente das iterações anteriores**: "Rate limiting / autenticação
+  nos endpoints de admin que usam service role". Esta iteração implementa a
+  primeira parte (rate limiting); a autenticação fica como próxima etapa.
+- **Solução**:
+  - Criado `src/lib/rateLimit.ts`: rate limiter em memória (janela fixa) por IP
+    (x-forwarded-for / x-real-ip), com prefixo de chave por recurso e resposta
+    429 com headers `Retry-After`, `X-RateLimit-Limit/Remaining/Reset`.
+  - Aplicado em todos os endpoints de mutação: `POST` em `establishments`,
+    `queues`, `tickets`, `orders`, `polls`, `games` e `PATCH`/`DELETE` em
+    `tickets/[id]`.
+  - Criado `src/lib/rateLimit.test.ts` (4 testes: limite, 429, separação por
+    IP, separação por prefixo).
+- **Decisão**: limite padrão de 60 req/min por IP e recurso (self-contained,
+  sem dependências externas). Em produção real recomenda-se mover a contagem
+  para um store partilhado (ex.: Redis) — fora do escopo atual.
+- **Verificação**: `tsc --noEmit` ✓, `eslint` ✓ (0 erros), `vitest run` ✓
+  (24/24), `next build` ✓.
+
 ## Pendente / próximas ideias
-- Rate limiting / autenticação nos endpoints de admin que usam service role.
+- Autenticação (auth) nos endpoints de admin que usam service role.
+- Migrar o state do rate limiter para um store partilhado em produção.
