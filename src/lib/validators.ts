@@ -14,12 +14,34 @@ export const establishmentSchema = z.object({
     .optional(),
 })
 
+export const establishmentPatchSchema = z
+  .object({
+    name: z.string().min(1).max(120).optional(),
+    slug: z.string().min(1).max(120).optional(),
+    description: z.string().max(500).nullable().optional(),
+    category: z.string().min(1).max(60).optional(),
+    address: z.string().max(255).nullable().optional(),
+    phone: z.string().max(30).nullable().optional(),
+    primary_color: z.string().regex(/^#[0-9a-fA-F]{6}$/).optional(),
+    is_active: z.boolean().optional(),
+  })
+  .refine((data) => Object.keys(data).length > 0, 'No valid fields to update')
+
 export const queueSchema = z.object({
   name: z.string().min(1, 'Name is required').max(120),
   description: z.string().max(500).nullable().optional(),
   establishment_id: z.string().min(1, 'Establishment is required'),
   estimated_wait_minutes: z.number().int().min(0).max(600).optional(),
 })
+
+export const queuePatchSchema = z
+  .object({
+    name: z.string().min(1).max(120).optional(),
+    description: z.string().max(500).nullable().optional(),
+    estimated_wait_minutes: z.number().int().min(0).max(600).optional(),
+    is_active: z.boolean().optional(),
+  })
+  .refine((data) => Object.keys(data).length > 0, 'No valid fields to update')
 
 export const ticketSchema = z.object({
   queue_id: z.string().min(1, 'Queue is required'),
@@ -47,12 +69,28 @@ export const orderSchema = z.object({
   notes: z.string().max(500).nullable().optional(),
 })
 
+export const orderPatchSchema = z
+  .object({
+    status: z.enum(['pending', 'preparing', 'ready', 'delivered', 'cancelled']).optional(),
+    notes: z.string().max(500).nullable().optional(),
+  })
+  .refine((data) => Object.keys(data).length > 0, 'No valid fields to update')
+
 export const pollSchema = z.object({
   question: z.string().min(1, 'Question is required').max(300),
   options: z.array(z.string().min(1).max(120)).min(2, 'At least two options').max(10),
   establishment_id: z.string().min(1, 'Establishment is required'),
   expires_at: z.string().datetime().nullable().optional(),
 })
+
+export const pollPatchSchema = z
+  .object({
+    question: z.string().min(1).max(300).optional(),
+    options: z.array(z.string().min(1).max(120)).min(2).max(10).optional(),
+    expires_at: z.string().datetime().nullable().optional(),
+    is_active: z.boolean().optional(),
+  })
+  .refine((data) => Object.keys(data).length > 0, 'No valid fields to update')
 
 export const gameSchema = z.object({
   name: z.string().min(1, 'Name is required').max(120),
@@ -61,6 +99,21 @@ export const gameSchema = z.object({
   establishment_id: z.string().min(1, 'Establishment is required'),
   points_reward: z.number().int().min(0).max(100000).optional(),
   config: z.record(z.string(), z.unknown()).optional(),
+})
+
+export const gamePatchSchema = z
+  .object({
+    name: z.string().min(1).max(120).optional(),
+    description: z.string().max(500).nullable().optional(),
+    type: z.enum(['quiz', 'memory', 'scratch', 'spin', 'word']).optional(),
+    points_reward: z.number().int().min(0).max(100000).optional(),
+    config: z.record(z.string(), z.unknown()).optional(),
+    is_active: z.boolean().optional(),
+  })
+  .refine((data) => Object.keys(data).length > 0, 'No valid fields to update')
+
+export const forgotPasswordSchema = z.object({
+  email: z.string().email('Invalid email'),
 })
 
 export const ticketPatchSchema = z

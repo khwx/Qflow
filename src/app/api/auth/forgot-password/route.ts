@@ -1,13 +1,15 @@
 import { NextResponse } from 'next/server'
 import { createClientComponentClient } from '@/lib/supabase'
+import { rateLimit } from '@/lib/rateLimit'
+import { forgotPasswordSchema, validateBody } from '@/lib/validators'
 
 export async function POST(request: Request) {
+  const limited = rateLimit(request, { keyPrefix: 'auth', max: 5, windowMs: 60_000 })
+  if (limited.response) return limited.response
   try {
-    const { email } = await request.json()
-
-    if (!email) {
-      return NextResponse.json({ error: 'Email is required' }, { status: 400 })
-    }
+    const result = await validateBody(request, forgotPasswordSchema)
+    if ('response' in result) return result.response
+    const { email } = result.data
 
     const supabase = createClientComponentClient()
     const { error } = await supabase.auth.resetPasswordForEmail(email, {

@@ -1,12 +1,18 @@
 import { describe, it, expect } from 'vitest'
 import {
   establishmentSchema,
+  establishmentPatchSchema,
   queueSchema,
+  queuePatchSchema,
   ticketSchema,
-  orderSchema,
-  pollSchema,
-  gameSchema,
   ticketPatchSchema,
+  orderSchema,
+  orderPatchSchema,
+  pollSchema,
+  pollPatchSchema,
+  gameSchema,
+  gamePatchSchema,
+  forgotPasswordSchema,
   validateBody,
 } from './validators'
 
@@ -202,5 +208,105 @@ describe('validateBody', () => {
     })
     const result = await validateBody(req, establishmentSchema)
     expect('response' in result).toBe(true)
+  })
+})
+
+describe('establishmentPatchSchema', () => {
+  it('rejects empty patch body', () => {
+    const result = establishmentPatchSchema.safeParse({})
+    expect(result.success).toBe(false)
+  })
+
+  it('accepts partial updates', () => {
+    const data = { name: 'Novo Nome', is_active: false }
+    expect(establishmentPatchSchema.parse(data)).toEqual(data)
+  })
+
+  it('rejects invalid color', () => {
+    const result = establishmentPatchSchema.safeParse({ primary_color: 'red' })
+    expect(result.success).toBe(false)
+  })
+})
+
+describe('queuePatchSchema', () => {
+  it('rejects empty patch body', () => {
+    const result = queuePatchSchema.safeParse({})
+    expect(result.success).toBe(false)
+  })
+
+  it('accepts partial updates', () => {
+    const data = { estimated_wait_minutes: 15, is_active: true }
+    expect(queuePatchSchema.parse(data)).toEqual(data)
+  })
+
+  it('rejects wait over max', () => {
+    const result = queuePatchSchema.safeParse({ estimated_wait_minutes: 9999 })
+    expect(result.success).toBe(false)
+  })
+})
+
+describe('orderPatchSchema', () => {
+  it('rejects empty patch body', () => {
+    const result = orderPatchSchema.safeParse({})
+    expect(result.success).toBe(false)
+  })
+
+  it('accepts valid status update', () => {
+    expect(orderPatchSchema.parse({ status: 'ready' })).toEqual({ status: 'ready' })
+  })
+
+  it('rejects invalid status', () => {
+    const result = orderPatchSchema.safeParse({ status: 'invalid' as string })
+    expect(result.success).toBe(false)
+  })
+})
+
+describe('pollPatchSchema', () => {
+  it('rejects empty patch body', () => {
+    const result = pollPatchSchema.safeParse({})
+    expect(result.success).toBe(false)
+  })
+
+  it('accepts partial updates', () => {
+    const data = { question: 'Nova pergunta?', is_active: false }
+    expect(pollPatchSchema.parse(data)).toEqual(data)
+  })
+
+  it('rejects options with less than 2 items', () => {
+    const result = pollPatchSchema.safeParse({ options: ['a'] })
+    expect(result.success).toBe(false)
+  })
+})
+
+describe('gamePatchSchema', () => {
+  it('rejects empty patch body', () => {
+    const result = gamePatchSchema.safeParse({})
+    expect(result.success).toBe(false)
+  })
+
+  it('accepts partial updates', () => {
+    const data = { points_reward: 20, is_active: true }
+    expect(gamePatchSchema.parse(data)).toEqual(data)
+  })
+
+  it('rejects unknown game type', () => {
+    const result = gamePatchSchema.safeParse({ type: 'puzzle' as string })
+    expect(result.success).toBe(false)
+  })
+})
+
+describe('forgotPasswordSchema', () => {
+  it('accepts valid email', () => {
+    expect(forgotPasswordSchema.parse({ email: 'test@example.com' })).toEqual({ email: 'test@example.com' })
+  })
+
+  it('rejects invalid email', () => {
+    const result = forgotPasswordSchema.safeParse({ email: 'invalid' })
+    expect(result.success).toBe(false)
+  })
+
+  it('rejects missing email', () => {
+    const result = forgotPasswordSchema.safeParse({})
+    expect(result.success).toBe(false)
   })
 })
