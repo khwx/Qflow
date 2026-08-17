@@ -28,6 +28,21 @@ Log de execuções autónomas do Bot Orquestrador (cada 12h).
   Como o SSH (`id_ed25519`) autentica como `khwx`, alterou-se o remote para
   `git@github.com:khwx/Qflow.git`. Push subsequente OK.
 
+## 2026-08-17 — Testes de validação (Vitest)
+
+- **Tarefa pendente da iteração anterior**: adicionar testes para os schemas de
+  validação Zod criados em `src/lib/validators.ts`.
+- **Solução**:
+  - Instalado `vitest@^3` como devDependency (o script `test` já existia no
+    `package.json` mas faltava a dependência).
+  - Criado `vitest.config.ts` com alias `@` → `./src` para espelhar o tsconfig.
+  - Criado `src/lib/validators.test.ts` com 20 testes cobrindo: campos
+    obrigatórios, enums inválidos, stripping de chaves desconhecidas, limites
+    numéricos (wait/quantity/price), `expires_at` ISO, `config` record,
+    `ticketPatchSchema` vazio e o helper `validateBody` (sucesso, 400 e JSON
+    malformado).
+- **Verificação**: `vitest run` ✓ (20/20), `tsc --noEmit` ✓, `eslint` ✓
+  (0 erros — só warnings pré-existentes em routes).
+
 ## Pendente / próximas ideias
-- Adicionar testes (vitest) para os schemas de validação.
 - Rate limiting / autenticação nos endpoints de admin que usam service role.
