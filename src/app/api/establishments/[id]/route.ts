@@ -1,6 +1,7 @@
 import { NextResponse, type NextRequest } from 'next/server'
 import { createAdminClient } from '@/lib/supabase'
 import { rateLimit } from '@/lib/rateLimit'
+import { authenticateRequest } from '@/lib/auth'
 import { establishmentPatchSchema, validateBody } from '@/lib/validators'
 
 export async function GET(
@@ -31,6 +32,8 @@ export async function PATCH(
 ) {
   const limited = rateLimit(request, { keyPrefix: 'establishments' })
   if (limited.response) return limited.response
+  const auth = await authenticateRequest(request)
+  if ('response' in auth) return auth.response
   try {
     const { id } = await params
     const result = await validateBody(request, establishmentPatchSchema)
@@ -64,6 +67,8 @@ export async function DELETE(
 ) {
   const limited = rateLimit(request, { keyPrefix: 'establishments' })
   if (limited.response) return limited.response
+  const auth = await authenticateRequest(request)
+  if ('response' in auth) return auth.response
   try {
     const { id } = await params
     const { error } = await createAdminClient()

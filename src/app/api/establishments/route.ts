@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/supabase'
 import { rateLimit } from '@/lib/rateLimit'
+import { authenticateRequest } from '@/lib/auth'
 import { establishmentSchema, validateBody } from '@/lib/validators'
 
 export async function GET(request: Request) {
@@ -24,6 +25,8 @@ export async function GET(request: Request) {
 export async function POST(request: Request) {
   const limited = rateLimit(request, { keyPrefix: 'establishments' })
   if (limited.response) return limited.response
+  const auth = await authenticateRequest(request)
+  if ('response' in auth) return auth.response
   try {
     const result = await validateBody(request, establishmentSchema)
     if ('response' in result) return result.response

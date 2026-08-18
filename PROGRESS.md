@@ -65,8 +65,32 @@ Log de execuções autónomas do Bot Orquestrador (cada 12h).
   (24/24), `next build` ✓.
 
 ## Pendente / próximas ideias
-- Autenticação (auth) nos endpoints de admin que usam service role.
 - Migrar o state do rate limiter para um store partilhado em produção.
+- Avaliar se os GETs de lista (que usam service role) devem passar para o
+  cliente publishable + RLS, ou também exigir auth.
+
+## 2026-08-18 — Autenticação nos endpoints de admin (service role)
+
+- **Tarefa pendente das iterações anteriores**: "Autenticação (auth) nos
+  endpoints de admin que usam service role". Os endpoints de mutação usavam o
+  `createAdminClient()` (service role, que ignora RLS) sem qualquer auth — qualquer
+  pessoa com o URL podia criar/alterar/apagar dados.
+- **Solução**:
+  - Criado `src/lib/auth.ts` com `authenticateRequest(request)`: valida o header
+    `Authorization: Bearer <jwt>`, verifica o token via `supabase.auth.getUser`
+    (com a chave publishable, sem expor a secret) e devolve o `user` ou 401.
+  - Aplicado a todos os handlers de escrita (POST/PATCH/DELETE) de todos os
+    recursos: `establishments` (+`[id]`), `queues` (+`[id]`), `tickets` (+`[id]`),
+    `orders` (+`[id]`), `polls` (+`[id]`), `games` (+`[id]`). O rate limiting e a
+    validação Zod mantêm-se; a auth corre após o rate limit.
+  - Criado `src/lib/auth.test.ts` (5 testes): header em falta, não-Bearer, token
+    vazio, token inválido (401) e token válido (devolve user).
+- **Decisão**: não quebrar o frontend — este não usa os `/api/*` (chama o
+  Supabase direto, exceto `forgot-password`). Os GETs de lista continuam públicos
+  por enquanto (registado em "Pendente" como próximo passo). Em produção real, o
+  ideal é exigir também auth nos GETs ou migrá-los para o cliente publishable + RLS.
+- **Verificação**: `tsc --noEmit` ✓, `eslint` ✓ (0 erros; só warnings
+  pré-existentes), `vitest run` ✓ (47/47).
 
 ## 2026-08-17 — API REST completa + validação auth/forgot-password
 
