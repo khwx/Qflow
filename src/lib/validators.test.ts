@@ -14,6 +14,7 @@ import {
   gamePatchSchema,
   forgotPasswordSchema,
   validateBody,
+  sanitizeInput,
 } from './validators'
 
 function makeRequest(body: unknown): Request {
@@ -308,5 +309,39 @@ describe('forgotPasswordSchema', () => {
   it('rejects missing email', () => {
     const result = forgotPasswordSchema.safeParse({})
     expect(result.success).toBe(false)
+  })
+})
+
+describe('sanitizeInput', () => {
+  it('trims leading/trailing whitespace from strings', () => {
+    expect(sanitizeInput('  hello  ')).toBe('hello')
+  })
+
+  it('strips control characters and null bytes from strings', () => {
+    expect(sanitizeInput('a\x00b\x01c')).toBe('abc')
+    expect(sanitizeInput('x\u200by')).toBe('xy')
+  })
+
+  it('recurses into nested objects and arrays', () => {
+    const input = { name: '  Joao ', items: ['  x ', 'y'] }
+    expect(sanitizeInput(input)).toEqual({ name: 'Joao', items: ['x', 'y'] })
+  })
+
+  it('passes through non-string values', () => {
+    expect(sanitizeInput(42)).toBe(42)
+    expect(sanitizeInput(true)).toBe(true)
+    expect(sanitizeInput(null)).toBe(null)
+  })
+
+  it('is applied by validateBody before parsing', async () => {
+    const req = makeRequest({ email: '  test@example.com  ' })
+    const result = await validateBody(req, forgotPasswordSchema)
+    expect(result).toMatchObject({ data: { email: 'test@example.com' } })
+  })
+
+  it('strips padding so over-length content is caught by validation', async () => {
+    const long = 'a'.repeat(130) + ' '
+    const result = await validateBody(makeRequest({ name: long, slug: 's', category: 'c' }), establishmentSchema)
+    expect('response' in result).toBe(true)
   })
 })

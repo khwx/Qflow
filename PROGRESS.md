@@ -64,6 +64,29 @@ Log de execuções autónomas do Bot Orquestrador (cada 12h).
 - **Verificação**: `tsc --noEmit` ✓, `eslint` ✓ (0 erros), `vitest run` ✓
   (24/24), `next build` ✓.
 
+## 2026-08-18 — Sanitização de entrada (README reclamava, não estava feito)
+
+- **Tarefa**: o README afirma "Sanitização de dados", mas nenhum dado de entrada
+  era sanitizado — apenas validado (Zod) e com `strip` de chaves desconhecidas.
+- **Solução**:
+  - Criado `sanitizeInput(value)` em `src/lib/validators.ts`: percorre
+    recursivamente o body e, em cada string, faz `trim()` + remove caracteres
+    de controlo (null bytes, `\x00-\x08`, `\x0b`, `\x0c`, `\x0e-\x1f`, `\x7f`)
+    e zero-width (`\u200b`, `\u200c`, `\u200d`, `\ufeff`). Números, booleans,
+    nulls, arrays e objetos passam intactos.
+  - Integrado em `validateBody` antes do `schema.safeParse`, por isso **todas**
+    as rotas que já usam validação Zod passam a sanitizar automaticamente.
+  - Adicionados 6 testes em `validators.test.ts`: trim, remoção de control
+    chars/null bytes, remoção de zero-width, recursão em objetos/arrays,
+    pass-through de não-strings, e aplicação via `validateBody` (email com
+    espaços é normalizado; conteúdo com padding é apanhado pela validação de
+    tamanho).
+- **Porquê**: espaços/resíduos e caracteres invisíveis podem contornar
+  validações de tamanho/formato ou causar inconsistências no armazenamento;
+  o trim também melhora a qualidade dos dados (ex.: emails).
+- **Verificação**: `tsc --noEmit` ✓, `eslint` ✓ (0 erros), `vitest run` ✓
+  (53/53).
+
 ## Pendente / próximas ideias
 - Migrar o state do rate limiter para um store partilhado em produção.
 - Avaliar se os GETs de lista (que usam service role) devem passar para o

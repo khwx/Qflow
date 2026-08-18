@@ -133,6 +133,33 @@ export const ticketPatchSchema = z
     'No valid fields to update'
   )
 
+/**
+ * Recursively trims leading/trailing whitespace from strings and strips
+ * control characters (incl. null bytes and zero-width chars) that could be
+ * used for injection or to bypass length/format validation.
+ *
+ * Numbers, booleans, nulls, arrays and plain objects are passed through;
+ * only string leaves are mutated.
+ */
+export function sanitizeInput(value: unknown): unknown {
+  if (typeof value === 'string') {
+    return value
+      .trim()
+      .replace(/[\x00-\x08\x0b\x0c\x0e-\x1f\x7f\u200b\u200c\u200d\ufeff]/g, '')
+  }
+  if (Array.isArray(value)) {
+    return value.map((item) => sanitizeInput(item))
+  }
+  if (value && typeof value === 'object') {
+    const out: Record<string, unknown> = {}
+    for (const [key, val] of Object.entries(value)) {
+      out[key] = sanitizeInput(val)
+    }
+    return out
+  }
+  return value
+}
+
 export type ValidationResult<T extends z.ZodTypeAny> =
   | { data: z.infer<T> }
   | { response: NextResponse }
@@ -153,7 +180,7 @@ export async function validateBody<T extends z.ZodTypeAny>(
     }
   }
 
-  const result = schema.safeParse(json)
+  const result = schema.safeParse(sanitizeInput(json))
   if (!result.success) {
     return {
       response: NextResponse.json(
