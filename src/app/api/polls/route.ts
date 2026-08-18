@@ -5,6 +5,8 @@ import { authenticateRequest } from '@/lib/auth'
 import { pollSchema, validateBody } from '@/lib/validators'
 
 export async function GET(request: Request) {
+  const auth = await authenticateRequest(request)
+  if ('response' in auth) return auth.response
   try {
     const { searchParams } = new URL(request.url)
     const establishmentId = searchParams.get('establishment_id')

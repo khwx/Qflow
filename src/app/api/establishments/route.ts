@@ -5,6 +5,8 @@ import { authenticateRequest } from '@/lib/auth'
 import { establishmentSchema, validateBody } from '@/lib/validators'
 
 export async function GET(request: Request) {
+  const auth = await authenticateRequest(request)
+  if ('response' in auth) return auth.response
   try {
     const { data, error } = await createAdminClient()
       .from('establishments')

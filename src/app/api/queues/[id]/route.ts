@@ -8,6 +8,8 @@ export async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  const auth = await authenticateRequest(request)
+  if ('response' in auth) return auth.response
   try {
     const { id } = await params
     const { data, error } = await createAdminClient()

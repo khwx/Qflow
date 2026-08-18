@@ -87,6 +87,29 @@ Log de execuções autónomas do Bot Orquestrador (cada 12h).
 - **Verificação**: `tsc --noEmit` ✓, `eslint` ✓ (0 erros), `vitest run` ✓
   (53/53).
 
+## 2026-08-18 — Autenticação nos endpoints GET (fecha exposição de leitura)
+
+- **Tarefa pendente das iterações anteriores**: os GETs de lista e de
+  detalhe (`establishments`, `queues`, `tickets`, `orders`, `polls`, `games`
+  + `[id]`) usavam o `createAdminClient()` (service role, ignora RLS) **sem**
+  qualquer autenticação — qualquer pessoa com o URL podia ler todos os dados
+  (incluindo tickets, encomendas com dados de cliente e polls).
+- **Solução**:
+  - Adicionado `authenticateRequest(request)` no início de todos os 12 handlers
+    `GET` (listas + `[id]`), devolvendo 401 quando não há token Bearer válido.
+  - Ordem mantida igual aos handlers de escrita: rate limiting já existia nos
+    imports; a auth corre após o rate limit (nos mutadores) e agora também
+    precede a leitura nos GETs.
+  - O frontend não é afetado: a única rota `/api/*` usada pela UI é
+    `auth/forgot-password`; as páginas de entrada/fila/TV usam o cliente
+    Supabase direto.
+- **Decisão**: expor dados via service role sem auth era um risco real de
+  fuga de dados. Com isto, toda a API `/api/*` (leitura e escrita) exige agora
+  autenticação Bearer. Em produção real, poder-se-ia depois migrar as leituras
+  para o cliente publishable + RLS para permitir acesso público granular.
+- **Verificação**: `tsc --noEmit` ✓, `eslint` ✓ (0 erros; só warnings
+  pré-existentes), `vitest run` ✓ (53/53), `next build` ✓.
+
 ## Pendente / próximas ideias
 - Migrar o state do rate limiter para um store partilhado em produção.
 - Avaliar se os GETs de lista (que usam service role) devem passar para o
