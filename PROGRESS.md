@@ -138,6 +138,37 @@ Log de execuções autónomas do Bot Orquestrador (cada 12h).
 - **Verificação**: `tsc --noEmit` ✓, `eslint` ✓ (0 erros; só warnings
   pré-existentes), `vitest run` ✓ (47/47).
 
+## 2026-08-18 — Autorização por posse nos endpoints admin (fecha bypass de RLS)
+
+- **Tarefa pendente das iterações anteriores**: os endpoints exigiam auth
+  (JWT válido), mas usavam o `createAdminClient()` (service role), que
+  **ignora o Row Level Security** do Postgres. Resultado: qualquer utilizador
+  autenticado (qualquer JWT válido) podia ler/criar/alterar/apagar os dados de
+  **qualquer** estabelecimento — um gap de autorização real, apesar do RLS
+  existir no `schema.sql` (que só protege o cliente publishable, não o service role).
+- **Solução** (`src/lib/ownership.ts` + helper `assertOwnership(table, id, userId)`):
+  - `establishments`: verifica `owner_id` na própria linha.
+  - Tabelas-filhas (`queues`, `tickets`, `orders`, `polls`, `games`): resolve o
+    estabelecimento pai via `establishment_id` e compara `owner_id`.
+  - Devolve `404` se o recurso/pai não existir, `403` se não for o dono, ou
+    `null` se autorizado.
+  - Aplicado em **todos** os `PATCH`/`DELETE` de `[id]` (5 recursos) e em todos
+    os `POST` de recursos-filha (verifica posse do `establishment_id` no body).
+  - `POST /api/establishments` passa a gravar `owner_id: auth.user.id` (antes
+    ficava `null`, o que tornava a RLS de update/delete inatingível).
+- **Decisão**: manter os `GET` de lista/detalhe como estão (já exigem auth;
+  o `select` é público no RLS). A verificação de posse nos `GET` de detalhe
+  fica como possível refinamento futuro. O frontend não é afetado — não usa
+  estes `/api/*` (chama o Supabase direto).
+- **Verificação**: `tsc --noEmit` ✓, `eslint` ✓ (0 erros; só warnings
+  pré-existentes), `vitest run` ✓ (61/61 — +8 testes em `ownership.test.ts`),
+  `next build` ✓.
+
+## Pendente / próximas ideias
+- Aplicar `assertOwnership` também aos `GET` de detalhe (`[id]`) dos recursos
+  não-públicos (ex.: `orders`, cujo RLS de select é só do dono).
+- Migrar o state do rate limiter para um store partilhado em produção.
+
 ## 2026-08-17 — API REST completa + validação auth/forgot-password
 
 - **Tarefa**: completar a API com endpoints PATCH/DELETE para todos os recursos

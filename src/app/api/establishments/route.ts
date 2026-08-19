@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/supabase'
 import { rateLimit } from '@/lib/rateLimit'
 import { authenticateRequest } from '@/lib/auth'
+import { assertOwnership } from '@/lib/ownership'
 import { establishmentSchema, validateBody } from '@/lib/validators'
 
 export async function GET(request: Request) {
@@ -45,6 +46,7 @@ export async function POST(request: Request) {
         address,
         phone,
         primary_color: primary_color || '#4f46e5',
+        owner_id: auth.user.id,
       })
       .select()
       .single()

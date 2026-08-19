@@ -2,6 +2,7 @@ import { NextResponse, type NextRequest } from 'next/server'
 import { createAdminClient } from '@/lib/supabase'
 import { rateLimit } from '@/lib/rateLimit'
 import { authenticateRequest } from '@/lib/auth'
+import { assertOwnership } from '@/lib/ownership'
 import { pollPatchSchema, validateBody } from '@/lib/validators'
 
 export async function GET(
@@ -38,6 +39,8 @@ export async function PATCH(
   if ('response' in auth) return auth.response
   try {
     const { id } = await params
+    const ownership = await assertOwnership('polls', id, auth.user.id)
+    if (ownership) return ownership
     const result = await validateBody(request, pollPatchSchema)
     if ('response' in result) return result.response
 
@@ -68,6 +71,8 @@ export async function DELETE(
   if ('response' in auth) return auth.response
   try {
     const { id } = await params
+    const ownership = await assertOwnership('polls', id, auth.user.id)
+    if (ownership) return ownership
     const { error } = await createAdminClient()
       .from('polls')
       .delete()
