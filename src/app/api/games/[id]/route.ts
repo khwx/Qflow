@@ -13,6 +13,8 @@ export async function GET(
   if ('response' in auth) return auth.response
   try {
     const { id } = await params
+    const ownership = await assertOwnership('games', id, auth.user.id)
+    if (ownership) return ownership
     const { data, error } = await createAdminClient()
       .from('games')
       .select('*')

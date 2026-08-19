@@ -164,10 +164,28 @@ Log de execuções autónomas do Bot Orquestrador (cada 12h).
   pré-existentes), `vitest run` ✓ (61/61 — +8 testes em `ownership.test.ts`),
   `next build` ✓.
 
+## 2026-08-19 — Autorização por posse nos GETs de detalhe (`[id]`)
+
+- **Tarefa pendente da iteração anterior**: os `GET` de detalhe (`[id]`) de todos
+  os 6 recursos exigiam auth (JWT válido) mas, como usam o `createAdminClient()`
+  (service role, que ignora RLS), **qualquer** utilizador autenticado podia ler
+  o registo de detalhe de **qualquer** tenant (ex.: `orders`, cujo RLS de select
+  é só do dono).
+- **Solução**: aplicado `assertOwnership(table, id, auth.user.id)` no início de
+  cada `GET` de `[id]` (`establishments`, `queues`, `tickets`, `orders`,
+  `polls`, `games`), logo após a auth e antes do `select`. Devolve 404 se o
+  recurso/pai não existir, 403 se não for o dono, senão prossegue.
+- **Decisão**: fechar a leitura por detalhe de forma consistente com os
+  mutadores (PATCH/DELETE), que já tinham posse. Os `GET` de **lista** continuam
+  a devolver o que o RLS do cliente publishable permitiria — mantidos como estão
+  (sem quebrar o frontend, que não usa estes `/api/*`).
+- **Verificação**: `tsc --noEmit` ✓, `eslint` ✓ (0 erros; só warnings
+  pré-existentes), `vitest run` ✓ (61/61), `next build` ✓.
+
 ## Pendente / próximas ideias
-- Aplicar `assertOwnership` também aos `GET` de detalhe (`[id]`) dos recursos
-  não-públicos (ex.: `orders`, cujo RLS de select é só do dono).
 - Migrar o state do rate limiter para um store partilhado em produção.
+- Avaliar se os `GET` de lista devem passar para o cliente publishable + RLS
+  (ou continuar a exigir auth no service-role).
 
 ## 2026-08-17 — API REST completa + validação auth/forgot-password
 
