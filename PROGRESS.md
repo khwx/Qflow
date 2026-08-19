@@ -187,6 +187,22 @@ Log de execuções autónomas do Bot Orquestrador (cada 12h).
 - Avaliar se os `GET` de lista devem passar para o cliente publishable + RLS
   (ou continuar a exigir auth no service-role).
 
+## 2026-08-19 — Evicção de buckets expirados no rate limiter (fecha memory leak)
+
+- **Tarefa**: o `rateLimit.ts` mantinha um `Map` em memória de todos os buckets
+  de IP/prefixo **sem nunca os libertar** — buckets expirados acumulavam-se
+  indefinidamente, um memory leak real em execução de longa duração (dias/semanas).
+- **Solução**:
+  - `Bucket` passou a guardar `createdAt`; adicionado `sweep(now)` que, de forma
+    preguiçosa (a cada chamada, mas no máximo uma vez por `SWEEP_INTERVAL_MS` =
+    60s, ou quando `buckets.size > MAX_BUCKETS` = 10 000), remove buckets com
+    `resetAt <= now` e, se ainda acima do limite, descarta os mais antigos.
+  - `sweep` é invocado no início de cada `rateLimit`; `clearRateLimitBuckets`
+    reinicia também `lastSweep`.
+- **Verificação**: `tsc --noEmit` ✓, `eslint` ✓ (0 erros; só warnings
+  pré-existentes), `vitest run` ✓ (63/63 — +2 testes: reclaim de IP bloqueado
+  após expirar, e preservação de bucket dentro da janela durante um sweep).
+
 ## 2026-08-17 — API REST completa + validação auth/forgot-password
 
 - **Tarefa**: completar a API com endpoints PATCH/DELETE para todos os recursos

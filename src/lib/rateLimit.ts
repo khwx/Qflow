@@ -1,8 +1,39 @@
 import { NextResponse } from 'next/server'
 
-type Bucket = { count: number; resetAt: number }
+type Bucket = { count: number; resetAt: number; createdAt: number }
 
 const buckets = new Map<string, Bucket>()
+
+// Bound memory: never hold more than this many buckets. When exceeded (or every
+// SWEEP_INTERVAL_MS), expired buckets are reclaimed and, if still over the cap,
+// the oldest entries are dropped.
+const MAX_BUCKETS = 10_000
+const SWEEP_INTERVAL_MS = 60_000
+
+let lastSweep = 0
+
+function sweep(now: number): void {
+  if (buckets.size === 0) {
+    lastSweep = now
+    return
+  }
+  const due = now - lastSweep >= SWEEP_INTERVAL_MS
+  if (!due && buckets.size <= MAX_BUCKETS) return
+
+  for (const [key, bucket] of buckets) {
+    if (bucket.resetAt <= now) buckets.delete(key)
+  }
+  lastSweep = now
+
+  if (buckets.size > MAX_BUCKETS) {
+    const excess = buckets.size - MAX_BUCKETS
+    const oldest = [...buckets.entries()]
+      .sort((a, b) => a[1].createdAt - b[1].createdAt)
+      .slice(0, excess)
+      .map(([key]) => key)
+    for (const key of oldest) buckets.delete(key)
+  }
+}
 
 function getClientIp(request: Request): string {
   const forwarded = request.headers.get('x-forwarded-for')
@@ -34,10 +65,11 @@ export function rateLimit(
   const key = `${prefix}:${getClientIp(request)}`
 
   const now = Date.now()
+  sweep(now)
   const bucket = buckets.get(key)
 
   if (!bucket || bucket.resetAt <= now) {
-    buckets.set(key, { count: 1, resetAt: now + windowMs })
+    buckets.set(key, { count: 1, resetAt: now + windowMs, createdAt: now })
     return {
       response: null,
       remaining: max - 1,
@@ -72,4 +104,5 @@ export function rateLimit(
 
 export function clearRateLimitBuckets(): void {
   buckets.clear()
+  lastSweep = 0
 }
