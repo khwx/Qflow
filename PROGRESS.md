@@ -182,10 +182,41 @@ Log de execuções autónomas do Bot Orquestrador (cada 12h).
 - **Verificação**: `tsc --noEmit` ✓, `eslint` ✓ (0 erros; só warnings
   pré-existentes), `vitest run` ✓ (61/61), `next build` ✓.
 
+## 2026-08-20 — HTTP security headers em todas as respostas
+
+- **Tarefa**: o projeto tinha validação, sanitização, rate limiting, auth e
+  autorização por posse nas APIs, mas **nenhuma** política de cabeçalhos HTTP
+  de segurança (CSP, HSTS, X-Content-Type-Options, etc.) — lacuna de defesa em
+  profundidade para o browser.
+- **Solução**:
+  - Criado `src/lib/securityHeaders.ts` com `getSecurityHeaders({ supabaseHost })`
+    que devolve a lista de headers: `X-DNS-Prefetch-Control`,
+    `X-Content-Type-Options: nosniff`, `X-Frame-Options: SAMEORIGIN`,
+    `Referrer-Policy`, `Strict-Transport-Security` (2 anos + preload),
+    `Permissions-Policy` (câmara/mic/geo desativados) e uma `Content-Security-Policy`
+    restritiva (`default-src 'self'`, `object-src 'none'`, `frame-ancestors
+    'self'`, `base-uri/form-action 'self'`, `upgrade-insecure-requests`).
+  - A CSP permite dinamicamente o `https://` e `wss://` do host do Supabase
+    (lido de `NEXT_PUBLIC_SUPABASE_URL`) no `connect-src`, para não quebrar o
+    cliente publishable, Auth nem o Realtime.
+  - Aplicado globalmente em `next.config.ts` via `headers()` com `source:
+    '/:path*'`, cobrindo páginas **e** rotas `/api` (as rotas que devolvem JSON
+    também passam a enviar os headers).
+  - Criado `src/lib/securityHeaders.test.ts` (5 testes): presença dos headers
+    base, emissão de CSP, `connect-src 'self'` sem host e inclusão de
+    `https://`+`wss://` quando o host é fornecido.
+- **Decisão**: `script-src` mantém `'unsafe-inline'`/`'unsafe-eval'` por
+  compatibilidade com o Next.js (dev/prod inline) — um relaxamento conhecido,
+  aceitável face ao resto da política; reforçar exigiria nonce/hashing (fora do
+  escopo). `upgrade-insecure-requests` força HTTPS no browser.
+- **Verificação**: `tsc --noEmit` ✓, `eslint` ✓ (0 erros), `vitest run` ✓
+  (68/68 — +5 testes), `next build` ✓.
+
 ## Pendente / próximas ideias
 - Migrar o state do rate limiter para um store partilhado em produção.
 - Avaliar se os `GET` de lista devem passar para o cliente publishable + RLS
   (ou continuar a exigir auth no service-role).
+- Reforçar a CSP com nonce/hashing para remover `'unsafe-inline'`/`'unsafe-eval'`.
 
 ## 2026-08-19 — Evicção de buckets expirados no rate limiter (fecha memory leak)
 
