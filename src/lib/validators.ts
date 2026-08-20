@@ -47,9 +47,14 @@ export const ticketSchema = z.object({
   queue_id: z.string().min(1, 'Queue is required'),
   establishment_id: z.string().min(1, 'Establishment is required'),
   ticket_number: z.string().min(1, 'Ticket number is required').max(20),
+  status: z
+    .enum(['waiting', 'called', 'serving', 'completed', 'cancelled'])
+    .optional(),
+  priority: z.enum(['normal', 'urgent', 'elderly', 'pregnant']).optional(),
   customer_name: z.string().max(120).nullable().optional(),
   customer_phone: z.string().max(20).nullable().optional(),
-  priority: z.enum(['normal', 'urgent', 'elderly', 'pregnant']).optional(),
+  customer_email: z.string().email('Invalid email').max(120).nullable().optional(),
+  notes: z.string().max(500).nullable().optional(),
 })
 
 export const orderItemSchema = z.object({

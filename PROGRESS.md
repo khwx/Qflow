@@ -218,6 +218,24 @@ Log de execuções autónomas do Bot Orquestrador (cada 12h).
   (ou continuar a exigir auth no service-role).
 - Reforçar a CSP com nonce/hashing para remover `'unsafe-inline'`/`'unsafe-eval'`.
 
+## 2026-08-20 — Corrigir perda de dados no POST de tickets
+
+- **Problema**: `POST /api/tickets` validava `priority` mas **não o persistia**
+  (o `insert` só gravava `queue_id`, `establishment_id`, `ticket_number`,
+  `customer_name`, `customer_phone`); além disso a tabela `tickets` suporta
+  `status`, `customer_email` e `notes`, mas o `ticketSchema` nem os aceitava —
+  dados do cliente eram silenciosamente descartados.
+- **Solução**:
+  - `src/lib/validators.ts`: `ticketSchema` passou a validar `status`
+    (enum), `customer_email` (formato email) e `notes` (max 500), mantendo
+    `priority` e os campos opcionais como `nullable`/`optional` (compatível com
+    o schema SQL).
+  - `src/app/api/tickets/route.ts`: o `insert` passa agora a gravar
+    `status`, `priority`, `customer_email` e `notes` quando fornecidos.
+- **Verificação**: `tsc --noEmit` ✓, `eslint` ✓ (0 erros; só warnings
+  pré-existentes), `vitest run` ✓ (71/71 — +3 testes no `ticketSchema`),
+  `next build` ✓.
+
 ## 2026-08-19 — Evicção de buckets expirados no rate limiter (fecha memory leak)
 
 - **Tarefa**: o `rateLimit.ts` mantinha um `Map` em memória de todos os buckets

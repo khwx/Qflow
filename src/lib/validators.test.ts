@@ -98,6 +98,41 @@ describe('ticketSchema', () => {
     })
     expect(result.success).toBe(false)
   })
+
+  it('accepts and persists all ticket fields (status, email, notes)', () => {
+    const data = {
+      queue_id: 'q1',
+      establishment_id: 'e1',
+      ticket_number: 'A12',
+      status: 'waiting',
+      priority: 'elderly',
+      customer_name: 'Ana',
+      customer_phone: '11999999999',
+      customer_email: 'ana@example.com',
+      notes: 'Needs assistance',
+    }
+    expect(ticketSchema.parse(data)).toEqual(data)
+  })
+
+  it('rejects invalid customer_email', () => {
+    const result = ticketSchema.safeParse({
+      queue_id: 'q1',
+      establishment_id: 'e1',
+      ticket_number: 'A12',
+      customer_email: 'not-an-email',
+    })
+    expect(result.success).toBe(false)
+  })
+
+  it('rejects notes longer than 500 chars', () => {
+    const result = ticketSchema.safeParse({
+      queue_id: 'q1',
+      establishment_id: 'e1',
+      ticket_number: 'A12',
+      notes: 'x'.repeat(501),
+    })
+    expect(result.success).toBe(false)
+  })
 })
 
 describe('orderSchema', () => {

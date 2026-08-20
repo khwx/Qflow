@@ -46,8 +46,17 @@ export async function POST(request: Request) {
   try {
     const result = await validateBody(request, ticketSchema)
     if ('response' in result) return result.response
-    const { queue_id, establishment_id, ticket_number, customer_name, customer_phone } =
-      result.data
+    const {
+      queue_id,
+      establishment_id,
+      ticket_number,
+      status,
+      priority,
+      customer_name,
+      customer_phone,
+      customer_email,
+      notes,
+    } = result.data
 
     const ownership = await assertOwnership('establishments', establishment_id, auth.user.id)
     if (ownership) return ownership
@@ -58,8 +67,12 @@ export async function POST(request: Request) {
         queue_id,
         establishment_id,
         ticket_number,
+        status,
+        priority,
         customer_name,
         customer_phone,
+        customer_email,
+        notes,
       })
       .select()
       .single()
