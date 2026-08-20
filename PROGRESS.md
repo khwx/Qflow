@@ -218,6 +218,28 @@ Log de execuções autónomas do Bot Orquestrador (cada 12h).
   (ou continuar a exigir auth no service-role).
 - Reforçar a CSP com nonce/hashing para remover `'unsafe-inline'`/`'unsafe-eval'`.
 
+## 2026-08-20 — Analytics do dashboard: taxa de cancelamento e engajamento
+
+- **Problema**: o README afirma "Analytics → Taxa de cancelamento" e
+  "Engajamento (jogos jogados)", mas o dashboard admin
+  (`src/app/admin/dashboard/page.tsx`) só apresentava senhas hoje, aguardando,
+  atendidos, tempo médio e atendimentos por hora — os dois indicadores
+  reclamados estavam em falta (gap de feature vs. documentação).
+- **Solução**:
+  - Adicionados `cancelled` e `gamesPlayed` ao estado `stats`.
+  - `cancelled`: contagem de tickets com `status = 'cancelled'` no dia.
+  - `gamesPlayed`: `count` exato de `game_scores` cujo `game_id` pertence a um
+    jogo do estabelecimento e `played_at` no dia (janela `[today, tomorrow)`),
+    respeitando o filtro de estabelecimento (`?est=slug`).
+  - Adicionados dois cartões de estatística: **Taxa Cancel.** (canceladas /
+    total do dia, em %) e **Engajamento** (jogos jogados hoje).
+- **Decisão**: a janela de dia usa `gte('played_at', today)` + `lt('played_at',
+  tomorrow)` (strings ISO comparáveis lexicalmente) em vez de `startsWith`,
+  para cobrir corretamente o horário. `BarChart3` e `AlertCircle` já eram
+  importados e passam a ser usados.
+- **Verificação**: `tsc --noEmit` ✓, `eslint` ✓ (0 erros; só warnings
+  pré-existentes), `vitest run` ✓ (71/71), `next build` ✓.
+
 ## 2026-08-20 — Corrigir perda de dados no POST de tickets
 
 - **Problema**: `POST /api/tickets` validava `priority` mas **não o persistia**

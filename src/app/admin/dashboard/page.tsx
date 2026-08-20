@@ -42,8 +42,10 @@ function DashboardContent() {
     totalTickets: 0,
     waiting: 0,
     completed: 0,
+    cancelled: 0,
     avgWaitTime: 0,
     todayTickets: 0,
+    gamesPlayed: 0,
   })
   const [hourlyData, setHourlyData] = useState<{ hour: string; count: number }[]>([])
   const [recentTickets, setRecentTickets] = useState<TicketType[]>([])
@@ -54,16 +56,20 @@ function DashboardContent() {
     try {
       const supabase = createClientComponentClient()
       const today = new Date().toISOString().split('T')[0]
+      const tomorrow = new Date(Date.now() + 86400000).toISOString().split('T')[0]
 
-      let query = supabase.from('tickets').select('*')
+      let estId: string | null = null
       if (estSlug) {
         const { data: est } = await supabase
           .from('establishments')
           .select('id')
           .eq('slug', estSlug)
           .single()
-        if (est) query = query.eq('establishment_id', est.id)
+        estId = est?.id ?? null
       }
+
+      let query = supabase.from('tickets').select('*')
+      if (estId) query = query.eq('establishment_id', estId)
 
       const { data: tickets, error } = await query.order('created_at', { ascending: false })
       
@@ -74,10 +80,29 @@ function DashboardContent() {
         return
       }
 
+      let gamesPlayed = 0
+      if (estId) {
+        const { data: games } = await supabase
+          .from('games')
+          .select('id')
+          .eq('establishment_id', estId)
+        const gameIds = (games ?? []).map(g => g.id)
+        if (gameIds.length > 0) {
+          const { count } = await supabase
+            .from('game_scores')
+            .select('*', { count: 'exact', head: true })
+            .in('game_id', gameIds)
+            .gte('played_at', today)
+            .lt('played_at', tomorrow)
+          gamesPlayed = count ?? 0
+        }
+      }
+
       if (tickets) {
         const todayTickets = tickets.filter(t => t.created_at.startsWith(today))
         const waiting = todayTickets.filter(t => t.status === 'waiting').length
         const completed = todayTickets.filter(t => t.status === 'completed').length
+        const cancelled = todayTickets.filter(t => t.status === 'cancelled').length
 
         const completedWithTime = todayTickets.filter(
           t => t.status === 'completed' && t.completed_at && t.called_at
@@ -97,8 +122,10 @@ function DashboardContent() {
           totalTickets: tickets.length,
           waiting,
           completed,
+          cancelled,
           todayTickets: todayTickets.length,
           avgWaitTime,
+          gamesPlayed,
         })
 
         const hourCounts: Record<string, number> = {}
@@ -151,11 +178,18 @@ function DashboardContent() {
 
   const maxHourly = Math.max(...hourlyData.map(h => h.count), 1)
 
+  const cancellationRate =
+    stats.todayTickets > 0
+      ? `${Math.round((stats.cancelled / stats.todayTickets) * 100)}%`
+      : '0%'
+
   const statCards = [
     { label: 'Senhas Hoje', value: stats.todayTickets, icon: Ticket, color: 'from-blue-500 to-blue-600' },
     { label: 'Aguardando', value: stats.waiting, icon: Clock, color: 'from-yellow-400 to-orange-400' },
     { label: 'Atendidos', value: stats.completed, icon: Users, color: 'from-green-400 to-emerald-500' },
     { label: 'Tempo Médio', value: `${stats.avgWaitTime} min`, icon: TrendingUp, color: 'from-purple-400 to-pink-500' },
+    { label: 'Taxa Cancel.', value: cancellationRate, icon: AlertCircle, color: 'from-red-400 to-rose-500' },
+    { label: 'Engajamento', value: stats.gamesPlayed, icon: BarChart3, color: 'from-teal-400 to-cyan-500' },
   ]
 
   return (
