@@ -1,9 +1,38 @@
 import { NextResponse } from 'next/server'
 import { z } from 'zod'
 
+/**
+ * Normalizes a raw slug into a URL-safe identifier: lowercases, strips
+ * diacritics (accents), replaces any run of non-alphanumeric characters with a
+ * single hyphen and trims leading/trailing hyphens. This keeps stored slugs
+ * consistent with how they are looked up in routing (e.g. `/qr/[slug]`,
+ * `?est=slug`, `tv-display`/`queue` which do `slug.toLowerCase()`).
+ */
+export function normalizeSlug(input: string): string {
+  return input
+    .normalize('NFD')
+    .replace(/[̀-ͯ]/g, '')
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/-{2,}/g, '-')
+    .replace(/^-+|-+$/g, '')
+}
+
+export const slugSchema = z
+  .string()
+  .transform(normalizeSlug)
+  .pipe(
+    z
+      .string()
+      .min(1, 'Slug is required')
+      .max(120)
+      .regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, 'Invalid slug format')
+  )
+
 export const establishmentSchema = z.object({
   name: z.string().min(1, 'Name is required').max(120),
-  slug: z.string().min(1, 'Slug is required').max(120),
+  slug: slugSchema,
   description: z.string().max(500).nullable().optional(),
   category: z.string().min(1, 'Category is required').max(60),
   address: z.string().max(255).nullable().optional(),
@@ -17,7 +46,7 @@ export const establishmentSchema = z.object({
 export const establishmentPatchSchema = z
   .object({
     name: z.string().min(1).max(120).optional(),
-    slug: z.string().min(1).max(120).optional(),
+    slug: slugSchema.optional(),
     description: z.string().max(500).nullable().optional(),
     category: z.string().min(1).max(60).optional(),
     address: z.string().max(255).nullable().optional(),

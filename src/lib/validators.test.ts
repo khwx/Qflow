@@ -2,6 +2,8 @@ import { describe, it, expect } from 'vitest'
 import {
   establishmentSchema,
   establishmentPatchSchema,
+  slugSchema,
+  normalizeSlug,
   queueSchema,
   queuePatchSchema,
   ticketSchema,
@@ -59,6 +61,44 @@ describe('establishmentSchema', () => {
       primary_color: 'red',
     })
     expect(result.success).toBe(false)
+  })
+
+  it('normalizes and validates the slug via the schema', () => {
+    const parsed = establishmentSchema.parse({
+      name: 'Café São Paulo!',
+      slug: 'Café São Paulo!',
+      category: 'food',
+    })
+    expect(parsed.slug).toBe('cafe-sao-paulo')
+  })
+})
+
+describe('normalizeSlug', () => {
+  it('lowercases and replaces spaces with hyphens', () => {
+    expect(normalizeSlug('Padaria Central')).toBe('padaria-central')
+  })
+
+  it('strips diacritics', () => {
+    expect(normalizeSlug('Café São Paulo')).toBe('cafe-sao-paulo')
+  })
+
+  it('collapses non-alphanumeric runs and trims hyphens', () => {
+    expect(normalizeSlug('  Foo __ Bar!!  ')).toBe('foo-bar')
+  })
+})
+
+describe('slugSchema', () => {
+  it('rejects a slug that normalizes to empty', () => {
+    expect(slugSchema.safeParse('!!!').success).toBe(false)
+  })
+
+  it('rejects non-string input', () => {
+    expect(slugSchema.safeParse(123).success).toBe(false)
+  })
+
+  it('accepts and normalizes a valid slug', () => {
+    const result = slugSchema.safeParse('My-Cool_Store!!')
+    expect(result.success && result.data).toBe('my-cool-store')
   })
 })
 

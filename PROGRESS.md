@@ -328,10 +328,41 @@ Log de execuções autónomas do Bot Orquestrador (cada 12h).
 
 - **Problema**: o total de pontos do cliente na sala de espera (`customerPoints`)
   era atualizado só incrementalmente via callbacks de `onComplete` (jogos e
-  polls); recarregamentos ou dessincronização deixavam o total dessincronizado
-  com o servidor.
+   polls); recarregamentos ou dessincronização deixavam o total dessincronizado
+   com o servidor.
 - **Solução**: adicionado `loadPoints(ticketId)` em
-  `src/app/[locale]/waiting/[ticketId]/page.tsx` que faz `select
-  games(points_reward)` de `game_scores` por `ticket_id` e recalcula o total;
-  invocado no carregamento inicial e após cada `onComplete` de jogo/poll.
+   `src/app/[locale]/waiting/[ticketId]/page.tsx` que faz `select
+   games(points_reward)` de `game_scores` por `ticket_id` e recalcula o total;
+   invocado no carregamento inicial e após cada `onComplete` de jogo/poll.
 - **Verificação**: `tsc --noEmit` ✓, `eslint` ✓ (0 erros), `next build` ✓.
+
+## 2026-08-21 — Normalização + validação estrita de slug
+
+- **Problema**: o `establishmentSchema`/`establishmentPatchSchema` validavam o
+  `slug` apenas por tamanho (`min/max`), e as rotas normalizavam só
+  `toLowerCase().replace(/\s+/g, '-')`. Resultado: slugs com acentos
+  (`Café São Paulo`), símbolos ou `!` eram gravados inconsistentes com a forma
+  como são pesquisados no routing (`/qr/[slug]`, `?est=slug`, e `tv-display`/
+  `queue` que fazem `slug.toLowerCase()` mas não limpam acentos/símbolos) —
+  risco real de dessincronização entre o que é gravado e o que é encontrado.
+- **Solução**:
+  - Adicionado `normalizeSlug(input)` em `src/lib/validators.ts`: aplica
+    `NFD` + strip de diacríticos, lowercase, trim, substitui qualquer
+    sequência não-alfanumérica por hífen único e corta hífens no início/fim.
+  - Criado `slugSchema` (`z.string().transform(normalizeSlug).pipe(...)`) que
+    normaliza e depois exige `^[a-z0-9]+(?:-[a-z0-9]+)*$` (min 1, max 120).
+  - Aplicado `slugSchema` ao `slug` de `establishmentSchema` e
+    `establishmentPatchSchema`. A normalização passa a ocorrer **antes** da
+    validação (via transform do Zod), pelo que o valor gravado nas rotas já
+    vem consistente e URL-safe.
+  - A re-normalização residual nas rotas (`establishments/route.ts` e
+    `[id]/route.ts`) permanece idempotente e inofensiva.
+- **Verificação**: `tsc --noEmit` ✓, `eslint` ✓ (0 erros), `vitest run` ✓
+  (86/86 — +8 testes: `normalizeSlug`, `slugSchema` e normalização via
+  `establishmentSchema`), `next build` ✓.
+
+## Pendente / próximas ideias
+- Migrar o state do rate limiter para um store partilhado em produção.
+- Avaliar se os `GET` de lista devem passar para o cliente publishable + RLS
+  (ou continuar a exigir auth no service-role).
+- Reforçar a CSP com nonce/hashing para remover `'unsafe-inline'`/`'unsafe-eval'`.
