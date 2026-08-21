@@ -292,3 +292,46 @@ Log de execuções autónomas do Bot Orquestrador (cada 12h).
     `forgotPasswordSchema` (valid/invalid/missing email).
 - **Verificação**: `tsc --noEmit` ✓, `eslint` ✓ (0 erros), `vitest run` ✓
   (42/42), `next build` ✓.
+
+## 2026-08-21 — Endurecer sanitizeInput (fechar crashes/segurança)
+
+- **Problema**: a função `sanitizeInput` (em `src/lib/validators.ts`, aplicada a
+  todo o body das APIs via `validateBody`) tinha lacunas descobertas por testes
+  não terminados de uma iteração anterior:
+  - **Stack overflow** em objetos com referências circulares (`obj.self = obj`),
+    pois a recursão não tinha proteção.
+  - **Corrupção de tipo**: `Date` e outros objetos não-puros eram convertidos em
+    `{}` (perdia-se o valor), porque eram tratados como objetos "plain".
+  - **Bypass de sanitização** de espaços unicode/zero-width adicionais
+    (`\u2060`, `\u2028`, `\u2029`, `\u00a0`, etc.) — só os ANSI e `\u200b` eram
+    tratados.
+  - **Prototype pollution**: o objeto resultado partilhava o `Object.prototype`
+    e usava `Object.getPrototypeOf` para detetar objetos "plain", o que é
+    enganado por literais `{ __proto__: ... }`.
+- **Solução**:
+  - Deteção de objeto "plain" via `Object.prototype.toString.call(v) ===
+    '[object Object]'` (não enganado por `__proto__`-literal).
+  - Mapa `visited` (não `WeakSet`) que devolve o objeto **já construído** em
+    referências circulares, evitando stack overflow e mantendo `self === self`.
+  - Resultado criado com `Object.create(null)` (sem prototype) e chaves
+    `__proto__`/`constructor`/`prototype` explicitamente ignoradas → defende
+    contra prototype pollution.
+  - `Date`/objetos não-puros passam intactos; strings ganham strip de
+    `\u2060`, `\u2028`, `\u2029`, `\u00a0`, `\u1680`, `\u2000-\u200f`, `\u202f`,
+    `\u205f`, `\u3000` além dos já cobertos.
+  - 7 testes adicionados em `validators.test.ts` cobrem os casos acima (já
+    presentes na working tree, agora a passar).
+- **Verificação**: `tsc --noEmit` ✓, `eslint` ✓ (0 erros; só warnings
+  pré-existentes), `vitest run` ✓ (79/79), `next build` ✓.
+
+## 2026-08-21 — Waiting: recomputar pontos do cliente a partir de game_scores
+
+- **Problema**: o total de pontos do cliente na sala de espera (`customerPoints`)
+  era atualizado só incrementalmente via callbacks de `onComplete` (jogos e
+  polls); recarregamentos ou dessincronização deixavam o total dessincronizado
+  com o servidor.
+- **Solução**: adicionado `loadPoints(ticketId)` em
+  `src/app/[locale]/waiting/[ticketId]/page.tsx` que faz `select
+  games(points_reward)` de `game_scores` por `ticket_id` e recalcula o total;
+  invocado no carregamento inicial e após cada `onComplete` de jogo/poll.
+- **Verificação**: `tsc --noEmit` ✓, `eslint` ✓ (0 erros), `next build` ✓.
