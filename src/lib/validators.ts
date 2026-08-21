@@ -146,19 +146,41 @@ export const ticketPatchSchema = z
  * Numbers, booleans, nulls, arrays and plain objects are passed through;
  * only string leaves are mutated.
  */
-export function sanitizeInput(value: unknown): unknown {
+export function sanitizeInput(
+  value: unknown,
+  visited: Map<object, unknown> = new Map()
+): unknown {
   if (typeof value === 'string') {
     return value
       .trim()
-      .replace(/[\x00-\x08\x0b\x0c\x0e-\x1f\x7f\u200b\u200c\u200d\ufeff]/g, '')
+      .replace(
+        /[\x00-\x08\x0b\x0c\x0e-\x1f\x7f\u00a0\u1680\u2000-\u200f\u2028\u2029\u202f\u205f\u2060\u3000\ufeff]/gu,
+        ''
+      )
   }
   if (Array.isArray(value)) {
-    return value.map((item) => sanitizeInput(item))
+    if (visited.has(value)) return visited.get(value)
+    const arr: unknown[] = []
+    visited.set(value, arr)
+    for (const item of value) arr.push(sanitizeInput(item, visited))
+    return arr
   }
   if (value && typeof value === 'object') {
-    const out: Record<string, unknown> = {}
+    // Non-plain objects (Date, RegExp, etc.) are passed through untouched.
+    // Use toString tag rather than prototype check so a `__proto__`-literal
+    // (which mutates the prototype) is still recognised as a plain object.
+    if (Object.prototype.toString.call(value) !== '[object Object]') {
+      return value
+    }
+    // Guard against circular references (return the already-built result).
+    if (visited.has(value)) return visited.get(value)
+    const out = Object.create(null) as Record<string, unknown>
+    visited.set(value, out)
     for (const [key, val] of Object.entries(value)) {
-      out[key] = sanitizeInput(val)
+      if (key === '__proto__' || key === 'constructor' || key === 'prototype') {
+        continue
+      }
+      out[key] = sanitizeInput(val, visited)
     }
     return out
   }

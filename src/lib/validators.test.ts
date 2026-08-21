@@ -379,4 +379,50 @@ describe('sanitizeInput', () => {
     const result = await validateBody(makeRequest({ name: long, slug: 's', category: 'c' }), establishmentSchema)
     expect('response' in result).toBe(true)
   })
+
+  it('handles empty strings', () => {
+    expect(sanitizeInput('')).toBe('')
+    expect(sanitizeInput('   ')).toBe('')
+  })
+
+  it('strips strings that are only control characters', () => {
+    expect(sanitizeInput('\x00\x01\x02')).toBe('')
+    expect(sanitizeInput('\u200b\u200c')).toBe('')
+  })
+
+  it('handles deeply nested objects', () => {
+    const deep = { a: { b: { c: { d: '  deep  ' } } } }
+    expect(sanitizeInput(deep)).toEqual({ a: { b: { c: { d: 'deep' } } } })
+  })
+
+  it('handles arrays with mixed types', () => {
+    const mixed = ['  a  ', 123, true, null, { b: '  c  ' }]
+    expect(sanitizeInput(mixed)).toEqual(['a', 123, true, null, { b: 'c' }])
+  })
+
+  it('defends against prototype pollution attempts', () => {
+    const input = { __proto__: { polluted: true }, constructor: { prototype: { polluted: true } } }
+    const result = sanitizeInput(input) as Record<string, unknown>
+    expect(result.__proto__).toBeUndefined()
+    expect(result.constructor).toBeUndefined()
+  })
+
+  it('handles unicode whitespace and zero-width characters', () => {
+    expect(sanitizeInput('\u00A0hello\u00A0')).toBe('hello')
+    expect(sanitizeInput('\u200B\u200C\u200D\uFEFF')).toBe('')
+    expect(sanitizeInput('a\u2060b')).toBe('ab')
+  })
+
+  it('passes through Date objects', () => {
+    const date = new Date('2026-01-01T00:00:00.000Z')
+    expect(sanitizeInput(date)).toBe(date)
+  })
+
+  it('handles circular references without throwing', () => {
+    const obj: Record<string, unknown> = { a: '  test  ' }
+    obj.self = obj
+    const result = sanitizeInput(obj) as Record<string, unknown>
+    expect(result.a).toBe('test')
+    expect(result.self).toBe(result)
+  })
 })
