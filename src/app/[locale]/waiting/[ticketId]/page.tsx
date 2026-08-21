@@ -59,6 +59,25 @@ export default function WaitingPage({ params }: { params: Promise<{ locale: stri
     }
   }
 
+  const loadPoints = async (targetTicketId: string) => {
+    try {
+      const { data } = await supabase
+        .from('game_scores')
+        .select('games(points_reward)')
+        .eq('ticket_id', targetTicketId)
+
+      if (data) {
+        const total = data.reduce((sum, row) => {
+          const reward = (row.games as { points_reward?: number } | null)?.points_reward
+          return sum + (typeof reward === 'number' ? reward : 0)
+        }, 0)
+        setCustomerPoints(total)
+      }
+    } catch (error) {
+      console.error('Load points error:', error)
+    }
+  }
+
   const loadData = async () => {
     try {
       const { data: ticketData } = await supabase
@@ -89,6 +108,8 @@ export default function WaitingPage({ params }: { params: Promise<{ locale: stri
           .eq('is_active', true)
 
         if (pollsData) setPolls(pollsData)
+
+        await loadPoints(ticketData.id)
       }
     } catch (error) {
       console.error('Load data error:', error)
@@ -368,7 +389,10 @@ export default function WaitingPage({ params }: { params: Promise<{ locale: stri
                             key={poll.id}
                             poll={poll}
                             ticketId={ticket.id}
-                            onComplete={(points) => setCustomerPoints(p => p + points)}
+                            onComplete={(points) => {
+                              setCustomerPoints(p => p + points)
+                              loadPoints(ticket.id)
+                            }}
                           />
                         ))}
                       </div>
@@ -398,6 +422,7 @@ export default function WaitingPage({ params }: { params: Promise<{ locale: stri
           onComplete={(points) => {
             setCustomerPoints(p => p + points)
             setSelectedGame(null)
+            loadPoints(ticket.id)
           }}
         />
       )}
