@@ -66,13 +66,22 @@ export default function WaitingPage({ params }: { params: Promise<{ locale: stri
         .select('games(points_reward)')
         .eq('ticket_id', targetTicketId)
 
+      let total = 0
       if (data) {
-        const total = data.reduce((sum, row) => {
+        total = data.reduce((sum, row) => {
           const reward = (row.games as { points_reward?: number } | null)?.points_reward
           return sum + (typeof reward === 'number' ? reward : 0)
         }, 0)
-        setCustomerPoints(total)
       }
+
+      const { count: pollCount } = await supabase
+        .from('poll_responses')
+        .select('*', { count: 'exact', head: true })
+        .eq('ticket_id', targetTicketId)
+
+      total += (pollCount ?? 0) * 10
+
+      setCustomerPoints(total)
     } catch (error) {
       console.error('Load points error:', error)
     }

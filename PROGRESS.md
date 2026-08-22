@@ -400,8 +400,6 @@ Log de execuções autónomas do Bot Orquestrador (cada 12h).
 - Avaliar se os `GET` de lista devem passar para o cliente publishable + RLS
   (ou continuar a exigir auth no service-role).
 - Reforçar a CSP com nonce/hashing para remover `'unsafe-inline'`/`'unsafe-eval'`.
-- Estender a fidelização automática também às enquetes (`poll_responses`), que já
-  atribuem +10 pontos na UI mas não os persistem num total de cliente.
 
 ## 2026-08-22 — Fidelização automática: ligar senhas/jogos a clientes (fecha tarefa pendente)
 
@@ -430,5 +428,31 @@ Log de execuções autónomas do Bot Orquestrador (cada 12h).
   (admin cria os clientes de fidelidade). O scoreboard ao vivo (`customerPoints`)
   continua a ser recalculado a partir de `game_scores`; `customers.total_points`
   passa a ser o total persistente e acumulado automaticamente.
+- **Verificação**: `tsc --noEmit` ✓, `eslint` ✓ (0 erros; só warnings
+  pré-existentes), `vitest run` ✓ (91/91), `next build` ✓.
+
+## 2026-08-22 — Fidelização automática nas enquetes (fecha tarefa pendente)
+
+- **Tarefa pendente da iteração anterior**: "Estender a fidelização automática
+  também às enquetes (`poll_responses`), que já atribuem +10 pontos na UI mas não
+  os persistem num total de cliente."
+- **Problema**: a UI (`PollComponent`) fazia `onComplete(10)` mostrando "+10
+  pontos por participar", mas o `total_points` do cliente nunca era incrementado
+  no servidor — ao contrário dos jogos (que já tinham o `trg_award_customer_points`).
+- **Solução** (server-side, em `supabase/schema.sql` — sem quebrar RLS nem
+  exigir auth no cliente anónimo):
+  - Coluna `poll_responses.customer_id` (FK → `customers.id`, `on delete set
+    null`) + índice `idx_poll_responses_customer_id`.
+  - `trg_award_poll_points` (BEFORE INSERT em `poll_responses`): resolve o
+    cliente via `ticket_id` → `tickets.customer_id` e soma `+10` a
+    `customers.total_points` (igual ao valor mostrado na UI); regista o
+    `customer_id` na própria resposta.
+  - `src/types/index.ts`: `PollResponse` ganha `customer_id`.
+  - `src/app/[locale]/waiting/[ticketId]/page.tsx`: `loadPoints` passa a
+    recomputar também a partir de `poll_responses` (`count(*)` por `ticket_id`
+    ×10), mantendo o scoreboard vivo consistente com o total persistido.
+- **Decisão**: o prémio da enquete é fixo (+10), tal como na UI; não se adicionou
+  `points_reward` à tabela `polls` (fora do escopo e incompatível com o valor
+  hard-coded atual). Clientes não são criados automaticamente (modelo mantido).
 - **Verificação**: `tsc --noEmit` ✓, `eslint` ✓ (0 erros; só warnings
   pré-existentes), `vitest run` ✓ (91/91), `next build` ✓.

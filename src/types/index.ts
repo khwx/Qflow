@@ -118,6 +118,7 @@ export interface PollResponse {
   id: string
   poll_id: string
   ticket_id: string | null
+  customer_id: string | null
   option_index: number
   created_at: string
 }

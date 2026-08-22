@@ -411,3 +411,42 @@ drop trigger if exists trg_award_customer_points on public.game_scores;
 create trigger trg_award_customer_points
   before insert on public.game_scores
   for each row execute function public.award_customer_points();
+
+-- Atribui os pontos da enquete (+10, iguais aos mostrados na UI) ao cliente
+-- ligado à senha que respondeu, e regista-o na resposta. Espelha o fluxo dos
+-- jogos: a ligação por telefone/e-mail já foi feita no trigger dos tickets.
+create or replace function public.award_poll_points()
+returns trigger
+language plpgsql
+as $$
+declare
+  v_customer_id uuid;
+begin
+  if new.ticket_id is not null then
+    select t.customer_id into v_customer_id
+    from public.tickets t
+    where t.id = new.ticket_id
+      and t.customer_id is not null;
+
+    if v_customer_id is not null then
+      new.customer_id := v_customer_id;
+      update public.customers
+      set total_points = coalesce(total_points, 0) + 10,
+          updated_at = timezone('utc', now())
+      where id = v_customer_id;
+    end if;
+  end if;
+
+  return new;
+end;
+$$;
+
+alter table public.poll_responses
+  add column if not exists customer_id uuid references public.customers(id) on delete set null;
+
+create index if not exists idx_poll_responses_customer_id on public.poll_responses(customer_id);
+
+drop trigger if exists trg_award_poll_points on public.poll_responses;
+create trigger trg_award_poll_points
+  before insert on public.poll_responses
+  for each row execute function public.award_poll_points();
