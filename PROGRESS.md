@@ -359,10 +359,47 @@ Log de execuções autónomas do Bot Orquestrador (cada 12h).
     `[id]/route.ts`) permanece idempotente e inofensiva.
 - **Verificação**: `tsc --noEmit` ✓, `eslint` ✓ (0 erros), `vitest run` ✓
   (86/86 — +8 testes: `normalizeSlug`, `slugSchema` e normalização via
-  `establishmentSchema`), `next build` ✓.
+   `establishmentSchema`), `next build` ✓.
+
+## 2026-08-22 — Feature: gestão de clientes (fidelização) + fechar RLS do customers
+
+- **Problema**: a tabela `customers` (que suporta o "Sistema de pontos e
+  recompensas" do README) estava **inacessível**: o RLS estava ativo
+  (`enable row level security`) mas **não existia nenhuma policy** — logo, nem o
+  cliente publishable (frontend admin) nem leituras autenticadas conseguiam
+  ler/escrever clientes. Além disso não havia qualquer rota de API nem página
+  admin para o recurso (código morto documentado).
+- **Solução**:
+  - `supabase/schema.sql`: adicionadas 4 policies para `customers`
+    (select/insert/update/delete) restritas ao dono do `establishment_id`
+    (via `exists(... establishments.owner_id = auth.uid())`), espelhando as
+    policies de `queues`/`tickets`/`games`.
+  - `src/lib/validators.ts`: `customerPatchSchema` (name/phone/email nullable,
+    `total_visits`/`total_points` inteiros ≥ 0, refine de body não-vazio).
+  - `src/lib/ownership.ts`: `customers` adicionado a `OwnedTable` (tem
+    `establishment_id` → resolve posse como tabela-filha).
+  - `src/app/api/customers/route.ts` (`GET` por `?est=slug` ou
+    `?establishment_id`, com auth + posse do estabelecimento) e
+    `src/app/api/customers/[id]/route.ts` (`GET`/`PATCH`/`DELETE` com auth +
+    `assertOwnership` + rate limiting + validação Zod).
+  - `src/app/admin/customers/page.tsx`: página admin (lista, busca, edição
+    inline de pontos/visitas via cliente publishable + RLS, remoção com
+    confirmação) espelhando `admin/tickets`.
+  - `src/components/admin/AdminShell.tsx`: item "Clientes" na navegação.
+- **Decisão**: a página admin usa o cliente publishable + RLS (igual a todas as
+  outras páginas admin, que não usam os `/api/*`); as rotas `/api/customers`
+  existem para acesso programático consistente com os restantes recursos. O
+  `updated_at` é definido na escrita. Não se criou `POST` (clientes ligam-se a
+  `auth.users` e são criados no fluxo de autenticação).
+- **Verificação**: `tsc --noEmit` ✓, `eslint` ✓ (0 erros; só warnings
+  pré-existentes), `vitest run` ✓ (91/91 — +5 testes no `customerPatchSchema`),
+  `next build` ✓.
 
 ## Pendente / próximas ideias
 - Migrar o state do rate limiter para um store partilhado em produção.
 - Avaliar se os `GET` de lista devem passar para o cliente publishable + RLS
   (ou continuar a exigir auth no service-role).
 - Reforçar a CSP com nonce/hashing para remover `'unsafe-inline'`/`'unsafe-eval'`.
+- Ligar a criação/atualização de `customers` (e `total_points`/`total_visits`)
+  ao fluxo de entrada na fila e aos jogos, para a fidelização deixar de depender
+  de edição manual no admin.

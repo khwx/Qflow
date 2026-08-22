@@ -15,6 +15,7 @@ import {
   gameSchema,
   gamePatchSchema,
   forgotPasswordSchema,
+  customerPatchSchema,
   validateBody,
   sanitizeInput,
 } from './validators'
@@ -383,6 +384,33 @@ describe('forgotPasswordSchema', () => {
 
   it('rejects missing email', () => {
     const result = forgotPasswordSchema.safeParse({})
+    expect(result.success).toBe(false)
+  })
+})
+
+describe('customerPatchSchema', () => {
+  it('accepts a partial update of points and visits', () => {
+    const result = customerPatchSchema.safeParse({ total_points: 50, total_visits: 3 })
+    expect(result.success).toBe(true)
+  })
+
+  it('accepts nullable contact fields', () => {
+    const result = customerPatchSchema.safeParse({ name: null, email: null, phone: null })
+    expect(result.success).toBe(true)
+  })
+
+  it('rejects invalid email', () => {
+    const result = customerPatchSchema.safeParse({ email: 'not-an-email' })
+    expect(result.success).toBe(false)
+  })
+
+  it('rejects negative points', () => {
+    const result = customerPatchSchema.safeParse({ total_points: -1 })
+    expect(result.success).toBe(false)
+  })
+
+  it('rejects empty body', () => {
+    const result = customerPatchSchema.safeParse({})
     expect(result.success).toBe(false)
   })
 })

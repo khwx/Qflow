@@ -8,6 +8,7 @@ export type OwnedTable =
   | 'orders'
   | 'polls'
   | 'games'
+  | 'customers'
 
 export type OwnershipResult = NextResponse | null
 

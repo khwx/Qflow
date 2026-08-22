@@ -250,6 +250,47 @@ drop policy if exists "Poll responses are insertable by everyone" on public.poll
 create policy "Poll responses are insertable by everyone" on public.poll_responses
   for insert with check (true);
 
+-- Policies para customers
+drop policy if exists "Customers are viewable by owner" on public.customers;
+create policy "Customers are viewable by owner" on public.customers
+  for select using (
+    exists (
+      select 1 from public.establishments
+      where establishments.id = customers.establishment_id
+      and establishments.owner_id = auth.uid()
+    )
+  );
+
+drop policy if exists "Customers are insertable by owner" on public.customers;
+create policy "Customers are insertable by owner" on public.customers
+  for insert with check (
+    exists (
+      select 1 from public.establishments
+      where establishments.id = customers.establishment_id
+      and establishments.owner_id = auth.uid()
+    )
+  );
+
+drop policy if exists "Customers are updatable by owner" on public.customers;
+create policy "Customers are updatable by owner" on public.customers
+  for update using (
+    exists (
+      select 1 from public.establishments
+      where establishments.id = customers.establishment_id
+      and establishments.owner_id = auth.uid()
+    )
+  );
+
+drop policy if exists "Customers are deletable by owner" on public.customers;
+create policy "Customers are deletable by owner" on public.customers
+  for delete using (
+    exists (
+      select 1 from public.establishments
+      where establishments.id = customers.establishment_id
+      and establishments.owner_id = auth.uid()
+    )
+  );
+
 -- Policies para orders
 drop policy if exists "Orders are viewable by owner" on public.orders;
 create policy "Orders are viewable by owner" on public.orders

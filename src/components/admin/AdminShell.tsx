@@ -32,6 +32,7 @@ const navigation = [
   { name: 'Senhas', href: '/admin/tickets', icon: Ticket },
   { name: 'Pedidos', href: '/admin/orders', icon: Package },
   { name: 'Jogos', href: '/admin/games', icon: Gamepad2 },
+  { name: 'Clientes', href: '/admin/customers', icon: Users },
   { name: 'Configurações', href: '/admin/settings', icon: Settings },
 ]
 

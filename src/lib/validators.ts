@@ -150,6 +150,16 @@ export const forgotPasswordSchema = z.object({
   email: z.string().email('Invalid email'),
 })
 
+export const customerPatchSchema = z
+  .object({
+    name: z.string().min(1).max(120).nullable().optional(),
+    phone: z.string().max(30).nullable().optional(),
+    email: z.string().email('Invalid email').max(120).nullable().optional(),
+    total_visits: z.number().int().min(0).max(1000000).optional(),
+    total_points: z.number().int().min(0).max(100000000).optional(),
+  })
+  .refine((data) => Object.keys(data).length > 0, 'No valid fields to update')
+
 export const ticketPatchSchema = z
   .object({
     status: z
