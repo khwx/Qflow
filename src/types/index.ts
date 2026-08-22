@@ -38,6 +38,7 @@ export interface Ticket {
   customer_name: string | null
   customer_phone: string | null
   customer_email: string | null
+  customer_id: string | null
   notes: string | null
   called_at: string | null
   completed_at: string | null
@@ -83,6 +84,7 @@ export interface GameScore {
   id: string
   game_id: string
   ticket_id: string | null
+  customer_id: string | null
   player_name: string | null
   score: number
   max_score: number

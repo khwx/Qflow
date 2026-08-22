@@ -239,6 +239,12 @@ export default function WaitingPage({ params }: { params: Promise<{ locale: stri
               <Trophy className="h-5 w-5 text-white" />
               <span className="font-bold text-white">{customerPoints} pts</span>
             </div>
+            {ticket.customer_id && (
+              <div className="hidden sm:flex items-center gap-1 px-3 py-2 rounded-xl bg-indigo-100 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-300 text-sm font-medium">
+                <Star className="h-4 w-4" />
+                {t('loyalty_member', { default: 'Cliente fidelizado' })}
+              </div>
+            )}
           </div>
         </div>
       </header>

@@ -317,3 +317,97 @@ create index if not exists idx_polls_establishment_id on public.polls(establishm
 -- Realtime
 alter publication supabase_realtime add table public.tickets;
 alter publication supabase_realtime add table public.queues;
+
+-- ============================================================================
+-- Fidelização: ligar senhas e pontos de jogos a clientes existentes
+-- ============================================================================
+-- As senhas são criadas de forma anónima (sem auth.users), mas um cliente de
+-- fidelização já pode existir no estabelecimento (criado no admin). Ligamos por
+-- telefone/e-mail para que `total_visits`/`total_points` deixem de depender de
+-- edição manual no admin. Clientes NÃO são criados automaticamente aqui (o seu
+-- `id` referencia `auth.users` e são criados no fluxo de autenticação).
+
+alter table public.tickets
+  add column if not exists customer_id uuid references public.customers(id) on delete set null;
+
+alter table public.game_scores
+  add column if not exists customer_id uuid references public.customers(id) on delete set null;
+
+create index if not exists idx_tickets_customer_id on public.tickets(customer_id);
+create index if not exists idx_game_scores_customer_id on public.game_scores(customer_id);
+
+-- Liga a senha a um cliente existente (por telefone/e-mail) e contabiliza a visita.
+create or replace function public.link_ticket_customer()
+returns trigger
+language plpgsql
+as $$
+declare
+  v_customer_id uuid;
+begin
+  if new.customer_id is null and new.establishment_id is not null then
+    select c.id into v_customer_id
+    from public.customers c
+    where c.establishment_id = new.establishment_id
+      and (
+        (new.customer_phone is not null and c.phone = new.customer_phone)
+        or (new.customer_email is not null and c.email = new.customer_email)
+      )
+    limit 1;
+
+    if v_customer_id is not null then
+      new.customer_id := v_customer_id;
+      update public.customers
+      set total_visits = coalesce(total_visits, 0) + 1,
+          updated_at = timezone('utc', now())
+      where id = v_customer_id;
+    end if;
+  end if;
+  return new;
+end;
+$$;
+
+drop trigger if exists trg_link_ticket_customer on public.tickets;
+create trigger trg_link_ticket_customer
+  before insert on public.tickets
+  for each row execute function public.link_ticket_customer();
+
+-- Atribui os pontos do jogo ao cliente ligado à senha (e regista-o na pontuação).
+create or replace function public.award_customer_points()
+returns trigger
+language plpgsql
+as $$
+declare
+  v_customer_id uuid;
+  v_reward integer;
+begin
+  select t.customer_id into v_customer_id
+  from public.tickets t
+  where t.id = new.ticket_id;
+
+  if v_customer_id is null then
+    v_customer_id := new.customer_id;
+  end if;
+
+  if v_customer_id is not null then
+    select g.points_reward into v_reward
+    from public.games g
+    where g.id = new.game_id;
+
+    update public.customers
+    set total_points = coalesce(total_points, 0) + coalesce(v_reward, 0),
+        updated_at = timezone('utc', now())
+    where id = v_customer_id;
+
+    if new.customer_id is null then
+      new.customer_id := v_customer_id;
+    end if;
+  end if;
+
+  return new;
+end;
+$$;
+
+drop trigger if exists trg_award_customer_points on public.game_scores;
+create trigger trg_award_customer_points
+  before insert on public.game_scores
+  for each row execute function public.award_customer_points();

@@ -400,6 +400,35 @@ Log de execuções autónomas do Bot Orquestrador (cada 12h).
 - Avaliar se os `GET` de lista devem passar para o cliente publishable + RLS
   (ou continuar a exigir auth no service-role).
 - Reforçar a CSP com nonce/hashing para remover `'unsafe-inline'`/`'unsafe-eval'`.
-- Ligar a criação/atualização de `customers` (e `total_points`/`total_visits`)
-  ao fluxo de entrada na fila e aos jogos, para a fidelização deixar de depender
-  de edição manual no admin.
+- Estender a fidelização automática também às enquetes (`poll_responses`), que já
+  atribuem +10 pontos na UI mas não os persistem num total de cliente.
+
+## 2026-08-22 — Fidelização automática: ligar senhas/jogos a clientes (fecha tarefa pendente)
+
+- **Tarefa pendente da iteração anterior**: "Ligar a criação/atualização de
+  `customers` (e `total_points`/`total_visits`) ao fluxo de entrada na fila e aos
+  jogos, para a fidelização deixar de depender de edição manual no admin."
+- **Problema**: as senhas são criadas anonimamente (sem `auth.users`), mas já
+  pode existir um cliente de fidelização no estabelecimento (criado no admin). O
+  total de visitas/pontos só era atualizado à mão no admin.
+- **Solução** (server-side, em `supabase/schema.sql` — sem quebrar RLS nem
+  exigir auth no cliente anónimo):
+  - Colunas `tickets.customer_id` e `game_scores.customer_id` (FK →
+    `customers.id`, `on delete set null`) + índices.
+  - `trg_link_ticket_customer` (BEFORE INSERT em `tickets`): se a senha tem
+    `customer_phone`/`customer_email` que coincida com um `customers` do mesmo
+    `establishment_id`, define `customer_id` e incrementa `total_visits`.
+  - `trg_award_customer_points` (BEFORE INSERT em `game_scores`): resolve o
+    cliente pela `ticket_id` (ou `customer_id` próprio), soma
+    `games.points_reward` a `total_points` e regista-o na pontuação.
+  - Clientes **não** são criados automaticamente (o `id` referencia
+    `auth.users`, criados no fluxo de autenticação — respeita a decisão anterior).
+- **UI**: `src/app/[locale]/waiting/[ticketId]/page.tsx` mostra um badge
+  "Cliente fidelizado" quando `ticket.customer_id` está presente; os tipos
+  `Ticket`/`GameScore` em `src/types/index.ts` ganharam `customer_id`.
+- **Decisão**: a ligação por telefone/e-mail replica o modelo já existente
+  (admin cria os clientes de fidelidade). O scoreboard ao vivo (`customerPoints`)
+  continua a ser recalculado a partir de `game_scores`; `customers.total_points`
+  passa a ser o total persistente e acumulado automaticamente.
+- **Verificação**: `tsc --noEmit` ✓, `eslint` ✓ (0 erros; só warnings
+  pré-existentes), `vitest run` ✓ (91/91), `next build` ✓.
