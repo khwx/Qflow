@@ -2,7 +2,7 @@
 
 import { useState, useEffect, use } from 'react'
 import { useTranslations } from 'next-intl'
-import { useRouter } from '@/i18n/navigation'
+import { useRouter, Link } from '@/i18n/navigation'
 import { Establishment, Queue, Ticket } from '@/types'
 import { cn, getEstimatedWait } from '@/lib/utils'
 import toast from 'react-hot-toast'
@@ -174,6 +174,12 @@ export default function QueuePage({ params }: { params: Promise<{ locale: string
               <div className="text-center py-8">
                 <Clock className="h-12 w-12 text-gray-400 dark:text-gray-500 mx-auto mb-3" />
                 <p className="text-gray-500 dark:text-gray-400">{t('no_queues')}</p>
+                <p className="text-xs text-gray-400 dark:text-gray-500 mt-3">
+                  Se és o dono,{' '}
+                  <Link href={`/admin/queues?est=${code}`} className="text-indigo-600 dark:text-indigo-400 underline">
+                    cria a primeira fila aqui
+                  </Link>
+                </p>
               </div>
             )}
             {queues.map((queue) => (

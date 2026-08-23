@@ -4,7 +4,7 @@ import { Suspense, useState, useEffect } from 'react'
 import { createClientComponentClient } from '@/lib/supabase'
 import { Queue, Ticket, Establishment } from '@/types'
 import toast from 'react-hot-toast'
-import { Plus, Play, Check, X, Trash2 } from 'lucide-react'
+import { Plus, Play, Check, X, Trash2, Users } from 'lucide-react'
 import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { Skeleton } from '@/components/ui/Skeleton'
@@ -234,7 +234,25 @@ function QueuesContent() {
         </form>
       )}
 
-      <div className="space-y-4">
+      {queues.length === 0 && !showForm ? (
+        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700 p-8 text-center">
+          <div className="w-16 h-16 bg-indigo-100 dark:bg-indigo-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
+            <Users className="h-8 w-8 text-indigo-600 dark:text-indigo-400" />
+          </div>
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Nenhuma fila ainda</h3>
+          <p className="text-gray-600 dark:text-gray-400 mb-6 max-w-md mx-auto">
+            Este estabelecimento ainda não tem filas. Cria a primeira para começar a atender — ex. “Fila Geral” com 5 min de espera.
+          </p>
+          <button
+            onClick={() => setShowForm(true)}
+            className="inline-flex items-center gap-2 bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-6 py-3 rounded-xl font-semibold hover:from-indigo-700 hover:to-purple-700 transition-all shadow-sm hover:scale-105"
+          >
+            <Plus className="h-5 w-5" />
+            Criar primeira fila
+          </button>
+        </div>
+      ) : (
+        <div className="space-y-4">
         {queues.map((queue) => {
           const queueTickets = tickets.filter(t => t.queue_id === queue.id)
           const waiting = queueTickets.filter(t => t.status === 'waiting')
@@ -313,9 +331,10 @@ function QueuesContent() {
                 </div>
               )}
             </div>
-           )
+            )
         })}
       </div>
+      )}
     </div>
   )
 }

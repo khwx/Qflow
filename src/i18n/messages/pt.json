@@ -259,7 +259,9 @@
     "success_desc": "Seu estabelecimento está pronto. Compartilhe o QR Code com seus clientes.",
     "show_qr": "Mostrar QR Code",
     "go_dashboard": "Ir para o Painel",
-    "slug_display": "Seu código"
+    "slug_display": "Seu código",
+    "error_creating": "Erro ao criar estabelecimento. Tente outro slug.",
+    "auth_required": "Precisas fazer login para criar um estabelecimento"
   },
   "qr": {
     "title": "QR Code",

@@ -513,3 +513,22 @@ begin
   return v_result;
 end;
 $$;
+
+-- Garante fila padrão para novos estabelecimentos (resolve MilAgulhas sem filas)
+create or replace function public.ensure_default_queue()
+returns trigger
+language plpgsql
+as $$
+begin
+  if not exists (select 1 from public.queues where establishment_id = new.id) then
+    insert into public.queues (establishment_id, name, description, is_active, current_number, estimated_wait_minutes)
+    values (new.id, 'Fila Geral', 'Atendimento geral', true, 0, 5);
+  end if;
+  return new;
+end;
+$$;
+
+drop trigger if exists trg_ensure_default_queue on public.establishments;
+create trigger trg_ensure_default_queue
+  after insert on public.establishments
+  for each row execute function public.ensure_default_queue();

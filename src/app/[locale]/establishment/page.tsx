@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { useTranslations } from 'next-intl'
-import { Link } from '@/i18n/navigation'
+import { Link, useRouter } from '@/i18n/navigation'
 import { createClientComponentClient } from '@/lib/supabase'
 import toast from 'react-hot-toast'
 import { QrCode, Building2, CheckCircle2, ExternalLink } from 'lucide-react'
@@ -16,6 +16,7 @@ interface CreatedEstablishment {
 
 export default function CreateEstablishmentPage() {
   const t = useTranslations('establishment')
+  const router = useRouter()
   const [name, setName] = useState('')
   const [slug, setSlug] = useState('')
   const [category, setCategory] = useState('general')
@@ -26,26 +27,49 @@ export default function CreateEstablishmentPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
-
-    const { data, error } = await supabase
-      .from('establishments')
-      .insert({
-        name,
-        slug: slug.toLowerCase().replace(/\s+/g, '-'),
-        category,
+    try {
+      const {
+        data: { session },
+      } = await supabase.auth.getSession()
+      if (!session?.access_token) {
+        toast.error(t('auth_required') || 'Precisas fazer login para criar um estabelecimento')
+        router.push('/auth/login')
+        return
+      }
+      const res = await fetch('/api/establishments', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${session.access_token}`,
+        },
+        body: JSON.stringify({ name, slug, category }),
       })
-      .select()
-      .single()
-
-    if (error) {
-      console.error('Error creating establishment:', error)
-      toast.error(error.message || t('error_creating'))
+      const body = await res.json().catch(() => ({}))
+      if (!res.ok) {
+        // 409 duplicate -> sugere slug alternativo e atualiza input
+        if (res.status === 409 && body.suggestedSlug) {
+          setSlug(body.suggestedSlug)
+          toast.error(`${body.error}. Sugestão: ${body.suggestedSlug}`)
+        } else if (res.status === 400 && body.issues) {
+          toast.error(body.issues.map((i: { message: string }) => i.message).join(', '))
+        } else {
+          // Mensagem amigável para 23505 que escapou
+          const msg = (body.error as string) || ''
+          if (msg.includes('duplicate') || msg.includes('slug')) {
+            toast.error('Já existe um estabelecimento com esse identificador. Tenta outro slug.')
+          } else {
+            toast.error(msg || t('error_creating'))
+          }
+        }
+        return
+      }
+      setCreated({ id: body.id, name: body.name, slug: body.slug })
+    } catch (err) {
+      console.error('Error creating establishment:', err)
+      toast.error(t('error_creating'))
+    } finally {
       setLoading(false)
-      return
     }
-
-    setCreated({ id: data.id, name: data.name, slug: data.slug })
-    setLoading(false)
   }
 
   if (created) {
@@ -82,7 +106,7 @@ export default function CreateEstablishmentPage() {
               </Link>
               <button
                 onClick={() => {
-                  window.location.href = `/admin/dashboard?est=${created.id}`
+                  window.location.href = `/admin/dashboard?est=${created.slug}`
                 }}
                 className="w-full bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 py-3 rounded-xl font-semibold hover:bg-gray-200 dark:hover:bg-gray-600 transition hover:scale-105 active:scale-95"
               >

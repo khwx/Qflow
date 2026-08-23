@@ -33,14 +33,41 @@ export async function POST(request: Request) {
   try {
     const result = await validateBody(request, establishmentSchema)
     if ('response' in result) return result.response
-    const { name, slug, description, category, address, phone, primary_color } =
+    const { name, slug: rawSlug, description, category, address, phone, primary_color } =
       result.data
 
-    const { data, error } = await createAdminClient()
+    const admin = createAdminClient()
+    const baseSlug = rawSlug // já normalizado pelo Zod (normalizeSlug)
+    let finalSlug = baseSlug
+    for (let suffix = 2; suffix <= 20; suffix++) {
+      const { data: existing } = await admin
+        .from('establishments')
+        .select('id')
+        .eq('slug', finalSlug)
+        .maybeSingle()
+      if (!existing) break
+      finalSlug = `${baseSlug}-${suffix}`
+    }
+    // Se após 20 tentativas ainda colide, retorna 409 amigável
+    {
+      const { data: stillExists } = await admin
+        .from('establishments')
+        .select('id')
+        .eq('slug', finalSlug)
+        .maybeSingle()
+      if (stillExists) {
+        return NextResponse.json(
+          { error: 'Já existe um estabelecimento com esse slug', suggestedSlug: `${baseSlug}-2` },
+          { status: 409 }
+        )
+      }
+    }
+
+    const { data, error } = await admin
       .from('establishments')
       .insert({
         name,
-        slug: slug.toLowerCase().replace(/\s+/g, '-'),
+        slug: finalSlug,
         description,
         category,
         address,
@@ -52,9 +79,17 @@ export async function POST(request: Request) {
       .single()
 
     if (error) {
+      // Trata violação unique de forma amigável (corrida concorrente)
+      if ((error as { code?: string }).code === '23505') {
+        return NextResponse.json(
+          { error: 'Já existe um estabelecimento com esse slug', suggestedSlug: `${baseSlug}-2` },
+          { status: 409 }
+        )
+      }
       return NextResponse.json({ error: error.message }, { status: 500 })
     }
 
+    // Fila padrão criada pelo trigger trg_ensure_default_queue (schema.sql)
     return NextResponse.json(data, { status: 201 })
   } catch (error) {
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
