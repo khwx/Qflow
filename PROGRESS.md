@@ -431,6 +431,33 @@ Log de execuções autónomas do Bot Orquestrador (cada 12h).
 - **Verificação**: `tsc --noEmit` ✓, `eslint` ✓ (0 erros; só warnings
   pré-existentes), `vitest run` ✓ (91/91), `next build` ✓.
 
+## 2026-08-23 — Completar API pública de entrada na fila (fecha iteração pendente)
+
+- **Estado encontrado**: uma iteração anterior começou a mover o fluxo de entrada
+  do cliente (página `queue/[code]`) do cliente Supabase anónimo direto para uma
+  API pública server-side (`/api/public/tickets` + `publicTicketSchema`), mas
+  ficou **incompleta e quebrada**:
+  - A página passou a fazer `fetch('/${locale}/api/public/establishments/...')`,
+    mas (a) as rotas `/api/*` **não** são prefixadas por locale (não há
+    middleware de locale para API) e (b) a rota `establishments` pública **não
+    existia** — logo o carregamento do estabelecimento/filas devolvia 404 e a
+    página ficava sempre no estado "não encontrado".
+- **Solução**:
+  - Criado `src/app/api/public/establishments/[slug]/route.ts` (`GET`): rate
+    limit (60/min), resolve o estabelecimento por `slug` normalizado
+    (`normalizeSlug`) com `is_active`, carrega as filas ativas ordenadas por
+    nome e devolve `{ establishment, queues }` (404 se inexistente).
+  - Corrigido o `queue/[code]/page.tsx`: os `fetch` passam a usar
+    `/api/public/establishments/...` e `/api/public/tickets` (sem prefixo de
+    locale), fechando o 404.
+- **Decisão**: manter o design server-side (validation Zod + rate limit +
+  admin client) para a criação de senhas anónimas, consistente com o resto da
+  API. A normalização de slug espelha a das rotas admin, evitando
+  dessincronização entre o que é gravado e o que é procurado.
+- **Verificação**: `tsc --noEmit` ✓, `eslint` ✓ (0 erros; só warnings
+  pré-existentes), `vitest run` ✓ (91/91), `next build` ✓ (rota
+  `api/public/establishments/[slug]` registada).
+
 ## 2026-08-22 — Fidelização automática nas enquetes (fecha tarefa pendente)
 
 - **Tarefa pendente da iteração anterior**: "Estender a fidelização automática

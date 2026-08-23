@@ -3,9 +3,8 @@
 import { useState, useEffect, use } from 'react'
 import { useTranslations } from 'next-intl'
 import { useRouter } from '@/i18n/navigation'
-import { createClientComponentClient } from '@/lib/supabase'
 import { Establishment, Queue, Ticket } from '@/types'
-import { cn, generateTicketNumber, getEstimatedWait } from '@/lib/utils'
+import { cn, getEstimatedWait } from '@/lib/utils'
 import toast from 'react-hot-toast'
 import { QrCode, Clock, Users, AlertCircle, CheckCircle2 } from 'lucide-react'
 
@@ -22,42 +21,31 @@ export default function QueuePage({ params }: { params: Promise<{ locale: string
   const [takingTicket, setTakingTicket] = useState(false)
   const [customerName, setCustomerName] = useState('')
   const [customerPhone, setCustomerPhone] = useState('')
+  const [customerEmail, setCustomerEmail] = useState('')
   const router = useRouter()
-  const supabase = createClientComponentClient()
 
   const loadData = async () => {
-    const { data: est } = await supabase
-      .from('establishments')
-      .select('*')
-      .eq('slug', code.toLowerCase())
-      .eq('is_active', true)
-      .single()
-
-    if (est) {
-      setEstablishment(est)
-      
-      const { data: queueData } = await supabase
-        .from('queues')
-        .select('*')
-        .eq('establishment_id', est.id)
-        .eq('is_active', true)
-        .order('name')
-
-      if (queueData) {
-        setQueues(queueData)
+    try {
+      const res = await fetch(`/api/public/establishments/${code.toLowerCase()}`)
+      if (res.ok) {
+        const data = await res.json()
+        setEstablishment(data.establishment)
+        setQueues(data.queues)
       }
+    } catch (error) {
+      console.error('Load data error:', error)
+    } finally {
+      setLoading(false)
     }
-
-    setLoading(false)
   }
 
   useEffect(() => {
     if (!code) {
-      router.push('/enter')
+      router.push(`/${locale}/enter`)
       return
     }
     queueMicrotask(loadData)
-  }, [code])
+  }, [code, locale])
 
   const validatePhone = (phone: string) => {
     const cleaned = phone.replace(/\D/g, '')
@@ -69,38 +57,33 @@ export default function QueuePage({ params }: { params: Promise<{ locale: string
     
     setTakingTicket(true)
     
-    const newNumber = selectedQueue.current_number + 1
-    const ticketNumber = generateTicketNumber(
-      selectedQueue.name.substring(0, 3).toUpperCase(),
-      newNumber
-    )
-
-    const { data, error } = await supabase
-      .from('tickets')
-      .insert({
-        queue_id: selectedQueue.id,
-        establishment_id: establishment!.id,
-        ticket_number: ticketNumber,
-        customer_name: customerName || null,
-        customer_phone: customerPhone || null,
+    try {
+      const res = await fetch(`/api/public/tickets`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          queue_id: selectedQueue.id,
+          customer_name: customerName || null,
+          customer_phone: customerPhone || null,
+          customer_email: customerEmail || null,
+        }),
       })
-      .select()
-      .single()
 
-    if (error) {
+      const data = await res.json()
+
+      if (!res.ok) {
+        toast.error(data.error || tTicket('error_creating'))
+        setTakingTicket(false)
+        return
+      }
+
+      setTicket(data)
+    } catch (error) {
       console.error('Error creating ticket:', error)
-      toast.error(error.message || tTicket('error_creating'))
+      toast.error(tTicket('error_creating'))
+    } finally {
       setTakingTicket(false)
-      return
     }
-
-    await supabase
-      .from('queues')
-      .update({ current_number: newNumber })
-      .eq('id', selectedQueue.id)
-
-    setTicket(data)
-    setTakingTicket(false)
   }
 
   if (loading) {

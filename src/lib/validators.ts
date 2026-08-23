@@ -160,6 +160,14 @@ export const customerPatchSchema = z
   })
   .refine((data) => Object.keys(data).length > 0, 'No valid fields to update')
 
+export const publicTicketSchema = z.object({
+  queue_id: z.string().min(1, 'Queue is required'),
+  customer_name: z.string().max(120).nullable().optional(),
+  customer_phone: z.string().max(20).nullable().optional(),
+  customer_email: z.string().email('Invalid email').max(120).nullable().optional(),
+  priority: z.enum(['normal', 'urgent', 'elderly', 'pregnant']).optional(),
+})
+
 export const ticketPatchSchema = z
   .object({
     status: z
