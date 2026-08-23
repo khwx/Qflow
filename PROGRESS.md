@@ -483,3 +483,29 @@ Log de execuções autónomas do Bot Orquestrador (cada 12h).
   hard-coded atual). Clientes não são criados automaticamente (modelo mantido).
 - **Verificação**: `tsc --noEmit` ✓, `eslint` ✓ (0 erros; só warnings
   pré-existentes), `vitest run` ✓ (91/91), `next build` ✓.
+
+## 2026-08-23 — Criação atómica de senhas (fecha race condition de número duplicado)
+
+- **Problema**: `POST /api/public/tickets` (e o fluxo de entrada anónima) lia
+  `queues.current_number`, calculava o próximo número e só **depois** fazia o
+  `insert` da senha + `update` da fila em duas escritas separadas. Sob
+  concorrência (várias pessoas a tirar senha em simultâneo), duas senhas podiam
+  ler o mesmo `current_number` e gerar **números de senha duplicados** — um bug
+  real de correção de dados.
+- **Solução** (server-side, em `supabase/schema.sql` — sem quebrar RLS):
+  - `create or replace function public.create_ticket(p_queue_id, p_customer_name,
+    p_customer_phone, p_customer_email, p_priority)` com `security definer` +
+    `set search_path = public`. Faz `select ... from queues where id = $1 and
+    is_active = true for update` (trava a linha da fila), calcula
+    `current_number + 1`, faz `insert` da senha e `update` da fila **dentro da
+    mesma transação**, devolvendo a senha completa (`row_to_json`). Devolve
+    `{error:'Queue not found'}` se a fila não existir/estiver inativa.
+  - `src/app/api/public/tickets/route.ts`: substituídas as duas escritas pelo
+    `supabase.rpc('create_ticket', ...)`; 404 se a função devolver `error`, 500
+    em caso de erro RPC, 201 com a senha em sucesso. Opcionalmente
+    `customer_id` continua a ser preenchido pelo trigger `trg_link_ticket_customer`.
+- **Decisão**: manter a lógica de prefixo (`upper(left(name,3))`) e padding
+  (`lpad(...,4,'0')`) idêntica à anterior, para não alterar o formato das senhas
+  já emitidas. A trava `for update` serializa só por fila, sem bloquear o resto.
+- **Verificação**: `tsc --noEmit` ✓, `eslint` ✓ (0 erros, 0 warnings novos),
+  `vitest run` ✓ (91/91), `next build` ✓.

@@ -15,47 +15,29 @@ export async function POST(request: Request) {
   try {
     const supabase = createAdminClient()
 
-    const { data: queue, error: queueError } = await supabase
-      .from('queues')
-      .select('id, establishment_id, current_number, name, is_active')
-      .eq('id', queue_id)
-      .eq('is_active', true)
-      .single()
-
-    if (queueError || !queue) {
-      return NextResponse.json({ error: 'Queue not found' }, { status: 404 })
-    }
-
-    const newNumber = queue.current_number + 1
-    const prefix = queue.name.substring(0, 3).toUpperCase()
-    const ticketNumber = `${prefix}-${newNumber.toString().padStart(4, '0')}`
-
-    const { data: ticket, error } = await supabase
-      .from('tickets')
-      .insert({
-        queue_id: queue.id,
-        establishment_id: queue.establishment_id,
-        ticket_number: ticketNumber,
-        status: 'waiting',
-        priority: priority || 'normal',
-        customer_name,
-        customer_phone,
-        customer_email,
-      })
-      .select()
-      .single()
+    // Criação atómica (função DB trava a fila e evita números duplicados sob
+    // concorrência). Ver PROGRESS 2026-08-23.
+    const { data: ticket, error } = await supabase.rpc('create_ticket', {
+      p_queue_id: queue_id,
+      p_customer_name: customer_name,
+      p_customer_phone: customer_phone,
+      p_customer_email: customer_email,
+      p_priority: priority || 'normal',
+    })
 
     if (error) {
       return NextResponse.json({ error: error.message }, { status: 500 })
     }
 
-    await supabase
-      .from('queues')
-      .update({ current_number: newNumber })
-      .eq('id', queue.id)
+    if (ticket && (ticket as { error?: string }).error) {
+      return NextResponse.json(
+        { error: (ticket as { error: string }).error },
+        { status: 404 }
+      )
+    }
 
     return NextResponse.json(ticket, { status: 201 })
-  } catch (error) {
+  } catch {
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
 }

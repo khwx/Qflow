@@ -450,3 +450,66 @@ drop trigger if exists trg_award_poll_points on public.poll_responses;
 create trigger trg_award_poll_points
   before insert on public.poll_responses
   for each row execute function public.award_poll_points();
+
+-- ============================================================================
+-- Criação atómica de senhas (evita número duplicado em concorrência)
+-- ============================================================================
+-- A criação de senhas no endpoint público fazia duas escritas separadas
+-- (ler `current_number`, inserir senha, atualizar `current_number`). Sob
+-- concorrência, duas senhas podiam ler o mesmo número e gerar senhas
+-- duplicadas. Esta função trava a linha da fila (`for update`) e faz a leitura,
+-- o cálculo, o insert e o update dentro da mesma transação, de forma atómica.
+create or replace function public.create_ticket(
+  p_queue_id uuid,
+  p_customer_name text default null,
+  p_customer_phone text default null,
+  p_customer_email text default null,
+  p_priority text default 'normal'
+)
+returns jsonb
+language plpgsql
+security definer
+set search_path = public
+as $$
+declare
+  v_queue public.queues%rowtype;
+  v_new_number integer;
+  v_prefix text;
+  v_ticket_number text;
+  v_ticket_id uuid;
+  v_result jsonb;
+begin
+  select * into v_queue
+  from public.queues q
+  where q.id = p_queue_id and q.is_active = true
+  for update;
+
+  if not found then
+    return jsonb_build_object('error', 'Queue not found');
+  end if;
+
+  v_new_number := v_queue.current_number + 1;
+  v_prefix := upper(left(v_queue.name, 3));
+  v_ticket_number := v_prefix || '-' || lpad(v_new_number::text, 4, '0');
+
+  insert into public.tickets (
+    queue_id, establishment_id, ticket_number, status, priority,
+    customer_name, customer_phone, customer_email
+  ) values (
+    v_queue.id, v_queue.establishment_id, v_ticket_number, 'waiting',
+    p_priority, p_customer_name, p_customer_phone, p_customer_email
+  )
+  returning id into v_ticket_id;
+
+  update public.queues
+  set current_number = v_new_number,
+      updated_at = timezone('utc', now())
+  where id = v_queue.id;
+
+  select row_to_json(t)::jsonb into v_result
+  from public.tickets t
+  where t.id = v_ticket_id;
+
+  return v_result;
+end;
+$$;
