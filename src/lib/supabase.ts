@@ -12,7 +12,7 @@ export function createClientComponentClient(): SupabaseClient {
       'Missing Supabase env vars: NEXT_PUBLIC_SUPABASE_URL + NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY (ou NEXT_PUBLIC_SUPABASE_ANON_KEY)'
     )
   }
-  return createClient(url, key, { auth: { persistSession: false } })
+  return createClient(url, key, { auth: { persistSession: true, autoRefreshToken: true } })
 }
 
 export function createAdminClient(): SupabaseClient {
