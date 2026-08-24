@@ -1,6 +1,9 @@
 -- Enable UUID extension
 create extension if not exists "uuid-ossp";
 
+-- Enable pg_cron for scheduled tasks (e.g., rate_limit_cleanup hourly)
+create extension if not exists pg_cron;
+
 -- Estabelecimentos
 create table if not exists public.establishments (
   id uuid default uuid_generate_v4() primary key,
@@ -532,3 +535,6 @@ drop trigger if exists trg_ensure_default_queue on public.establishments;
 create trigger trg_ensure_default_queue
   after insert on public.establishments
   for each row execute function public.ensure_default_queue();
+
+-- Schedule rate limit cleanup hourly (runs at minute 0 of every hour)
+select cron.schedule('rate-limit-cleanup-hourly', '0 * * * *', 'select public.rate_limit_cleanup()');

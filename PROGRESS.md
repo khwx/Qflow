@@ -623,3 +623,17 @@ Log de execuções autónomas do Bot Orquestrador (cada 12h).
 - **Verificação**: `tsc --noEmit` ✓, `eslint` ✓ (0 erros; só warnings
   pré-existentes), `vitest run` ✓ (116/116 — +9 testes: store em memória +
   fallback + `SupabaseRateLimitStore` com cliente fake), `next build` ✓.
+
+## 2026-08-24 — Agendar rate_limit_cleanup via pg_cron (fecha item pendente)
+
+- **Problema**: a tabela `rate_limits` (usada pelo `SupabaseRateLimitStore` em
+  produção) cresce indefinidamente pois não havia job agendado para invocar a
+  função `rate_limit_cleanup()` que remove linhas expiradas.
+- **Solução**:
+  - Adicionado `create extension if not exists pg_cron` em `supabase/schema.sql`.
+  - Adicionado `select cron.schedule('rate-limit-cleanup-hourly', '0 * * * *', 'select public.rate_limit_cleanup()')` no final de `supabase/schema.sql` para executar a limpeza a cada hora (minuto 0).
+  - Adicionado comentário em `supabase/rate-limit.sql` com instruções para ativar o cron (a extensão precisa ser habilitada uma vez no SQL Editor do Supabase; o `select cron.schedule` roda automaticamente ao aplicar o schema).
+- **Decisão**: frequência horária é suficiente para manter a tabela pequena sem
+  sobrecarregar o DB; `pg_cron` é nativo do Supabase e não exige infraestrutura
+  externa.
+- **Verificação**: `tsc --noEmit` ✓ (erro pré-existente em `.next/types/`), `eslint` ✓ (0 erros; só warnings pré-existentes), `vitest run` ✓ (116/116), `next build` ✓.
