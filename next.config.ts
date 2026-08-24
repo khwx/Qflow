@@ -13,7 +13,10 @@ function supabaseHost(): string | null {
   }
 }
 
-const securityHeaders = getSecurityHeaders({ supabaseHost: supabaseHost() })
+const securityHeaders = getSecurityHeaders({
+  supabaseHost: supabaseHost(),
+  allowUnsafeEval: process.env.NODE_ENV !== 'production',
+})
 
 export default withNextIntl({
   async headers() {

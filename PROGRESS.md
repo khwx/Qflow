@@ -505,7 +505,41 @@ Log de execuções autónomas do Bot Orquestrador (cada 12h).
     em caso de erro RPC, 201 com a senha em sucesso. Opcionalmente
     `customer_id` continua a ser preenchido pelo trigger `trg_link_ticket_customer`.
 - **Decisão**: manter a lógica de prefixo (`upper(left(name,3))`) e padding
-  (`lpad(...,4,'0')`) idêntica à anterior, para não alterar o formato das senhas
-  já emitidas. A trava `for update` serializa só por fila, sem bloquear o resto.
+   (`lpad(...,4,'0')`) idêntica à anterior, para não alterar o formato das senhas
+   já emitidas. A trava `for update` serializa só por fila, sem bloquear o resto.
 - **Verificação**: `tsc --noEmit` ✓, `eslint` ✓ (0 erros, 0 warnings novos),
-  `vitest run` ✓ (91/91), `next build` ✓.
+   `vitest run` ✓ (91/91), `next build` ✓.
+
+## 2026-08-24 — CSP: remover `unsafe-eval` em produção (avança item pendente)
+
+- **Tarefa pendente das iterações anteriores**: "Reforçar a CSP com nonce/hashing
+   para remover `'unsafe-inline'`/`'unsafe-eval'`." A remoção completa de
+   `'unsafe-inline'` exigiria nonce nos scripts inline do framework Next.js (que
+   não suportam nonce automático) e quebraria a app — fora do escopo. Esta
+   iteração dá o passo seguro possível: remover `'unsafe-eval'`.
+- **Solução**:
+   - `getSecurityHeaders(options)` em `src/lib/securityHeaders.ts` ganha a opção
+     `allowUnsafeEval` (default `true`). Quando `false`, `script-src` passa a ser
+     `'self' 'unsafe-inline'` (sem `'unsafe-eval'`).
+   - `next.config.ts`: passa `allowUnsafeEval: process.env.NODE_ENV !== 'production'`,
+     pelo que o build de produção emite a CSP sem `unsafe-eval` e o dev mantém o
+     runtime intacto.
+   - Removido `src/middleware.ts` (ficheiro não rastreado): era um resto de uma
+     tentativa anterior de nonce que, no Next 16, **nunca era executado** (a
+     convenção é `proxy.ts`, não `middleware.ts`) e duplicava a configuração de
+     headers — código morto que só confundia.
+   - Adicionados 2 testes em `securityHeaders.test.ts`: manutenção de `unsafe-eval`
+     em dev e respetiva ausência em produção.
+- **Decisão**: `unsafe-inline` mantém-se (scripts inline do framework Next.js),
+   conforme a limitação conhecida. `unsafe-eval` em produção é seguro de remover
+   porque o bundle de cliente de produção não usa `eval`/`new Function` (dev sim).
+- **Verificação**: `tsc --noEmit` ✓, `eslint` ✓ (0 erros; só warnings
+   pré-existentes), `vitest run` ✓ (93/93 — +2 testes), `next build` ✓ (apenas um
+   "Proxy (Middleware)" = `proxy.ts`, sem o `middleware.ts` morto).
+
+## Pendente / próximas ideias
+- Migrar o state do rate limiter para um store partilhado em produção.
+- Avaliar se os `GET` de lista devem passar para o cliente publishable + RLS
+  (ou continuar a exigir auth no service-role).
+- Reforçar a CSP com nonce/hashing para remover `'unsafe-inline'` (bloqueado
+  pelo facto de o framework Next.js injetar scripts inline sem nonce).

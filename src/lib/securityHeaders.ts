@@ -5,6 +5,13 @@ export interface SecurityHeader {
 
 export interface SecurityHeadersOptions {
   supabaseHost?: string | null
+  /**
+   * When `true` (development) `script-src` keeps `'unsafe-eval'`, which the
+   * Next.js dev runtime needs. In production builds omit it to harden the
+   * policy — the production client bundle does not rely on `eval`/`new Function`.
+   * Defaults to `true` so local dev keeps working unchanged.
+   */
+  allowUnsafeEval?: boolean
 }
 
 /**
@@ -35,15 +42,22 @@ const BASE_HEADERS: SecurityHeader[] = [
 export function getSecurityHeaders(
   options: SecurityHeadersOptions = {}
 ): SecurityHeader[] {
-  const { supabaseHost } = options
+  const { supabaseHost, allowUnsafeEval = true } = options
   const connectSrc =
     supabaseHost && supabaseHost.length > 0
       ? `'self' https://${supabaseHost} wss://${supabaseHost}`
       : "'self'"
 
+  // `unsafe-inline` is kept because the Next.js framework injects inline
+  // bootstrap scripts that cannot carry a nonce. `unsafe-eval` is only needed
+  // by the dev runtime, so it is dropped in production builds.
+  const scriptSrc = allowUnsafeEval
+    ? "'self' 'unsafe-inline' 'unsafe-eval'"
+    : "'self' 'unsafe-inline'"
+
   const csp = [
     "default-src 'self'",
-    "script-src 'self' 'unsafe-inline' 'unsafe-eval'",
+    `script-src ${scriptSrc}`,
     "style-src 'self' 'unsafe-inline'",
     "img-src 'self' data: blob:",
     "font-src 'self' data:",

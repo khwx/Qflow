@@ -49,4 +49,18 @@ describe('getSecurityHeaders', () => {
   it('always returns a non-empty header list', () => {
     expect(getSecurityHeaders().length).toBeGreaterThan(0)
   })
+
+  it('keeps unsafe-eval in development (allowUnsafeEval default true)', () => {
+    const csp = headerValue(getSecurityHeaders(), 'Content-Security-Policy')!
+    expect(csp).toContain("script-src 'self' 'unsafe-inline' 'unsafe-eval'")
+  })
+
+  it('drops unsafe-eval in production builds', () => {
+    const csp = headerValue(
+      getSecurityHeaders({ allowUnsafeEval: false }),
+      'Content-Security-Policy'
+    )!
+    expect(csp).toContain("script-src 'self' 'unsafe-inline'")
+    expect(csp).not.toContain('unsafe-eval')
+  })
 })
