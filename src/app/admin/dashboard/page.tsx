@@ -10,7 +10,7 @@ import type { Ticket as TicketType } from '@/types'
 
 const REFRESH_INTERVAL = 10000
 
-import { timeAgo } from '@/lib/utils'
+import { timeAgo, computeAvgWaitMinutes, computeAvgServiceMinutes } from '@/lib/utils'
 
 function getStatusLabel(status: string): string {
   const labels: Record<string, string> = {
@@ -44,6 +44,7 @@ function DashboardContent() {
     completed: 0,
     cancelled: 0,
     avgWaitTime: 0,
+    avgServiceTime: 0,
     todayTickets: 0,
     gamesPlayed: 0,
   })
@@ -104,19 +105,8 @@ function DashboardContent() {
         const completed = todayTickets.filter(t => t.status === 'completed').length
         const cancelled = todayTickets.filter(t => t.status === 'cancelled').length
 
-        const completedWithTime = todayTickets.filter(
-          t => t.status === 'completed' && t.completed_at && t.called_at
-        )
-        const avgWaitTime =
-          completedWithTime.length > 0
-            ? Math.round(
-                completedWithTime.reduce(
-                  (sum, t) =>
-                    sum + (new Date(t.completed_at!).getTime() - new Date(t.called_at!).getTime()) / 60000,
-                  0
-                ) / completedWithTime.length
-              )
-            : 0
+        const avgWaitTime = computeAvgWaitMinutes(todayTickets)
+        const avgServiceTime = computeAvgServiceMinutes(todayTickets)
 
         setStats({
           totalTickets: tickets.length,
@@ -125,6 +115,7 @@ function DashboardContent() {
           cancelled,
           todayTickets: todayTickets.length,
           avgWaitTime,
+          avgServiceTime,
           gamesPlayed,
         })
 
@@ -187,7 +178,8 @@ function DashboardContent() {
     { label: 'Senhas Hoje', value: stats.todayTickets, icon: Ticket, color: 'from-blue-500 to-blue-600' },
     { label: 'Aguardando', value: stats.waiting, icon: Clock, color: 'from-yellow-400 to-orange-400' },
     { label: 'Atendidos', value: stats.completed, icon: Users, color: 'from-green-400 to-emerald-500' },
-    { label: 'Tempo Médio', value: `${stats.avgWaitTime} min`, icon: TrendingUp, color: 'from-purple-400 to-pink-500' },
+    { label: 'Tempo Médio Espera', value: `${stats.avgWaitTime} min`, icon: TrendingUp, color: 'from-purple-400 to-pink-500' },
+    { label: 'Tempo Médio Atend.', value: `${stats.avgServiceTime} min`, icon: Clock, color: 'from-cyan-400 to-blue-500' },
     { label: 'Taxa Cancel.', value: cancellationRate, icon: AlertCircle, color: 'from-red-400 to-rose-500' },
     { label: 'Engajamento', value: stats.gamesPlayed, icon: BarChart3, color: 'from-teal-400 to-cyan-500' },
   ]

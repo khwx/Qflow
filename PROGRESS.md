@@ -571,3 +571,23 @@ Log de execuções autónomas do Bot Orquestrador (cada 12h).
   cliente publishable + RLS), pelo que não é afetado.
 - **Verificação**: `tsc --noEmit` ✓, `eslint` ✓ (0 erros; só warnings
   pré-existentes), `vitest run` ✓ (101/101 — +9 testes), `next build` ✓.
+
+## 2026-08-24 — Corrigir métrica "Tempo Médio" do dashboard (espera vs. atendimento)
+
+- **Problema**: o README reclama "Tempo médio de espera", mas o card
+  "Tempo Médio" do dashboard calculava `completed_at − called_at`, ou seja, o
+  **tempo de atendimento**, não o tempo de espera (que é `called_at −
+  created_at`). Métrica semanticamente errada e desalinhada com a documentação.
+- **Solução**:
+  - Adicionados `computeAvgWaitMinutes` (criação → chamada) e
+    `computeAvgServiceMinutes` (chamada → conclusão) em `src/lib/utils.ts`,
+    ambos com guarda para valores em falta e para tempos negativos.
+  - `src/app/admin/dashboard/page.tsx`: "Tempo Médio" passa a usar o tempo de
+    **espera** real e adicionou-se um novo card "Tempo Médio Atend." com o
+    tempo de serviço — agora ambas as métricas do README estão cobertas e
+    corretas.
+  - Removido o `completedWithTime` morto que deixou de ser usado.
+  - Criado `src/lib/utils.test.ts` (6 testes: 0/sem chamadas, média de espera,
+    média de atendimento, e ignorar waits negativos).
+- **Verificação**: `tsc --noEmit` ✓, `eslint` ✓ (0 erros; só warning
+  pré-existente `loading` não-usado), `vitest run` ✓ (107/107 — +6 testes).
