@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/supabase'
 import { authenticateRequest } from '@/lib/auth'
 import { assertOwnership } from '@/lib/ownership'
+import { jsonWithPagination, parsePagination } from '@/lib/pagination'
 
 export async function GET(request: Request) {
   const auth = await authenticateRequest(request)
@@ -35,17 +36,23 @@ export async function GET(request: Request) {
     )
     if (ownership) return ownership
 
-    const { data, error } = await createAdminClient()
+    const pagination = parsePagination(searchParams)
+    if ('error' in pagination) {
+      return NextResponse.json({ error: pagination.error }, { status: 400 })
+    }
+
+    const { data, error, count } = await createAdminClient()
       .from('customers')
-      .select('*')
+      .select('*', { count: 'exact' })
       .eq('establishment_id', targetEstId)
       .order('total_points', { ascending: false })
+      .range(pagination.offset, pagination.offset + pagination.limit - 1)
 
     if (error) {
       return NextResponse.json({ error: error.message }, { status: 500 })
     }
 
-    return NextResponse.json(data)
+    return jsonWithPagination(data, pagination, count ?? 0)
   } catch (error) {
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }

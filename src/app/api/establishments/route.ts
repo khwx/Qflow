@@ -3,23 +3,31 @@ import { createAdminClient } from '@/lib/supabase'
 import { rateLimit } from '@/lib/rateLimit'
 import { authenticateRequest } from '@/lib/auth'
 import { assertOwnership } from '@/lib/ownership'
+import { jsonWithPagination, parsePagination } from '@/lib/pagination'
 import { establishmentSchema, validateBody } from '@/lib/validators'
 
 export async function GET(request: Request) {
   const auth = await authenticateRequest(request)
   if ('response' in auth) return auth.response
   try {
-    const { data, error } = await createAdminClient()
+    const { searchParams } = new URL(request.url)
+    const pagination = parsePagination(searchParams)
+    if ('error' in pagination) {
+      return NextResponse.json({ error: pagination.error }, { status: 400 })
+    }
+
+    const { data, error, count } = await createAdminClient()
       .from('establishments')
-      .select('*')
+      .select('*', { count: 'exact' })
       .eq('is_active', true)
       .order('name')
+      .range(pagination.offset, pagination.offset + pagination.limit - 1)
 
     if (error) {
       return NextResponse.json({ error: error.message }, { status: 500 })
     }
 
-    return NextResponse.json(data)
+    return jsonWithPagination(data, pagination, count ?? 0)
   } catch (error) {
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }

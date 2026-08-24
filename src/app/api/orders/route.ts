@@ -3,6 +3,7 @@ import { createAdminClient } from '@/lib/supabase'
 import { rateLimit } from '@/lib/rateLimit'
 import { authenticateRequest } from '@/lib/auth'
 import { assertOwnership } from '@/lib/ownership'
+import { jsonWithPagination, parsePagination } from '@/lib/pagination'
 import { orderSchema, validateBody } from '@/lib/validators'
 
 export async function GET(request: Request) {
@@ -13,9 +14,14 @@ export async function GET(request: Request) {
     const establishmentId = searchParams.get('establishment_id')
     const status = searchParams.get('status')
 
+    const pagination = parsePagination(searchParams)
+    if ('error' in pagination) {
+      return NextResponse.json({ error: pagination.error }, { status: 400 })
+    }
+
     let query = createAdminClient()
       .from('orders')
-      .select('*')
+      .select('*', { count: 'exact' })
       .order('created_at', { ascending: false })
 
     if (establishmentId) {
@@ -26,13 +32,16 @@ export async function GET(request: Request) {
       query = query.eq('status', status)
     }
 
-    const { data, error } = await query
+    const { data, error, count } = await query.range(
+      pagination.offset,
+      pagination.offset + pagination.limit - 1
+    )
 
     if (error) {
       return NextResponse.json({ error: error.message }, { status: 500 })
     }
 
-    return NextResponse.json(data)
+    return jsonWithPagination(data, pagination, count ?? 0)
   } catch (error) {
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }

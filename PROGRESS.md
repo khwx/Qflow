@@ -543,3 +543,31 @@ Log de execuções autónomas do Bot Orquestrador (cada 12h).
   (ou continuar a exigir auth no service-role).
 - Reforçar a CSP com nonce/hashing para remover `'unsafe-inline'` (bloqueado
   pelo facto de o framework Next.js injetar scripts inline sem nonce).
+
+## 2026-08-24 — Paginação nos endpoints de lista da API (fecha gap de escala)
+
+- **Problema**: os `GET` de lista (`establishments`, `queues`, `tickets`,
+  `orders`, `polls`, `games`, `customers`) devolviam **toda** a tabela sem
+  limite — com o tempo (senhas/encomendas acumulam), a resposta cresce sem
+  controlo e não há forma de saber o total. Lacuna real de escalabilidade/API.
+- **Solução**:
+  - Criado `src/lib/pagination.ts` com `parsePagination(searchParams)` (valida
+    `limit` 1–200, `offset` ≥ 0, `page` 1-based → offset) e
+    `jsonWithPagination(data, pagination, total)` que **mantém o body como
+    array** (não-quebrante) e expõe `X-Total-Count`, `X-Pagination-Limit` e
+    `X-Pagination-Offset`.
+  - Aplicado aos 7 handlers `GET` de lista: `.select('*', { count: 'exact' })`
+    + `.range(offset, offset+limit-1)`; `limit`/`offset`/`page` inválidos
+    devolvem 400 com a mensagem do Zod. Default 50/0.
+  - `parsePagination` normaliza `null` (de `URLSearchParams.get`) para
+    `undefined` — caso contrário o `z.coerce.number` converteria `null`→`0` e
+    falharia o `min(1)`, bloqueando qualquer listagem sem o parâmetro.
+  - Criado `src/lib/pagination.test.ts` (9 testes: defaults, limit, offset,
+    page→offset, limites acima/máx, offset negativo, não-numérico, e headers da
+    resposta).
+- **Decisão**: manter o array no body (em vez de envelope `{items,
+  pagination}`) para não quebrar consumidores; o total e a janela vão nos
+  headers (convenção comum de APIs). O frontend não usa estes `/api/*` (usa o
+  cliente publishable + RLS), pelo que não é afetado.
+- **Verificação**: `tsc --noEmit` ✓, `eslint` ✓ (0 erros; só warnings
+  pré-existentes), `vitest run` ✓ (101/101 — +9 testes), `next build` ✓.
