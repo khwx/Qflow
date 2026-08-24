@@ -4,7 +4,7 @@ import { rateLimit } from '@/lib/rateLimit'
 import { publicTicketSchema, validateBody } from '@/lib/validators'
 
 export async function POST(request: Request) {
-  const limited = rateLimit(request, { keyPrefix: 'public-tickets', max: 30, windowMs: 60_000 })
+  const limited = await rateLimit(request, { keyPrefix: 'public-tickets', max: 30, windowMs: 60_000 })
   if (limited.response) return limited.response
 
   const result = await validateBody(request, publicTicketSchema)

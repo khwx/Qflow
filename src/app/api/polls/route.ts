@@ -43,7 +43,7 @@ export async function GET(request: Request) {
 }
 
 export async function POST(request: Request) {
-  const limited = rateLimit(request, { keyPrefix: 'polls' })
+  const limited = await rateLimit(request, { keyPrefix: 'polls' })
   if (limited.response) return limited.response
   const auth = await authenticateRequest(request)
   if ('response' in auth) return auth.response

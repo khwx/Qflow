@@ -1,39 +1,15 @@
 import { NextResponse } from 'next/server'
+import {
+  getRateLimitStore,
+  resetRateLimitStore,
+  MemoryRateLimitStore,
+  type RateLimitBucket,
+  type RateLimitStore,
+} from './rateLimitStore'
 
-type Bucket = { count: number; resetAt: number; createdAt: number }
-
-const buckets = new Map<string, Bucket>()
-
-// Bound memory: never hold more than this many buckets. When exceeded (or every
-// SWEEP_INTERVAL_MS), expired buckets are reclaimed and, if still over the cap,
-// the oldest entries are dropped.
-const MAX_BUCKETS = 10_000
-const SWEEP_INTERVAL_MS = 60_000
-
-let lastSweep = 0
-
-function sweep(now: number): void {
-  if (buckets.size === 0) {
-    lastSweep = now
-    return
-  }
-  const due = now - lastSweep >= SWEEP_INTERVAL_MS
-  if (!due && buckets.size <= MAX_BUCKETS) return
-
-  for (const [key, bucket] of buckets) {
-    if (bucket.resetAt <= now) buckets.delete(key)
-  }
-  lastSweep = now
-
-  if (buckets.size > MAX_BUCKETS) {
-    const excess = buckets.size - MAX_BUCKETS
-    const oldest = [...buckets.entries()]
-      .sort((a, b) => a[1].createdAt - b[1].createdAt)
-      .slice(0, excess)
-      .map(([key]) => key)
-    for (const key of oldest) buckets.delete(key)
-  }
-}
+// Per-process fallback used only when the configured shared store throws, so a
+// transient backend error never blocks legitimate traffic.
+const fallbackStore = new MemoryRateLimitStore()
 
 function getClientIp(request: Request): string {
   const forwarded = request.headers.get('x-forwarded-for')
@@ -47,6 +23,8 @@ export interface RateLimitOptions {
   windowMs?: number
   max?: number
   keyPrefix?: string
+  /** Inject a custom store (used by tests). Defaults to the app-wide store. */
+  store?: RateLimitStore
 }
 
 export interface RateLimitResult {
@@ -55,25 +33,40 @@ export interface RateLimitResult {
   resetAt: number
 }
 
-export function rateLimit(
+export async function rateLimit(
   request: Request,
   options: RateLimitOptions = {}
-): RateLimitResult {
+): Promise<RateLimitResult> {
   const windowMs = options.windowMs ?? 60_000
   const max = options.max ?? 60
   const prefix = options.keyPrefix ?? 'api'
   const key = `${prefix}:${getClientIp(request)}`
 
   const now = Date.now()
-  sweep(now)
-  const bucket = buckets.get(key)
+  const store = options.store ?? getRateLimitStore()
+
+  let bucket: RateLimitBucket | null = null
+  try {
+    bucket = await store.get(key)
+  } catch {
+    bucket = await fallbackStore.get(key)
+  }
 
   if (!bucket || bucket.resetAt <= now) {
-    buckets.set(key, { count: 1, resetAt: now + windowMs, createdAt: now })
+    const created: RateLimitBucket = {
+      count: 1,
+      resetAt: now + windowMs,
+      createdAt: now,
+    }
+    try {
+      await store.set(key, created)
+    } catch {
+      await fallbackStore.set(key, created)
+    }
     return {
       response: null,
       remaining: max - 1,
-      resetAt: now + windowMs,
+      resetAt: created.resetAt,
     }
   }
 
@@ -94,15 +87,20 @@ export function rateLimit(
     return { response, remaining: 0, resetAt: bucket.resetAt }
   }
 
-  bucket.count += 1
+  const updated: RateLimitBucket = { ...bucket, count: bucket.count + 1 }
+  try {
+    await store.set(key, updated)
+  } catch {
+    await fallbackStore.set(key, updated)
+  }
   return {
     response: null,
-    remaining: max - bucket.count,
-    resetAt: bucket.resetAt,
+    remaining: max - updated.count,
+    resetAt: updated.resetAt,
   }
 }
 
 export function clearRateLimitBuckets(): void {
-  buckets.clear()
-  lastSweep = 0
+  fallbackStore.clear()
+  resetRateLimitStore()
 }

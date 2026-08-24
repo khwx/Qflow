@@ -7,7 +7,7 @@ export async function GET(
   _request: Request,
   { params }: { params: Promise<{ slug: string }> }
 ) {
-  const limited = rateLimit(_request, { keyPrefix: 'public-establishments', max: 60, windowMs: 60_000 })
+  const limited = await rateLimit(_request, { keyPrefix: 'public-establishments', max: 60, windowMs: 60_000 })
   if (limited.response) return limited.response
 
   const { slug } = await params

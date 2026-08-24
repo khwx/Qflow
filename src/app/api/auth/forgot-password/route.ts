@@ -4,7 +4,7 @@ import { rateLimit } from '@/lib/rateLimit'
 import { forgotPasswordSchema, validateBody } from '@/lib/validators'
 
 export async function POST(request: Request) {
-  const limited = rateLimit(request, { keyPrefix: 'auth', max: 5, windowMs: 60_000 })
+  const limited = await rateLimit(request, { keyPrefix: 'auth', max: 5, windowMs: 60_000 })
   if (limited.response) return limited.response
   try {
     const result = await validateBody(request, forgotPasswordSchema)

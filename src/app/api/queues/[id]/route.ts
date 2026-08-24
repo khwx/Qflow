@@ -35,7 +35,7 @@ export async function PATCH(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  const limited = rateLimit(request, { keyPrefix: 'queues' })
+  const limited = await rateLimit(request, { keyPrefix: 'queues' })
   if (limited.response) return limited.response
   const auth = await authenticateRequest(request)
   if ('response' in auth) return auth.response
@@ -67,7 +67,7 @@ export async function DELETE(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  const limited = rateLimit(request, { keyPrefix: 'queues' })
+  const limited = await rateLimit(request, { keyPrefix: 'queues' })
   if (limited.response) return limited.response
   const auth = await authenticateRequest(request)
   if ('response' in auth) return auth.response

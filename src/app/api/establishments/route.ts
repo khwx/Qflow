@@ -34,7 +34,7 @@ export async function GET(request: Request) {
 }
 
 export async function POST(request: Request) {
-  const limited = rateLimit(request, { keyPrefix: 'establishments' })
+  const limited = await rateLimit(request, { keyPrefix: 'establishments' })
   if (limited.response) return limited.response
   const auth = await authenticateRequest(request)
   if ('response' in auth) return auth.response

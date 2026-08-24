@@ -538,11 +538,12 @@ Log de execuções autónomas do Bot Orquestrador (cada 12h).
    "Proxy (Middleware)" = `proxy.ts`, sem o `middleware.ts` morto).
 
 ## Pendente / próximas ideias
-- Migrar o state do rate limiter para um store partilhado em produção.
 - Avaliar se os `GET` de lista devem passar para o cliente publishable + RLS
   (ou continuar a exigir auth no service-role).
 - Reforçar a CSP com nonce/hashing para remover `'unsafe-inline'` (bloqueado
   pelo facto de o framework Next.js injetar scripts inline sem nonce).
+- Agendar `rate_limit_cleanup()` (cron/Supabase) em produção para evitar
+  crescimento da tabela `rate_limits`.
 
 ## 2026-08-24 — Paginação nos endpoints de lista da API (fecha gap de escala)
 
@@ -591,3 +592,34 @@ Log de execuções autónomas do Bot Orquestrador (cada 12h).
     média de atendimento, e ignorar waits negativos).
 - **Verificação**: `tsc --noEmit` ✓, `eslint` ✓ (0 erros; só warning
   pré-existente `loading` não-usado), `vitest run` ✓ (107/107 — +6 testes).
+
+## 2026-08-24 — Rate limiter com store partilhado em produção (fecha item pendente)
+
+- **Problema**: o rate limiter era 100% em memória (`Map` module-level). Em
+  produção serverless (Vercel) há múltiplas instâncias/replicas, pelo que cada
+  replica mantinha o seu próprio contador — a quota não era aplicada de forma
+  global e um atacante podia contornar o limite dividindo os pedidos pelas
+  instâncias. Item pendente das iterações anteriores.
+- **Solução**: extrair o armazenamento para trás de uma interface
+  `RateLimitStore` (`src/lib/rateLimitStore.ts`):
+  - `MemoryRateLimitStore` (default, por-instância) — preserva o comportamento
+    anterior (janela fixa deslizante + sweep de buckets expirados/mais antigos
+    para limitar memória).
+  - `SupabaseRateLimitStore` (partilhado) — lê/escreve uma linha por chave na
+    tabela `rate_limits` via upsert; usado automaticamente quando há credenciais
+    de service-role disponíveis (produção), com **fallback gracioso** para o
+    store em memória se o backend falhar (nunca bloqueia tráfego legítimo).
+  - `getRateLimitStore()` devolve o singleton adequado; `rateLimit()` faz
+    `await` e, em caso de erro do store, cai para o `fallbackStore` em memória.
+  - `rateLimit()` passa a ser `async`; os ~26 call sites (routes) foram
+    actualizados para `await rateLimit(...)`.
+  - `supabase/rate-limit.sql`: tabela `rate_limits` + índice em `reset_at` +
+    função `rate_limit_cleanup()` para remover linhas expiradas (cron).
+- **Decisão**: manter a consistência eventual do rate limiting (tolerável para
+  throttling) em vez de transação estrita — evita latência/lock por pedido;
+  a geração atómica de senhas (`create_ticket`) continua a usar transação DB.
+  O store em memória continua a ser o default em dev/testes/CI (sem credenciais
+  de produção), pelo que o comportamento e os testes existentes mantêm-se.
+- **Verificação**: `tsc --noEmit` ✓, `eslint` ✓ (0 erros; só warnings
+  pré-existentes), `vitest run` ✓ (116/116 — +9 testes: store em memória +
+  fallback + `SupabaseRateLimitStore` com cliente fake), `next build` ✓.
