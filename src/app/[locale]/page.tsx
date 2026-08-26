@@ -20,7 +20,7 @@ export default function Home({ params }: { params: Promise<{ locale: string }> }
 
   const handleAuthClick = () => {
     if (user) {
-      router.push('/admin/dashboard')
+      window.location.href = '/admin/dashboard'
     } else {
       router.push('/auth/login')
     }
@@ -59,12 +59,12 @@ export default function Home({ params }: { params: Promise<{ locale: string }> }
               {tAuth('logout', { default: 'Logout' })}
             </button>
           )}
-          <Link
+          <a
             href="/admin"
             className="hidden sm:inline-flex rounded-lg bg-white/10 px-4 py-2 text-white hover:bg-white/20 transition"
           >
             {t('admin')}
-          </Link>
+          </a>
           <Link
             href="/tv-display"
             className="hidden md:inline-flex rounded-lg bg-white/10 px-4 py-2 text-white hover:bg-white/20 transition"

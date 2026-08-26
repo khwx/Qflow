@@ -176,9 +176,9 @@ export default function QueuePage({ params }: { params: Promise<{ locale: string
                 <p className="text-gray-500 dark:text-gray-400">{t('no_queues')}</p>
                 <p className="text-xs text-gray-400 dark:text-gray-500 mt-3">
                   Se és o dono,{' '}
-                  <Link href={`/admin/queues?est=${code}`} className="text-indigo-600 dark:text-indigo-400 underline">
+                  <a href={`/admin/queues?est=${code}`} className="text-indigo-600 dark:text-indigo-400 underline">
                     cria a primeira fila aqui
-                  </Link>
+                  </a>
                 </p>
               </div>
             )}

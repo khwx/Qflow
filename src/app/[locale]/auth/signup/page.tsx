@@ -45,7 +45,7 @@ export default function SignupPage() {
 
     toast.success(t('signup_success'))
     localStorage.setItem('locale', locale)
-    router.push(`/${locale}/admin/dashboard`)
+    window.location.href = '/admin/dashboard'
   }
 
   return (

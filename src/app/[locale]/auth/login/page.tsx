@@ -34,7 +34,7 @@ export default function LoginPage() {
     localStorage.setItem('locale', locale)
 
     const redirect = new URLSearchParams(window.location.search).get('redirect')
-    window.location.href = redirect || `/${locale}/admin/dashboard`
+    window.location.href = redirect || '/admin/dashboard'
   }
 
   return (
