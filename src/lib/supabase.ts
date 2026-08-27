@@ -1,9 +1,6 @@
 import { createClient, type SupabaseClient } from '@supabase/supabase-js'
 
-let clientInstance: SupabaseClient | null = null
-
 export function createClientComponentClient(): SupabaseClient {
-  if (clientInstance) return clientInstance
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.SUPABASE_URL
   const key =
     process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY ||
@@ -15,8 +12,7 @@ export function createClientComponentClient(): SupabaseClient {
       'Missing Supabase env vars: NEXT_PUBLIC_SUPABASE_URL + NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY (ou NEXT_PUBLIC_SUPABASE_ANON_KEY)'
     )
   }
-  clientInstance = createClient(url, key, { auth: { persistSession: true, autoRefreshToken: true } })
-  return clientInstance
+  return createClient(url, key, { auth: { persistSession: true, autoRefreshToken: true } })
 }
 
 export function createAdminClient(): SupabaseClient {
