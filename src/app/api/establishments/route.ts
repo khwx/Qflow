@@ -97,7 +97,16 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: error.message }, { status: 500 })
     }
 
-    // Fila padrão criada pelo trigger trg_ensure_default_queue (schema.sql)
+    // Fila padrão criada pelo trigger trg_ensure_default_queue (schema.sql) ou inserção explícita
+    await admin.from('queues').insert({
+      establishment_id: data.id,
+      name: 'Geral',
+      description: 'Fila Geral',
+      is_active: true,
+      current_number: 0,
+      estimated_wait_minutes: 5,
+    }).select().maybeSingle()
+
     return NextResponse.json(data, { status: 201 })
   } catch (error) {
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })

@@ -22,11 +22,29 @@ function QueuesContent() {
 
   const loadData = async (establishmentId: string) => {
     try {
-      const { data: queuesData } = await supabase
+      let { data: queuesData } = await supabase
         .from('queues')
         .select('*')
         .eq('establishment_id', establishmentId)
         .order('name')
+
+      if (!queuesData || queuesData.length === 0) {
+        const { data: newQ } = await supabase
+          .from('queues')
+          .insert({
+            establishment_id: establishmentId,
+            name: 'Geral',
+            description: 'Fila Geral',
+            is_active: true,
+            current_number: 0,
+            estimated_wait_minutes: 5,
+          })
+          .select()
+          .single()
+        if (newQ) {
+          queuesData = [newQ]
+        }
+      }
 
       if (queuesData) {
         setQueues(queuesData)
