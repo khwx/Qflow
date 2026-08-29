@@ -167,6 +167,10 @@ function DashboardContent() {
     )
   }
 
+  if (loading && recentTickets.length === 0) {
+    return <DashboardSkeleton />
+  }
+
   const maxHourly = Math.max(...hourlyData.map(h => h.count), 1)
 
   const cancellationRate =

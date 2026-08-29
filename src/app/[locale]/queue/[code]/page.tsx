@@ -1,12 +1,12 @@
 'use client'
 
-import { useState, useEffect, use } from 'react'
+import { useState, useEffect, useCallback, use } from 'react'
 import { useTranslations } from 'next-intl'
-import { useRouter, Link } from '@/i18n/navigation'
+import { useRouter } from '@/i18n/navigation'
 import { Establishment, Queue, Ticket } from '@/types'
 import { cn, getEstimatedWait } from '@/lib/utils'
 import toast from 'react-hot-toast'
-import { QrCode, Clock, Users, AlertCircle, CheckCircle2 } from 'lucide-react'
+import { Clock, Users, AlertCircle, CheckCircle2, Mail } from 'lucide-react'
 
 export default function QueuePage({ params }: { params: Promise<{ locale: string; code: string }> }) {
   const { locale, code } = use(params)
@@ -24,7 +24,7 @@ export default function QueuePage({ params }: { params: Promise<{ locale: string
   const [customerEmail, setCustomerEmail] = useState('')
   const router = useRouter()
 
-  const loadData = async () => {
+  const loadData = useCallback(async () => {
     try {
       const res = await fetch(`/api/public/establishments/${code.toLowerCase()}`)
       if (res.ok) {
@@ -37,15 +37,15 @@ export default function QueuePage({ params }: { params: Promise<{ locale: string
     } finally {
       setLoading(false)
     }
-  }
+  }, [code])
 
   useEffect(() => {
     if (!code) {
       router.push(`/${locale}/enter`)
       return
     }
-    queueMicrotask(loadData)
-  }, [code, locale])
+    queueMicrotask(() => loadData())
+  }, [code, locale, loadData, router])
 
   const validatePhone = (phone: string) => {
     const cleaned = phone.replace(/\D/g, '')
@@ -157,6 +157,7 @@ export default function QueuePage({ params }: { params: Promise<{ locale: string
         <div className="text-center mb-8 animate-slide-up">
           <div className="w-20 h-20 bg-white/20 rounded-2xl flex items-center justify-center mx-auto mb-4 backdrop-blur-sm">
             {establishment.logo_url ? (
+              // eslint-disable-next-line @next/next/no-img-element
               <img src={establishment.logo_url} alt={establishment.name} className="w-16 h-16 object-contain" />
             ) : (
               <span className="text-3xl font-bold text-white">{establishment.name[0]}</span>
@@ -247,6 +248,22 @@ export default function QueuePage({ params }: { params: Promise<{ locale: string
                   className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-indigo-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition"
                 />
                 <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">Formato: (00) 00000-0000</p>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                  E-mail (opcional)
+                </label>
+                <div className="relative">
+                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
+                  <input
+                    type="email"
+                    value={customerEmail}
+                    onChange={(e) => setCustomerEmail(e.target.value)}
+                    placeholder="cliente@exemplo.com"
+                    className="w-full pl-10 pr-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-indigo-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition"
+                  />
+                </div>
               </div>
 
               <button

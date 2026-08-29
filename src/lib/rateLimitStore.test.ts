@@ -10,9 +10,9 @@ class FakeSupabaseClient {
     { count: number; reset_at: string; created_at: string }
   >()
 
-  from(_table: string) {
+  from() {
     return {
-      select: (_cols: string) => ({
+      select: () => ({
         eq: (col: string, value: string) => {
           if (col !== 'key') throw new Error('unexpected eq column')
           return {

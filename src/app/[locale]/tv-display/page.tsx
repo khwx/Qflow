@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 import { useTranslations } from 'next-intl'
 import { createClientComponentClient } from '@/lib/supabase'
 import { Ticket, Establishment, Queue } from '@/types'
@@ -19,26 +19,55 @@ export default function TVDisplayPage() {
   const [connecting, setConnecting] = useState(false)
   const supabase = createClientComponentClient()
   const channelRef = useRef<ReturnType<typeof supabase.channel> | null>(null)
-  const audioRef = useRef<HTMLAudioElement | null>(null)
   const soundEnabledRef = useRef(soundEnabled)
-  const ticketsRef = useRef<Ticket[]>([])
+  const knownCalledIdsRef = useRef<Set<string>>(new Set())
+  const initialLoadDoneRef = useRef(false)
 
   useEffect(() => { soundEnabledRef.current = soundEnabled }, [soundEnabled])
-  useEffect(() => { ticketsRef.current = tickets }, [tickets])
 
   useEffect(() => {
     const timer = setInterval(() => setCurrentTime(new Date()), 1000)
     return () => clearInterval(timer)
   }, [])
 
-  useEffect(() => {
-    if (soundEnabled && typeof window !== 'undefined') {
-      audioRef.current = new Audio('data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdH+JkI+Fd2Btf4aRk46EeWd0g4uUk5CKg31ue4OQlZGQiH54dYCLlJOPiYJ+eHuEjpSTkIeBfHh8hY2VlJCGgHx4fYWOlpSRh4B8eX6Gj5aVkYaAfXp/h4+XlpKGgX17f4eQl5eThoF9fH+IkJeYkoWBfn2AiJCYmZOFgX5+gYmRmZqUhYF/f4KJkZqblYSCf4GCiZKbnJWFg3+BgoqTnJ2VhYN/goOLlJ2elYaEf4KDjJWen5aGhX+DhI2Wn6CXh4Z/g4SOl6Cgl4eHf4SEj5mhoZiHiH+FiI+Zo6KZh4h/hYiQmaSjmYeJf4aJkJmlo5qIin+HiZGZpqOaiIt/h4qSmaekeA==')
-      audioRef.current.volume = 0.3
-    }
-  }, [soundEnabled])
+  const playChimeAndAnnounce = useCallback((ticketNumbers: string[]) => {
+    if (!soundEnabledRef.current || typeof window === 'undefined') return
 
-  const loadEstablishment = async (slug: string) => {
+    try {
+      const AudioCtx = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext
+      if (AudioCtx) {
+        const audioCtx = new AudioCtx()
+        const notes = [523.25, 659.25, 783.99] // C5, E5, G5 chime
+        notes.forEach((freq, i) => {
+          const osc = audioCtx.createOscillator()
+          const gain = audioCtx.createGain()
+          osc.type = 'sine'
+          osc.frequency.value = freq
+          gain.connect(audioCtx.destination)
+          gain.gain.setValueAtTime(0.25, audioCtx.currentTime + i * 0.12)
+          gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + i * 0.12 + 0.5)
+          osc.start(audioCtx.currentTime + i * 0.12)
+          osc.stop(audioCtx.currentTime + i * 0.12 + 0.5)
+        })
+      }
+    } catch {
+      // Audio context can fail if autoplay policy blocks before interaction
+    }
+
+    if ('speechSynthesis' in window && ticketNumbers.length > 0) {
+      try {
+        const text = ticketNumbers.map(num => `Senha ${num}`).join('. ')
+        const utterance = new SpeechSynthesisUtterance(text)
+        utterance.lang = 'pt-BR'
+        utterance.rate = 0.95
+        window.speechSynthesis.speak(utterance)
+      } catch {
+        // Speech synthesis fallback
+      }
+    }
+  }, [])
+
+  const loadEstablishment = useCallback(async (slug: string) => {
     setNotFound(false)
     const { data: est, error } = await supabase
       .from('establishments')
@@ -54,9 +83,9 @@ export default function TVDisplayPage() {
     }
     setEstablishment(est)
     return est
-  }
+  }, [supabase])
 
-  const loadQueues = async (estId: string) => {
+  const loadQueues = useCallback(async (estId: string) => {
     const { data: queueData } = await supabase
       .from('queues')
       .select('*')
@@ -68,9 +97,9 @@ export default function TVDisplayPage() {
       return queueData
     }
     return []
-  }
+  }, [supabase])
 
-  const loadTickets = async (estId: string) => {
+  const loadTickets = useCallback(async (estId: string) => {
     const { data: queueData } = await supabase
       .from('queues')
       .select('id')
@@ -87,22 +116,30 @@ export default function TVDisplayPage() {
         .order('created_at')
 
       if (ticketData) {
-        const prevCalled = ticketsRef.current.filter(t => t.status === 'called').length
-        const newCalled = ticketData.filter(t => t.status === 'called').length
+        const currentCalled = ticketData.filter(t => t.status === 'called')
+        const currentCalledIds = new Set(currentCalled.map(t => t.id))
 
-        if (newCalled > prevCalled && soundEnabledRef.current && audioRef.current) {
-          audioRef.current.play().catch(() => {})
+        if (initialLoadDoneRef.current) {
+          const newlyCalled = currentCalled.filter(t => !knownCalledIdsRef.current.has(t.id))
+          if (newlyCalled.length > 0) {
+            playChimeAndAnnounce(newlyCalled.map(t => t.ticket_number))
+          }
+        } else {
+          initialLoadDoneRef.current = true
         }
 
+        knownCalledIdsRef.current = currentCalledIds
         setTickets(ticketData)
       }
     }
-  }
+  }, [supabase, playChimeAndAnnounce])
 
   useEffect(() => {
     if (!code) return
 
     let cancelled = false
+    initialLoadDoneRef.current = false
+    knownCalledIdsRef.current = new Set()
     queueMicrotask(() => setConnecting(true))
 
     const setup = async () => {
@@ -150,7 +187,7 @@ export default function TVDisplayPage() {
         channelRef.current = null
       }
     }
-  }, [code])
+  }, [code, loadEstablishment, loadQueues, loadTickets, supabase])
 
   if (!code) {
     return (
@@ -311,8 +348,8 @@ export default function TVDisplayPage() {
                            className={cn(
                              'flex justify-between items-center py-2 px-3 rounded-lg',
                              i === 0
-                               ? 'bg-white/10 border border-white/20'
-                               : 'bg-white/5'
+                                ? 'bg-white/10 border border-white/20'
+                                : 'bg-white/5'
                            )}
                          >
                            <span className={cn(

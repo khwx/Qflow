@@ -1,10 +1,10 @@
 'use client'
 
-import { Suspense, useState, useEffect } from 'react'
+import { Suspense, useState, useEffect, useRef, useCallback } from 'react'
 import { createClientComponentClient } from '@/lib/supabase'
 import { Queue, Ticket, Establishment } from '@/types'
 import toast from 'react-hot-toast'
-import { Plus, Play, Check, X, Trash2, Users } from 'lucide-react'
+import { Plus, Play, Check, Trash2, Users } from 'lucide-react'
 import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { Skeleton } from '@/components/ui/Skeleton'
@@ -19,8 +19,9 @@ function QueuesContent() {
   const [showForm, setShowForm] = useState(false)
   const [newQueue, setNewQueue] = useState({ name: '', description: '', estimated_wait_minutes: 5 })
   const supabase = createClientComponentClient()
+  const channelRef = useRef<ReturnType<typeof supabase.channel> | null>(null)
 
-  const loadData = async (establishmentId: string) => {
+  const loadData = useCallback(async (establishmentId: string) => {
     try {
       let { data: queuesData } = await supabase
         .from('queues')
@@ -66,7 +67,7 @@ function QueuesContent() {
     } finally {
       setLoading(false)
     }
-  }
+  }, [supabase])
 
   useEffect(() => {
     if (estSlug) {
@@ -80,7 +81,35 @@ function QueuesContent() {
           if (data) queueMicrotask(() => loadData(data.id))
         })
     }
-  }, [estSlug])
+  }, [estSlug, supabase, loadData])
+
+  useEffect(() => {
+    if (!establishment) return
+    const estId = establishment.id
+
+    if (channelRef.current) {
+      supabase.removeChannel(channelRef.current)
+    }
+
+    const channel = supabase
+      .channel(`admin-queues-${estId}`)
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'tickets' }, () => {
+        loadData(estId)
+      })
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'queues' }, () => {
+        loadData(estId)
+      })
+      .subscribe()
+
+    channelRef.current = channel
+
+    return () => {
+      if (channelRef.current) {
+        supabase.removeChannel(channelRef.current)
+        channelRef.current = null
+      }
+    }
+  }, [establishment, loadData, supabase])
 
   const createQueue = async (e: React.FormEvent) => {
     e.preventDefault()

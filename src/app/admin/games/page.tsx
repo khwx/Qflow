@@ -1,6 +1,6 @@
 'use client'
 
-import { Suspense, useState, useEffect } from 'react'
+import { Suspense, useState, useEffect, useCallback } from 'react'
 import { createClientComponentClient } from '@/lib/supabase'
 import { Game, Establishment } from '@/types'
 import toast from 'react-hot-toast'
@@ -22,7 +22,7 @@ function GamesContent() {
   })
   const supabase = createClientComponentClient()
 
-  const loadGames = async (establishmentId: string) => {
+  const loadGames = useCallback(async (establishmentId: string) => {
     try {
       const { data } = await supabase
         .from('games')
@@ -34,7 +34,7 @@ function GamesContent() {
     } catch (error) {
       console.error('Load games error:', error)
     }
-  }
+  }, [supabase])
 
   useEffect(() => {
     if (estSlug) {
@@ -45,10 +45,10 @@ function GamesContent() {
         .single()
         .then(({ data }) => {
           setEstablishment(data)
-          if (data) loadGames(data.id)
+          if (data) queueMicrotask(() => loadGames(data.id))
         })
     }
-  }, [estSlug])
+  }, [estSlug, supabase, loadGames])
 
   const createGame = async (e: React.FormEvent) => {
     e.preventDefault()

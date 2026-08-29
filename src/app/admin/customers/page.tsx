@@ -1,6 +1,6 @@
 'use client'
 
-import { Suspense, useState, useEffect } from 'react'
+import { Suspense, useState, useEffect, useCallback } from 'react'
 import { createClientComponentClient } from '@/lib/supabase'
 import { Customer, Establishment } from '@/types'
 import toast from 'react-hot-toast'
@@ -19,7 +19,7 @@ function CustomersContent() {
   const [savingId, setSavingId] = useState<string | null>(null)
   const supabase = createClientComponentClient()
 
-  const loadCustomers = async (establishmentId: string) => {
+  const loadCustomers = useCallback(async (establishmentId: string) => {
     try {
       setLoading(true)
       const { data } = await supabase
@@ -46,7 +46,7 @@ function CustomersContent() {
     } finally {
       setLoading(false)
     }
-  }
+  }, [search, supabase])
 
   useEffect(() => {
     if (estSlug) {
@@ -60,13 +60,13 @@ function CustomersContent() {
           if (data) queueMicrotask(() => loadCustomers(data.id))
         })
     }
-  }, [estSlug])
+  }, [estSlug, supabase, loadCustomers])
 
   useEffect(() => {
     if (establishment) {
       queueMicrotask(() => loadCustomers(establishment.id))
     }
-  }, [search, establishment])
+  }, [establishment, loadCustomers])
 
   const saveCustomer = async (
     id: string,

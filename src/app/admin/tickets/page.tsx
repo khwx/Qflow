@@ -1,25 +1,31 @@
 'use client'
 
-import { Suspense, useState, useEffect } from 'react'
+import { Suspense, useState, useEffect, useRef, useCallback } from 'react'
 import { createClientComponentClient } from '@/lib/supabase'
 import { Ticket, Establishment } from '@/types'
 import toast from 'react-hot-toast'
-import { Check, X, Search, Play } from 'lucide-react'
+import { Check, X, Search, Play, Download } from 'lucide-react'
 import { useSearchParams } from 'next/navigation'
 import { DashboardSkeleton } from '@/components/ui/Skeleton'
 import Link from 'next/link'
+import { generateCsv, downloadCsv, type CsvColumn } from '@/lib/exportCsv'
+
+interface TicketWithQueue extends Ticket {
+  queues?: { name: string } | null
+}
 
 function TicketsContent() {
   const searchParams = useSearchParams()
   const estSlug = searchParams.get('est')
   const [establishment, setEstablishment] = useState<Establishment | null>(null)
-  const [tickets, setTickets] = useState<Ticket[]>([])
+  const [tickets, setTickets] = useState<TicketWithQueue[]>([])
   const [filter, setFilter] = useState('all')
   const [search, setSearch] = useState('')
   const [loading, setLoading] = useState(!estSlug)
   const supabase = createClientComponentClient()
+  const channelRef = useRef<ReturnType<typeof supabase.channel> | null>(null)
 
-  const loadTickets = async (establishmentId: string) => {
+  const loadTickets = useCallback(async (establishmentId: string) => {
     try {
       setLoading(true)
       let query = supabase
@@ -35,9 +41,9 @@ function TicketsContent() {
       const { data } = await query
 
       if (data) {
-        let filtered = data
+        let filtered = data as TicketWithQueue[]
         if (search) {
-          filtered = data.filter((t: Ticket) =>
+          filtered = filtered.filter((t) =>
             t.ticket_number.toLowerCase().includes(search.toLowerCase()) ||
             t.customer_name?.toLowerCase().includes(search.toLowerCase())
           )
@@ -49,7 +55,7 @@ function TicketsContent() {
     } finally {
       setLoading(false)
     }
-  }
+  }, [filter, search, supabase])
 
   useEffect(() => {
     if (estSlug) {
@@ -63,13 +69,34 @@ function TicketsContent() {
           if (data) queueMicrotask(() => loadTickets(data.id))
         })
     }
-  }, [estSlug])
+  }, [estSlug, supabase, loadTickets])
 
   useEffect(() => {
-    if (establishment) {
-      queueMicrotask(() => loadTickets(establishment.id))
+    if (!establishment) return
+
+    const estId = establishment.id
+    queueMicrotask(() => loadTickets(estId))
+
+    if (channelRef.current) {
+      supabase.removeChannel(channelRef.current)
     }
-  }, [filter, establishment])
+
+    const channel = supabase
+      .channel(`admin-tickets-${estId}`)
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'tickets' }, () => {
+        loadTickets(estId)
+      })
+      .subscribe()
+
+    channelRef.current = channel
+
+    return () => {
+      if (channelRef.current) {
+        supabase.removeChannel(channelRef.current)
+        channelRef.current = null
+      }
+    }
+  }, [establishment, loadTickets, supabase])
 
   const updateStatus = async (id: string, status: Ticket['status']) => {
     const statusLabels: Record<string, string> = {
@@ -98,6 +125,38 @@ function TicketsContent() {
     if (establishment) loadTickets(establishment.id)
   }
 
+  const exportCsvData = () => {
+    if (tickets.length === 0) {
+      toast.error('Nenhuma senha para exportar')
+      return
+    }
+
+    const statusLabels: Record<string, string> = {
+      waiting: 'Aguardando',
+      called: 'Chamado',
+      serving: 'Em atendimento',
+      completed: 'Concluído',
+      cancelled: 'Cancelado',
+    }
+
+    const columns: CsvColumn<TicketWithQueue>[] = [
+      { header: 'Senha', accessor: 'ticket_number' },
+      { header: 'Fila', accessor: (t) => t.queues?.name || '' },
+      { header: 'Cliente', accessor: (t) => t.customer_name || '' },
+      { header: 'Telefone', accessor: (t) => t.customer_phone || '' },
+      { header: 'E-mail', accessor: (t) => t.customer_email || '' },
+      { header: 'Status', accessor: (t) => statusLabels[t.status] || t.status },
+      { header: 'Criado em', accessor: (t) => new Date(t.created_at).toLocaleString('pt-BR') },
+      { header: 'Chamado em', accessor: (t) => t.called_at ? new Date(t.called_at).toLocaleString('pt-BR') : '' },
+      { header: 'Concluído em', accessor: (t) => t.completed_at ? new Date(t.completed_at).toLocaleString('pt-BR') : '' },
+    ]
+
+    const csv = generateCsv(tickets, columns)
+    const filename = `senhas-${establishment?.slug || 'export'}-${new Date().toISOString().split('T')[0]}.csv`
+    downloadCsv(csv, filename)
+    toast.success('CSV exportado com sucesso!')
+  }
+
   const getStatusBadge = (status: string) => {
     const styles = {
       waiting: 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400',
@@ -120,7 +179,7 @@ function TicketsContent() {
     )
   }
 
-  if (loading) {
+  if (loading && !establishment) {
     return <DashboardSkeleton />
   }
 
@@ -140,11 +199,19 @@ function TicketsContent() {
 
   return (
     <div className="animate-fade-in">
-      <div className="flex justify-between items-center mb-6">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
         <div>
           <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Senhas</h2>
           <p className="text-gray-600 dark:text-gray-400">Gerencie todas as senhas de {establishment.name}</p>
         </div>
+        <button
+          onClick={exportCsvData}
+          disabled={tickets.length === 0}
+          className="inline-flex items-center gap-2 bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 hover:bg-indigo-100 dark:hover:bg-indigo-900/50 px-4 py-2 rounded-xl transition-all font-medium disabled:opacity-50"
+        >
+          <Download className="h-4 w-4" />
+          Exportar CSV
+        </button>
       </div>
 
       <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm p-4 mb-6 border border-gray-200 dark:border-gray-700">
@@ -185,7 +252,7 @@ function TicketsContent() {
             </tr>
           </thead>
           <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
-            {tickets.map((ticket: Ticket) => (
+            {tickets.map((ticket: TicketWithQueue) => (
               <tr key={ticket.id} className="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
                 <td className="px-6 py-4 whitespace-nowrap">
                   <span className="text-lg font-bold text-indigo-600 dark:text-indigo-400">
@@ -193,7 +260,7 @@ function TicketsContent() {
                   </span>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
-                   {(ticket as unknown as { queues: { name: string } | null }).queues?.name || '-'}
+                   {ticket.queues?.name || '-'}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
                   {ticket.customer_name || '-'}

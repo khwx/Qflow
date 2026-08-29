@@ -42,7 +42,7 @@ export async function GET(request: Request) {
     }
 
     return jsonWithPagination(data, pagination, count ?? 0)
-  } catch (error) {
+  } catch (_error) {
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
 }
@@ -79,7 +79,7 @@ export async function POST(request: Request) {
     }
 
     return NextResponse.json(data, { status: 201 })
-  } catch (error) {
+  } catch (_error) {
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
 }

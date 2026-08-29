@@ -1,6 +1,6 @@
 'use client'
 
-import { use, useState, useEffect, useRef } from 'react'
+import { use, useState, useEffect, useRef, useCallback } from 'react'
 import { useTranslations } from 'next-intl'
 import { createClientComponentClient } from '@/lib/supabase'
 import { Ticket, Game, Poll, Queue, Establishment } from '@/types'
@@ -13,10 +13,9 @@ import { cn } from '@/lib/utils'
 type Tab = 'games' | 'polls' | 'orders'
 
 export default function WaitingPage({ params }: { params: Promise<{ locale: string; ticketId: string }> }) {
-  const { locale, ticketId } = use(params)
+  const { ticketId } = use(params)
   const t = useTranslations('waiting')
   const tGames = useTranslations('games')
-  const tPolls = useTranslations('polls')
   const tCalled = useTranslations('called')
   const tTicket = useTranslations('ticket')
 
@@ -29,8 +28,6 @@ export default function WaitingPage({ params }: { params: Promise<{ locale: stri
   const [loading, setLoading] = useState(true)
   const [selectedGame, setSelectedGame] = useState<Game | null>(null)
   const [customerPoints, setCustomerPoints] = useState(0)
-  const [waitingSince, setWaitingSince] = useState<Date | null>(null)
-  const [elapsedMinutes, setElapsedMinutes] = useState(0)
   const [soundEnabled, setSoundEnabled] = useState(true)
   const soundPlayedRef = useRef(false)
   const soundEnabledRef = useRef(true)
@@ -59,7 +56,7 @@ export default function WaitingPage({ params }: { params: Promise<{ locale: stri
     }
   }
 
-  const loadPoints = async (targetTicketId: string) => {
+  const loadPoints = useCallback(async (targetTicketId: string) => {
     try {
       const { data } = await supabase
         .from('game_scores')
@@ -85,9 +82,9 @@ export default function WaitingPage({ params }: { params: Promise<{ locale: stri
     } catch (error) {
       console.error('Load points error:', error)
     }
-  }
+  }, [supabase])
 
-  const loadData = async () => {
+  const loadData = useCallback(async () => {
     try {
       const { data: ticketData } = await supabase
         .from('tickets')
@@ -99,8 +96,6 @@ export default function WaitingPage({ params }: { params: Promise<{ locale: stri
         setTicket(ticketData)
         setEstablishment(ticketData.establishments)
         setQueue(ticketData.queues as Queue)
-        setWaitingSince(new Date(ticketData.created_at))
-        setElapsedMinutes(0)
 
         const { data: gamesData } = await supabase
           .from('games')
@@ -125,10 +120,10 @@ export default function WaitingPage({ params }: { params: Promise<{ locale: stri
     } finally {
       setLoading(false)
     }
-  }
+  }, [ticketId, supabase, loadPoints])
 
   useEffect(() => {
-    queueMicrotask(loadData)
+    queueMicrotask(() => loadData())
 
     const channel = supabase
       .channel('ticket-updates')
@@ -156,7 +151,7 @@ export default function WaitingPage({ params }: { params: Promise<{ locale: stri
     return () => {
       supabase.removeChannel(channel)
     }
-  }, [ticketId])
+  }, [ticketId, loadData, supabase])
 
   const getQueuePosition = () => {
     if (!ticket || !queue) return null
@@ -171,22 +166,9 @@ export default function WaitingPage({ params }: { params: Promise<{ locale: stri
   const getProgressPercent = () => {
     if (!ticket || !queue) return 0
     const ticketNum = parseInt(ticket.ticket_number.split('-')[1] || '0')
-    const maxNum = queue.current_number + 10
     if (ticketNum >= queue.current_number) return Math.min(100, ((queue.current_number / ticketNum) * 100))
     return 0
   }
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      if (waitingSince) {
-        const now = new Date()
-        const diff = Math.floor((now.getTime() - waitingSince.getTime()) / 60000)
-        setElapsedMinutes(diff)
-      }
-    }, 60000)
-
-    return () => clearInterval(timer)
-  }, [waitingSince])
 
   if (loading) {
     return (

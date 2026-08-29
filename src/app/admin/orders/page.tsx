@@ -1,15 +1,19 @@
 'use client'
 
-import { Suspense, useState, useEffect } from 'react'
+import { Suspense, useState, useEffect, useRef, useCallback } from 'react'
 import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { createClientComponentClient } from '@/lib/supabase'
 import { Order, Establishment } from '@/types'
 import toast from 'react-hot-toast'
-import { Package, Clock, Check, X, RefreshCw } from 'lucide-react'
+import { RefreshCw, Download } from 'lucide-react'
 import { DashboardSkeleton } from '@/components/ui/Skeleton'
-
 import { timeAgo } from '@/lib/utils'
+import { generateCsv, downloadCsv, type CsvColumn } from '@/lib/exportCsv'
+
+interface OrderWithTicket extends Order {
+  tickets?: { ticket_number: string; customer_name: string | null } | null
+}
 
 function getStatusBadge(status: string) {
   const styles = {
@@ -47,94 +51,143 @@ function getNextStatus(current: Order['status']): Order['status'] | null {
 function OrdersContent() {
   const searchParams = useSearchParams()
   const estSlug = searchParams.get('est')
-   const [establishment, setEstablishment] = useState<Establishment | null>(null)
-   const [orders, setOrders] = useState<Order[]>([])
-   const [filter, setFilter] = useState('all')
-   const [loading, setLoading] = useState(!estSlug)
-   const [refreshing, setRefreshing] = useState(false)
-   const supabase = createClientComponentClient()
+  const [establishment, setEstablishment] = useState<Establishment | null>(null)
+  const [orders, setOrders] = useState<OrderWithTicket[]>([])
+  const [filter, setFilter] = useState('all')
+  const [loading, setLoading] = useState(!estSlug)
+  const supabase = createClientComponentClient()
+  const channelRef = useRef<ReturnType<typeof supabase.channel> | null>(null)
 
-   useEffect(() => {
-     if (!estSlug) {
-       return
-     }
+  useEffect(() => {
+    if (!estSlug) {
+      return
+    }
 
-     let cancelled = false
-     const init = async () => {
-       const { data: est } = await supabase
-         .from('establishments')
-         .select('*')
-         .eq('slug', estSlug)
-         .single()
+    let cancelled = false
+    const init = async () => {
+      const { data: est } = await supabase
+        .from('establishments')
+        .select('*')
+        .eq('slug', estSlug)
+        .single()
 
-       if (cancelled || !est) return
-       setEstablishment(est)
-     }
-     init()
+      if (cancelled || !est) return
+      setEstablishment(est)
+    }
+    init()
 
-     return () => { cancelled = true }
-   }, [estSlug])
+    return () => { cancelled = true }
+  }, [estSlug, supabase])
 
-   const loadOrders = async (establishmentId: string, opts?: { background?: boolean }) => {
-     const isBg = opts?.background ?? false
-     if (!isBg) setLoading(true)
-     else setRefreshing(true)
-     let query = supabase
-       .from('orders')
-       .select('*, tickets(ticket_number, customer_name)')
-       .eq('establishment_id', establishmentId)
-       .order('created_at', { ascending: false })
+  const loadOrders = useCallback(async (establishmentId: string, opts?: { background?: boolean }) => {
+    const isBg = opts?.background ?? false
+    if (!isBg) setLoading(true)
 
-     if (filter !== 'all') {
-       query = query.eq('status', filter)
-     }
+    let query = supabase
+      .from('orders')
+      .select('*, tickets(ticket_number, customer_name)')
+      .eq('establishment_id', establishmentId)
+      .order('created_at', { ascending: false })
 
-     try {
-       const { data } = await query
-       if (data) setOrders(data)
-     } catch (error) {
-       console.error('Load orders error:', error)
-     } finally {
-       if (!isBg) setLoading(false)
-       else setRefreshing(false)
-     }
-   }
+    if (filter !== 'all') {
+      query = query.eq('status', filter)
+    }
 
-   useEffect(() => {
-     if (!establishment) return
+    try {
+      const { data } = await query
+      if (data) setOrders(data as OrderWithTicket[])
+    } catch (error) {
+      console.error('Load orders error:', error)
+    } finally {
+      if (!isBg) setLoading(false)
+    }
+  }, [filter, supabase])
+
+  useEffect(() => {
+    if (!establishment) return
     const id = establishment.id
-      queueMicrotask(() => loadOrders(id))
-      const interval = setInterval(() => loadOrders(id, { background: true }), 10000)
-     return () => clearInterval(interval)
-   }, [establishment, filter])
+    queueMicrotask(() => loadOrders(id))
 
-   const updateStatus = async (orderId: string, newStatus: Order['status']) => {
-     const statusLabels: Record<string, string> = {
-       pending: 'Pendente',
-       preparing: 'Preparando',
-       ready: 'Pronto',
-       delivered: 'Entregue',
-       cancelled: 'Cancelado',
-     }
+    if (channelRef.current) {
+      supabase.removeChannel(channelRef.current)
+    }
 
-     setOrders(prev => prev.map(o => o.id === orderId ? { ...o, status: newStatus } : o))
+    const channel = supabase
+      .channel(`admin-orders-${id}`)
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'orders' }, () => {
+        loadOrders(id, { background: true })
+      })
+      .subscribe()
 
-     const { error } = await supabase
-       .from('orders')
-       .update({ status: newStatus, updated_at: new Date().toISOString() })
-       .eq('id', orderId)
+    channelRef.current = channel
 
-     if (error) {
-       toast.error(error.message || 'Erro ao alterar status')
-       return
-     }
+    const interval = setInterval(() => loadOrders(id, { background: true }), 15000)
+    return () => {
+      clearInterval(interval)
+      if (channelRef.current) {
+        supabase.removeChannel(channelRef.current)
+        channelRef.current = null
+      }
+    }
+  }, [establishment, loadOrders, supabase])
 
-     toast.success(`Status alterado para ${statusLabels[newStatus]}`)
-   }
+  const updateStatus = async (orderId: string, newStatus: Order['status']) => {
+    const statusLabels: Record<string, string> = {
+      pending: 'Pendente',
+      preparing: 'Preparando',
+      ready: 'Pronto',
+      delivered: 'Entregue',
+      cancelled: 'Cancelado',
+    }
 
-   if (loading && !establishment) {
-     return <DashboardSkeleton />
-   }
+    setOrders(prev => prev.map(o => o.id === orderId ? { ...o, status: newStatus } : o))
+
+    const { error } = await supabase
+      .from('orders')
+      .update({ status: newStatus, updated_at: new Date().toISOString() })
+      .eq('id', orderId)
+
+    if (error) {
+      toast.error(error.message || 'Erro ao alterar status')
+      return
+    }
+
+    toast.success(`Status alterado para ${statusLabels[newStatus]}`)
+  }
+
+  const exportCsvData = () => {
+    if (orders.length === 0) {
+      toast.error('Nenhum pedido para exportar')
+      return
+    }
+
+    const statusLabels: Record<string, string> = {
+      pending: 'Pendente',
+      preparing: 'Preparando',
+      ready: 'Pronto',
+      delivered: 'Entregue',
+      cancelled: 'Cancelado',
+    }
+
+    const columns: CsvColumn<OrderWithTicket>[] = [
+      { header: 'Senha', accessor: (o) => o.tickets?.ticket_number || '' },
+      { header: 'Cliente', accessor: (o) => o.tickets?.customer_name || '' },
+      { header: 'Itens', accessor: (o) => o.items?.map(i => `${i.name} x${i.quantity}`).join('; ') || '' },
+      { header: 'Total (R$)', accessor: (o) => o.total.toFixed(2) },
+      { header: 'Status', accessor: (o) => statusLabels[o.status] || o.status },
+      { header: 'Observações', accessor: (o) => o.notes || '' },
+      { header: 'Criado em', accessor: (o) => new Date(o.created_at).toLocaleString('pt-BR') },
+    ]
+
+    const csv = generateCsv(orders, columns)
+    const filename = `pedidos-${establishment?.slug || 'export'}-${new Date().toISOString().split('T')[0]}.csv`
+    downloadCsv(csv, filename)
+    toast.success('CSV de pedidos exportado!')
+  }
+
+  if (loading && !establishment) {
+    return <DashboardSkeleton />
+  }
 
   if (!estSlug || !establishment) {
     return (
@@ -152,18 +205,28 @@ function OrdersContent() {
 
   return (
     <div className="animate-fade-in">
-      <div className="flex justify-between items-center mb-6">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
         <div>
           <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Pedidos</h2>
           <p className="text-gray-600 dark:text-gray-400">Gerencie todos os pedidos de {establishment.name}</p>
         </div>
-        <button
-          onClick={() => loadOrders(establishment.id)}
-          className="inline-flex items-center gap-2 bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-4 py-2 rounded-xl hover:from-indigo-700 hover:to-purple-700 transition-all shadow-sm hover:scale-105"
-        >
-          <RefreshCw className="h-4 w-4" />
-          Atualizar
-        </button>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={exportCsvData}
+            disabled={orders.length === 0}
+            className="inline-flex items-center gap-2 bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 hover:bg-indigo-100 dark:hover:bg-indigo-900/50 px-4 py-2 rounded-xl transition-all font-medium disabled:opacity-50"
+          >
+            <Download className="h-4 w-4" />
+            Exportar CSV
+          </button>
+          <button
+            onClick={() => loadOrders(establishment.id)}
+            className="inline-flex items-center gap-2 bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-4 py-2 rounded-xl hover:from-indigo-700 hover:to-purple-700 transition-all shadow-sm hover:scale-105"
+          >
+            <RefreshCw className="h-4 w-4" />
+            Atualizar
+          </button>
+        </div>
       </div>
 
       <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm p-4 mb-6 border border-gray-200 dark:border-gray-700">
@@ -197,9 +260,9 @@ function OrdersContent() {
             </tr>
           </thead>
           <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
-            {orders.map((order: Order) => {
-              const ticket = (order as unknown as { tickets: { ticket_number: string; customer_name: string | null } | null }).tickets
-              const itemsSummary = order.items?.map((item: Order['items'][0]) => `${item.name} x${item.quantity}`).join(', ') || '—'
+            {orders.map((order: OrderWithTicket) => {
+              const ticket = order.tickets
+              const itemsSummary = order.items?.map((item) => `${item.name} x${item.quantity}`).join(', ') || '—'
               const nextStatus = getNextStatus(order.status)
               const canCancel = order.status !== 'delivered' && order.status !== 'cancelled'
 

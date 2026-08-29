@@ -13,7 +13,6 @@ export default function QRCodePage({
 }) {
   const { slug } = use(params)
   const t = useTranslations('qr')
-  const tEstablishment = useTranslations('establishment')
   const router = useRouter()
   const qrRef = useRef<HTMLDivElement>(null)
   const [qrUrl, setQrUrl] = useState('')

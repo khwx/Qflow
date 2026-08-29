@@ -2,7 +2,6 @@ import { NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/supabase'
 import { rateLimit } from '@/lib/rateLimit'
 import { authenticateRequest } from '@/lib/auth'
-import { assertOwnership } from '@/lib/ownership'
 import { jsonWithPagination, parsePagination } from '@/lib/pagination'
 import { establishmentSchema, validateBody } from '@/lib/validators'
 
@@ -28,7 +27,7 @@ export async function GET(request: Request) {
     }
 
     return jsonWithPagination(data, pagination, count ?? 0)
-  } catch (error) {
+  } catch (_error) {
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
 }
@@ -108,7 +107,7 @@ export async function POST(request: Request) {
     }).select().maybeSingle()
 
     return NextResponse.json(data, { status: 201 })
-  } catch (error) {
+  } catch (_error) {
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
 }

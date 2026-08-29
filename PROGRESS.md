@@ -637,3 +637,39 @@ Log de execuções autónomas do Bot Orquestrador (cada 12h).
   sobrecarregar o DB; `pg_cron` é nativo do Supabase e não exige infraestrutura
   externa.
 - **Verificação**: `tsc --noEmit` ✓ (erro pré-existente em `.next/types/`), `eslint` ✓ (0 erros; só warnings pré-existentes), `vitest run` ✓ (116/116), `next build` ✓.
+
+## 2026-08-29 — Realtime nos painéis admin + export CSV + anúncio por voz no TV Display
+
+- **Problema**: (a) os painéis Filas/Senhas/Pedidos só atualizavam com refresh
+  manual ou polling; (b) não existia forma de exportar senhas/pedidos (o README
+  fala em analytics/gestão, mas os dados ficavam presos na UI); (c) o TV Display
+  tocava o som de chamada baseado na **contagem** total de "called" — quando uma
+  senha saía de "called" ao mesmo tempo que outra entrava, o som não tocava; e o som
+  era um WAV base64 fixo, sem anunciar o número por voz.
+- **Solução**:
+  - **Realtime nos admin**: `admin/tickets`, `admin/orders` e `admin/queues`
+    passam a subscrever `postgres_changes` nas tabelas `tickets`/`orders`/`queues`
+    (canal por `establishment_id`), recarregando os dados em tempo real. O polling
+    de orders foi mantido (15s) como fallback quando o Realtime não entrega o evento.
+  - **Export CSV** (`src/lib/exportCsv.ts` + `exportCsv.test.ts`): helpers puros
+    `formatCsvValue` (formata/RFC 4180 com `""`, CRLF e BOM UTF-8) e
+    `generateCsv(data, columns)` (accessor por chave ou função), mais
+    `downloadCsv(content, filename)` no browser. Botões "Exportar CSV" em
+    `admin/tickets` (senhas com timestamps) e `admin/orders` (pedidos com itens).
+  - **TV Display**: o som passa a disparar por **novas senhas “called” por id**
+    (ñão por contagem) — `knownCalledIdsRef` numa `Set`; a inicialização do painel
+    não toca som das senhas já chamadas. Substituído o audio de 3 notas por um
+    chime WebAudio (C5/E5/G5) **+ anúncio por voz** (`speechSynthesis`, `pt-BR`)
+    dos novos números chamados ("Senha X").
+- **Decisão**: `speechSynthesis` e o chime são opt-in via botão de som existente
+  (mesma lógica de `soundEnabled`) e silenciosos se a API não existir/cair fora de
+  `try/catch`. CSV continua a respeitar os filtros ativos da página (a exportação
+  reflete o que está visível).
+- **Limpeza de codebase**: `npm run lint` passou de 4 erros + 76 warnings para
+  **0 erros 0 warnings**. Correções: `<a href="/admin">` → `Link`; removidos
+  imports/estados não usados (e o campo opcional de **e-mail** volta a ser
+  preenchível na entrada da fila, que antes não tinha input); `useCallback` nas
+  dependências dos hooks; nos API routes, variáveis `error` não usadas em
+  `catch (_error)` (config do ESLint permite prefixo `_`).
+- **Verificação**: `tsc --noEmit` ✓, `eslint` ✓ (0 erros, 0 warnings),
+  `vitest run` ✓ (124/124 — +8 testes de exportCsv), `next build` ✓.

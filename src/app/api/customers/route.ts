@@ -53,7 +53,7 @@ export async function GET(request: Request) {
     }
 
     return jsonWithPagination(data, pagination, count ?? 0)
-  } catch (error) {
+  } catch (_error) {
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
 }

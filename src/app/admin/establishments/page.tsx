@@ -1,10 +1,9 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import Link from 'next/link'
 import { createClientComponentClient } from '@/lib/supabase'
 import { Establishment } from '@/types'
-import toast from 'react-hot-toast'
 import { QrCode, Building2, BarChart3, Settings, Plus } from 'lucide-react'
 
 interface EstablishmentWithQueueCount {
@@ -22,7 +21,7 @@ export default function EstablishmentsPage() {
   const [loading, setLoading] = useState(true)
   const supabase = createClientComponentClient()
 
-  const loadEstablishments = async () => {
+  const loadEstablishments = useCallback(async () => {
     try {
       const { data: ests } = await supabase
         .from('establishments')
@@ -41,29 +40,27 @@ export default function EstablishmentsPage() {
         .select('establishment_id')
         .in('establishment_id', estIds)
 
-      const countMap: Record<string, number> = {}
-      if (queueCounts) {
-        queueCounts.forEach((q: { establishment_id: string }) => {
-          countMap[q.establishment_id] = (countMap[q.establishment_id] || 0) + 1
-        })
-      }
+      const counts: Record<string, number> = {}
+      queueCounts?.forEach((q: { establishment_id: string }) => {
+        counts[q.establishment_id] = (counts[q.establishment_id] || 0) + 1
+      })
 
-      const enriched = ests.map((e: Establishment) => ({
+      const withCounts = ests.map((e: Establishment) => ({
         ...e,
-        queue_count: countMap[e.id] || 0,
+        queue_count: counts[e.id] || 0,
       }))
 
-      setEstablishments(enriched)
-      setLoading(false)
+      setEstablishments(withCounts)
     } catch (error) {
       console.error('Load establishments error:', error)
+    } finally {
       setLoading(false)
     }
-  }
+  }, [supabase])
 
   useEffect(() => {
-    queueMicrotask(loadEstablishments)
-  }, [])
+    queueMicrotask(() => loadEstablishments())
+  }, [loadEstablishments])
 
   const formatDate = (dateStr: string) => {
     return new Date(dateStr).toLocaleDateString('pt-BR', {

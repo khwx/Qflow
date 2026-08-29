@@ -2,8 +2,9 @@
 
 import { use } from 'react'
 import { useTranslations } from 'next-intl'
-import { useRouter, usePathname, Link } from '@/i18n/navigation'
-import { QrCode, Smartphone, Clock, Gamepad2, BarChart3, LogIn, UserPlus } from 'lucide-react'
+import { useRouter, Link } from '@/i18n/navigation'
+import NextLink from 'next/link'
+import { QrCode, Smartphone, Clock, Gamepad2, BarChart3, LogIn } from 'lucide-react'
 import LanguageSwitcher from '@/components/ui/LanguageSwitcher'
 import { useAuth } from '@/contexts/AuthContext'
 
@@ -15,7 +16,6 @@ export default function Home({ params }: { params: Promise<{ locale: string }> }
   const tFooter = useTranslations('footer')
   const tAuth = useTranslations('auth')
   const router = useRouter()
-  const pathname = usePathname()
   const { user, signOut } = useAuth()
 
   const handleAuthClick = () => {
@@ -59,12 +59,12 @@ export default function Home({ params }: { params: Promise<{ locale: string }> }
               {tAuth('logout', { default: 'Logout' })}
             </button>
           )}
-          <a
+          <NextLink
             href="/admin"
             className="hidden sm:inline-flex rounded-lg bg-white/10 px-4 py-2 text-white hover:bg-white/20 transition"
           >
             {t('admin')}
-          </a>
+          </NextLink>
           <Link
             href="/tv-display"
             className="hidden md:inline-flex rounded-lg bg-white/10 px-4 py-2 text-white hover:bg-white/20 transition"

@@ -135,7 +135,6 @@ describe('MemoryRateLimitStore', () => {
   })
 
   it('reclaims the oldest buckets when over capacity', async () => {
-    const store = new MemoryRateLimitStore()
     // Force a tiny cap via a subclass to exercise eviction deterministically.
     const small = new (class extends MemoryRateLimitStore {})()
     const base = Date.now()
