@@ -55,7 +55,8 @@
     "taking": "Gerando senha...",
     "estimated": "Tempo estimado",
     "minutes": "min",
-    "position": "Posição"
+    "position": "Posição",
+    "change_queue": "Trocar de fila"
   },
   "ticket": {
     "confirmed": "Senha Confirmada!",

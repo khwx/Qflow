@@ -55,7 +55,8 @@
     "taking": "Generando turno...",
     "estimated": "Tiempo estimado",
     "minutes": "min",
-    "position": "Posición"
+    "position": "Posição",
+    "change_queue": "Trocar de fila"
   },
   "ticket": {
     "confirmed": "¡Turno Confirmado!",
@@ -69,7 +70,8 @@
   "waiting": {
     "status": "Estado de la Cola",
     "current_ticket": "Turno Actual",
-    "position": "Posición",
+    "position": "Posição",
+    "change_queue": "Trocar de fila",
     "status_label": "Estado",
     "waiting": "Esperando",
     "earn_points": "Gana Puntos",

@@ -55,7 +55,8 @@
     "taking": "Generazione ticket...",
     "estimated": "Tempo stimato",
     "minutes": "min",
-    "position": "Posizione"
+    "position": "Posição",
+    "change_queue": "Trocar de fila"
   },
   "ticket": {
     "confirmed": "Ticket Confermato!",
@@ -69,7 +70,8 @@
   "waiting": {
     "status": "Stato della Coda",
     "current_ticket": "Ticket Attuale",
-    "position": "Posizione",
+    "position": "Posição",
+    "change_queue": "Trocar de fila",
     "status_label": "Stato",
     "waiting": "In attesa",
     "earn_points": "Guadagna Punti",
