@@ -65,7 +65,10 @@
     "queue_position": "Queue position",
     "waiting_room": "Enter Waiting Room",
     "min": "min",
-    "error_creating": "Error creating ticket. Please try again."
+    "error_creating": "Error creating ticket. Please try again.",
+    "copy": "Copy",
+    "copied": "Copied!",
+    "share": "Share"
   },
   "waiting": {
     "status": "Queue Status",

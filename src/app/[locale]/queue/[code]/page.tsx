@@ -6,7 +6,7 @@ import { useRouter } from '@/i18n/navigation'
 import { Establishment, Queue, Ticket } from '@/types'
 import { cn, getEstimatedWait } from '@/lib/utils'
 import toast from 'react-hot-toast'
-import { Clock, Users, AlertCircle, CheckCircle2, Mail, ArrowLeft } from 'lucide-react'
+import { Clock, Users, AlertCircle, CheckCircle2, Mail, ArrowLeft, Copy, Check, Share2 } from 'lucide-react'
 
 export default function QueuePage({ params }: { params: Promise<{ locale: string; code: string }> }) {
   const { locale, code } = use(params)
@@ -22,7 +22,36 @@ export default function QueuePage({ params }: { params: Promise<{ locale: string
   const [customerName, setCustomerName] = useState('')
   const [customerPhone, setCustomerPhone] = useState('')
   const [customerEmail, setCustomerEmail] = useState('')
+  const [copied, setCopied] = useState(false)
   const router = useRouter()
+
+  const handleCopyTicket = async () => {
+    if (!ticket) return
+    try {
+      await navigator.clipboard.writeText(ticket.ticket_number)
+      setCopied(true)
+      toast.success(tTicket('copied', { default: 'Senha copiada!' }))
+      setTimeout(() => setCopied(false), 2000)
+    } catch {
+      toast.error('Falha ao copiar')
+    }
+  }
+
+  const handleShareTicket = async () => {
+    if (!ticket || !establishment) return
+    const text = `${tTicket('your_ticket')} ${ticket.ticket_number} - ${establishment.name}`
+    const shareData = { title: establishment.name, text, url: typeof window !== 'undefined' ? `${window.location.origin}/${locale}/waiting/${ticket.id}` : undefined }
+    try {
+      if (navigator.share && navigator.canShare?.(shareData)) {
+        await navigator.share(shareData)
+      } else {
+        await navigator.clipboard.writeText(`${text} ${shareData.url ?? ''}`.trim())
+        toast.success(tTicket('copied', { default: 'Link copiado!' }))
+      }
+    } catch {
+      // user cancelled share
+    }
+  }
 
   const loadData = useCallback(async () => {
     try {
@@ -122,6 +151,22 @@ export default function QueuePage({ params }: { params: Promise<{ locale: string
             <div className="bg-gradient-to-r from-indigo-50 to-purple-50 dark:from-indigo-900/30 dark:to-purple-900/30 rounded-2xl p-6 mb-6">
               <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">{tTicket('your_ticket')}</p>
               <p className="text-4xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">{ticket.ticket_number}</p>
+              <div className="flex items-center justify-center gap-2 mt-4">
+                <button
+                  onClick={handleCopyTicket}
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-600 transition"
+                >
+                  {copied ? <Check className="h-4 w-4 text-green-500" /> : <Copy className="h-4 w-4" />}
+                  {copied ? tTicket('copied', { default: 'Copiado!' }) : tTicket('copy', { default: 'Copiar' })}
+                </button>
+                <button
+                  onClick={handleShareTicket}
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-600 transition"
+                >
+                  <Share2 className="h-4 w-4" />
+                  {tTicket('share', { default: 'Partilhar' })}
+                </button>
+              </div>
             </div>
 
             <div className="space-y-3 text-left mb-8">

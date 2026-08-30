@@ -682,3 +682,12 @@ Log de execuções autónomas do Bot Orquestrador (cada 12h).
   - Tradução `change_queue` adicionada a **todas** as 12 línguas suportadas (pt, en, es, fr, de, it, ar, zh, ja, ko, hi, ru) — evitando fallback para chave em falta.
 - **Decisão**: reutilizar o estado existente (`setTicket(null); setSelectedQueue(null)`) mantém o fluxo simples e sem navegação de router. O estilo do botão (outline) distingue-o do botão primário "Sala de Espera".
 - **Verificação**: `tsc --noEmit` ✓, `eslint` ✓ (0 erros, 0 warnings), `vitest run` ✓ (124/124), `next build` ✓.
+
+## 2026-08-30 — Copiar e partilhar senha na confirmação (UX)
+
+- **Problema**: após gerar a senha, o utilizador via o número grande mas não tinha ação rápida para copiar/partilhar (prints manuais, erro de digitação).
+- **Solução**:
+  - Adicionados botões **Copiar** e **Partilhar** sob o cartão da senha (`src/app/[locale]/queue/[code]/page.tsx`): `navigator.clipboard.writeText` com feedback `toast` + estado `Copiado!` (ícone `Check` por 2s), e `navigator.share` com fallback para copiar link da sala de espera (`/${locale}/waiting/${ticketId}`). Ícones `Copy`/`Share2`.
+  - Traduções `ticket.copy`/`ticket.copied`/`ticket.share` adicionadas em `pt`/`en` (fallback `default` cobre as outras 10 línguas sem quebrar).
+- **Decisão**: usar Web Share API quando disponível (mobile nativo) e clipboard como fallback; não adiciona dependências. Mantém `eslint` 0 erros.
+- **Verificação**: `tsc --noEmit` ✓, `eslint` ✓ (0 erros, 0 warnings), `vitest run` ✓ (124/124), `next build` ✓.

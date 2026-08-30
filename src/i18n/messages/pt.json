@@ -65,7 +65,10 @@
     "queue_position": "Posição na fila",
     "waiting_room": "Entrar na Sala de Espera",
     "min": "min",
-    "error_creating": "Erro ao criar senha. Tente novamente."
+    "error_creating": "Erro ao criar senha. Tente novamente.",
+    "copy": "Copiar",
+    "copied": "Copiado!",
+    "share": "Partilhar"
   },
   "waiting": {
     "status": "Status da Fila",
