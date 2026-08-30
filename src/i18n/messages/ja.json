@@ -55,7 +55,8 @@
     "taking": "番号券を生成中...",
     "estimated": "予想待ち時間",
     "minutes": "分",
-    "position": "現在地"
+    "position": "現在地",
+    "change_queue": "キューを変える"
   },
   "ticket": {
     "confirmed": "番号券確認済み！",

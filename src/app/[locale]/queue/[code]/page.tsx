@@ -6,7 +6,7 @@ import { useRouter } from '@/i18n/navigation'
 import { Establishment, Queue, Ticket } from '@/types'
 import { cn, getEstimatedWait } from '@/lib/utils'
 import toast from 'react-hot-toast'
-import { Clock, Users, AlertCircle, CheckCircle2, Mail } from 'lucide-react'
+import { Clock, Users, AlertCircle, CheckCircle2, Mail, ArrowLeft } from 'lucide-react'
 
 export default function QueuePage({ params }: { params: Promise<{ locale: string; code: string }> }) {
   const { locale, code } = use(params)
@@ -139,12 +139,21 @@ export default function QueuePage({ params }: { params: Promise<{ locale: string
               </div>
             </div>
 
-            <button
-              onClick={() => router.push(`/${locale}/waiting/${ticket.id}`)}
-              className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-3 rounded-xl font-semibold hover:from-indigo-700 hover:to-purple-700 transition-all shadow-lg hover:scale-[1.02] active:scale-[0.98]"
-            >
-              {tTicket('waiting_room')}
-            </button>
+            <div className="flex flex-col gap-3">
+              <button
+                onClick={() => router.push(`/${locale}/waiting/${ticket.id}`)}
+                className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-3 rounded-xl font-semibold hover:from-indigo-700 hover:to-purple-700 transition-all shadow-lg hover:scale-[1.02] active:scale-[0.98]"
+              >
+                {tTicket('waiting_room')}
+              </button>
+              <button
+                onClick={() => { setTicket(null); setSelectedQueue(null); }}
+                className="w-full bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 py-3 rounded-xl font-semibold border border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 transition-all"
+              >
+                <ArrowLeft className="h-4 w-4 inline mr-2" />
+                {t('change_queue', { default: 'Trocar de fila' })}
+              </button>
+            </div>
           </div>
         </div>
       </div>

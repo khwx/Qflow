@@ -673,3 +673,12 @@ Log de execuções autónomas do Bot Orquestrador (cada 12h).
   `catch (_error)` (config do ESLint permite prefixo `_`).
 - **Verificação**: `tsc --noEmit` ✓, `eslint` ✓ (0 erros, 0 warnings),
   `vitest run` ✓ (124/124 — +8 testes de exportCsv), `next build` ✓.
+
+## 2026-08-30 — Botão "Trocar de fila" na confirmação de senha + i18n completo
+
+- **Problema**: após obter a senha, o utilizador só tinha o botão "Entrar na Sala de Espera"; não havia forma de voltar e escolher outra fila sem recarregar a página.
+- **Solução**:
+  - Adicionado botão "Trocar de fila" (com ícone `ArrowLeft`) no ecrã de confirmação de senha (`src/app/[locale]/queue/[code]/page.tsx`). O botão limpa o estado `ticket` e `selectedQueue`, devolvendo ao utilizador à seleção de filas.
+  - Tradução `change_queue` adicionada a **todas** as 12 línguas suportadas (pt, en, es, fr, de, it, ar, zh, ja, ko, hi, ru) — evitando fallback para chave em falta.
+- **Decisão**: reutilizar o estado existente (`setTicket(null); setSelectedQueue(null)`) mantém o fluxo simples e sem navegação de router. O estilo do botão (outline) distingue-o do botão primário "Sala de Espera".
+- **Verificação**: `tsc --noEmit` ✓, `eslint` ✓ (0 erros, 0 warnings), `vitest run` ✓ (124/124), `next build` ✓.

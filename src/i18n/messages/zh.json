@@ -55,7 +55,8 @@
     "taking": "正在生成号码...",
     "estimated": "预计等待",
     "minutes": "分钟",
-    "position": "当前位置"
+    "position": "当前位置",
+    "change_queue": "更换排队通道"
   },
   "ticket": {
     "confirmed": "号码已确认！",

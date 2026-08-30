@@ -55,7 +55,8 @@
     "taking": "Генерация талона...",
     "estimated": "Примерное время",
     "minutes": "мин",
-    "position": "Позиция"
+    "position": "Позиция",
+    "change_queue": "Сменить очередь"
   },
   "ticket": {
     "confirmed": "Талон Подтверждён!",

@@ -55,7 +55,8 @@
     "taking": "Generating ticket...",
     "estimated": "Estimated time",
     "minutes": "min",
-    "position": "Position"
+    "position": "Position",
+    "change_queue": "Change queue"
   },
   "ticket": {
     "confirmed": "Ticket Confirmed!",

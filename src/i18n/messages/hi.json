@@ -55,7 +55,8 @@
     "taking": "टिकट बना रहे हैं...",
     "estimated": "अनुमानित समय",
     "minutes": "मिनट",
-    "position": "स्थिति"
+    "position": "स्थिति",
+    "change_queue": "क्यू बदलें"
   },
   "ticket": {
     "confirmed": "टिकट पुष्ट!",

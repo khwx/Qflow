@@ -55,7 +55,8 @@
     "taking": "번호표 생성 중...",
     "estimated": "예상 대기 시간",
     "minutes": "분",
-    "position": "현재 위치"
+    "position": "현재 위치",
+    "change_queue": "줄 변경"
   },
   "ticket": {
     "confirmed": "번호표 확인!",

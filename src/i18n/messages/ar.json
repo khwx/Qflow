@@ -55,7 +55,8 @@
     "taking": "جاري إنشاء التذكرة...",
     "estimated": "الوقت المقدر",
     "minutes": "دقيقة",
-    "position": "الموقع"
+    "position": "الموقع",
+    "change_queue": "تغيير الطابور"
   },
   "ticket": {
     "confirmed": "تم تأكيد التذكرة!",
