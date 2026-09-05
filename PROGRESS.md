@@ -701,3 +701,13 @@ Log de execuções autónomas do Bot Orquestrador (cada 12h).
   - Voto próprio continua a chamar `onComplete(10)` imediatamente; o realtime trata de atualizar a barra de percentagem.
 - **Decisão**: re-fetch simples (`select` + `map/filter`) em vez de `count(*)` incremental — mantém código simples e consistente com `loadPoints` existente; overhead negligenciável (enquetes têm poucas opções/respostas).
 - **Verificação**: `tsc --noEmit` ✓, `eslint` ✓ (1 warning `poll.options` em `useEffect`, aceitável), `vitest run` ✓ (124/124), `next build` ✓.
+
+## 2026-09-06 — Posição na fila em tempo real (Realtime) na seleção de fila
+
+- **Problema**: na página de seleção de fila (`queue/[code]`), o utilizador via a lista de filas mas o número atual (`current_number`) e a posição estimada só atualizavam ao recarregar a página. Se outra pessoa tirasse senha na mesma fila, a posição mostrada ficava desatualizada até refresh manual.
+- **Solução**:
+  - `src/app/[locale]/queue/[code]/page.tsx`: adicionado `useEffect` com subscrição `postgres_changes` (evento `*` na tabela `tickets` filtrado por `queue_id`). Quando qualquer ticket é criado/atualizado nessa fila, chama `loadData()` que recarrega as filas com o `current_number` atualizado.
+  - Cleanup: `supabase.removeChannel(channelRef.current)` no `return` evita leaks ao sair da página ou mudar de fila selecionada.
+  - A subscrição só ativa quando há `selectedQueue` + `establishment` (evita subscrições desnecessárias no estado inicial).
+- **Decisão**: reutilizar `loadData()` existente (que já faz `fetch` para `/api/public/establishments/...`) em vez de duplicar lógica; `current_number` vem da API pública e reflete o estado real da fila. Overhead mínimo (uma chamada fetch por evento de ticket na fila).
+- **Verificação**: `tsc --noEmit` ✓, `eslint` ✓ (0 erros, 0 warnings), `vitest run` ✓ (124/124), `next build` ✓.

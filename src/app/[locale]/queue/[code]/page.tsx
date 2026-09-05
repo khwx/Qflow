@@ -1,8 +1,9 @@
 'use client'
 
-import { useState, useEffect, useCallback, use } from 'react'
+import { useState, useEffect, useCallback, use, useRef } from 'react'
 import { useTranslations } from 'next-intl'
 import { useRouter } from '@/i18n/navigation'
+import { createClientComponentClient } from '@/lib/supabase'
 import { Establishment, Queue, Ticket } from '@/types'
 import { cn, getEstimatedWait } from '@/lib/utils'
 import toast from 'react-hot-toast'
@@ -80,6 +81,41 @@ export default function QueuePage({ params }: { params: Promise<{ locale: string
     const cleaned = phone.replace(/\D/g, '')
     return cleaned.length >= 10 && cleaned.length <= 11
   }
+
+  // Realtime subscription for queue position updates
+  const supabase = createClientComponentClient()
+  const channelRef = useRef<ReturnType<typeof supabase.channel> | null>(null)
+
+  useEffect(() => {
+    if (!selectedQueue || !establishment) return
+
+    // Subscribe to real-time updates for this queue's tickets
+    const channel = supabase
+      .channel(`queue-${selectedQueue.id}-tickets`)
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'tickets',
+          filter: `queue_id=eq.${selectedQueue.id}`,
+        },
+        () => {
+          // Reload queues data to get updated current_number
+          loadData()
+        }
+      )
+      .subscribe()
+
+    channelRef.current = channel
+
+    return () => {
+      if (channelRef.current) {
+        supabase.removeChannel(channelRef.current)
+        channelRef.current = null
+      }
+    }
+  }, [selectedQueue, establishment, loadData, supabase])
 
   const takeTicket = async () => {
     if (!selectedQueue) return
