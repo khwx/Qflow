@@ -722,4 +722,14 @@ Log de execuções autónomas do Bot Orquestrador (cada 12h).
   - `src/components/admin/AdminShell.tsx` — navegação atualizada (Operador, TV) com ícones `Headset`/`Monitor`, Shadcn/Tailwind 4 consistente.
   - `src/i18n/messages/{pt,en}.json` — chaves `operator`/`tv_config`/`kiosk` adicionadas (compatível, fallback default).
 - **Decisões**: sem MCP Google Stitch disponível, implementação manual Stitch-like fiel ao design system (Tailwind 4, `cn`, `Skeleton`, `DarkModeProvider`, `next-intl`). Operator mantém-se dentro do `AdminShell` mas com barra sticky própria para uso em guichê. Kiosk usa `fetch` público existente para evitar duplicar lógica de criação atômica (`create_ticket` RPC). TV Config usa `localStorage` para campos sem coluna DB.
-- **Verificação**: `next build` ✓ (108/108 páginas, rotas `/admin/operator`, `/admin/tv-display-config`, `/[locale]/kiosk/[code]` presentes), `tsc` sem erros relevantes. Commit `32aa76b`.
+ - **Verificação**: `next build` ✓ (108/108 páginas, rotas `/admin/operator`, `/admin/tv-display-config`, `/[locale]/kiosk/[code]` presentes), `tsc` sem erros relevantes. Commit `32aa76b`.
+
+## 2026-09-06 — Trio tipográfico Stitch Modern Heritage (Source Serif 4 + Inter + JetBrains Mono)
+
+- **Pedido**: aplicar trio Stitch e atualizar logotipo para estilo Stitch (#6C63FF).
+- **Solução**:
+  - `src/app/layout.tsx`: `Geist` → `Source_Serif_4` (600,700), `Inter` (400,600), `JetBrains_Mono` (500) via `next/font/google` com `display:swap` e `themeColor #6C63FF`.
+  - `src/app/globals.css`: `--font-sans` → `Inter`, `+ --font-serif/--font-mono/--color-primary`, `.font-stitch` e `.logo-stitch` (Source Serif 4 bold, tracking-tight -0.03em, #6C63FF).
+  - `src/components/admin/AdminShell.tsx` + `src/app/[locale]/page.tsx`: logo "Qflow" em `.logo-stitch` #6C63FF, `QrCode` em #6C63FF (igual Óbidos Genealogia Portugal).
+  - `src/components/ui/button.tsx` + `card.tsx` criados com `Inter` (`font-sans`) e primary #6C63FF.
+- **Verificação**: `next build` ✓. Commit `1c98e50`.
