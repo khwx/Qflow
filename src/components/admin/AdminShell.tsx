@@ -19,7 +19,11 @@ import {
   Sun,
   Moon,
   Monitor,
-  Headset
+  Headset,
+  BarChart3,
+  HeartHandshake,
+  Star,
+  ClipboardList
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { createClientComponentClient } from '@/lib/supabase'
@@ -31,12 +35,15 @@ const navigation = [
   { name: 'Estabelecimentos', href: '/admin/establishments', icon: Building2 },
   { name: 'Dashboard', href: '/admin/dashboard', icon: LayoutDashboard },
   { name: 'Operador', href: '/admin/operator', icon: Headset },
+  { name: 'Triagem', href: '/admin/triage', icon: HeartHandshake },
   { name: 'Filas', href: '/admin/queues', icon: Users },
   { name: 'Senhas', href: '/admin/tickets', icon: Ticket },
   { name: 'Pedidos', href: '/admin/orders', icon: Package },
+  { name: 'Enquetes', href: '/admin/polls', icon: BarChart3 },
+  { name: 'Feedback', href: '/admin/feedback', icon: Star },
   { name: 'TV', href: '/admin/tv-display-config', icon: Monitor },
   { name: 'Jogos', href: '/admin/games', icon: Gamepad2 },
-  { name: 'Clientes', href: '/admin/customers', icon: Users },
+  { name: 'Clientes', href: '/admin/customers', icon: ClipboardList },
   { name: 'Configurações', href: '/admin/settings', icon: Settings },
 ]
 

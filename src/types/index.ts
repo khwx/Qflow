@@ -122,3 +122,13 @@ export interface PollResponse {
   option_index: number
   created_at: string
 }
+
+export interface Feedback {
+  id: string
+  ticket_id: string
+  establishment_id: string
+  rating: number
+  tags: string[]
+  comment: string | null
+  created_at: string
+}
