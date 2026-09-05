@@ -70,8 +70,8 @@ function AdminShellInner({
   const sidebarContent = (
     <>
       <div className="flex items-center gap-2 p-6 border-b border-gray-200 dark:border-gray-700">
-        <QrCode className="h-8 w-8 text-indigo-600" />
-        <span className="text-xl font-bold text-gray-900 dark:text-white">QFlow</span>
+        <QrCode className="h-8 w-8" style={{ color: '#6C63FF' }} />
+        <span className="logo-stitch text-xl">Qflow</span>
       </div>
 
       <nav className="p-4 space-y-1">
@@ -138,8 +138,8 @@ function AdminShellInner({
           {sidebarOpen ? <X className="h-6 w-6 text-gray-700 dark:text-gray-300" /> : <Menu className="h-6 w-6 text-gray-700 dark:text-gray-300" />}
         </button>
         <div className="flex items-center gap-2">
-          <QrCode className="h-6 w-6 text-indigo-600" />
-          <span className="text-lg font-bold text-gray-900 dark:text-white">QFlow</span>
+          <QrCode className="h-6 w-6" style={{ color: '#6C63FF' }} />
+          <span className="logo-stitch text-lg">Qflow</span>
         </div>
       </div>
 
@@ -206,8 +206,8 @@ function AdminShellSkeleton() {
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       <aside className="fixed inset-y-0 left-0 w-64 bg-white dark:bg-gray-800 shadow-lg border-r border-gray-200 dark:border-gray-700">
         <div className="flex items-center gap-2 p-6 border-b border-gray-200 dark:border-gray-700">
-          <QrCode className="h-8 w-8 text-indigo-600 dark:text-indigo-400" />
-          <span className="text-xl font-bold text-gray-900 dark:text-white">QFlow</span>
+          <QrCode className="h-8 w-8" style={{ color: '#6C63FF' }} />
+          <span className="logo-stitch text-xl">Qflow</span>
         </div>
         <nav className="p-4 space-y-1">
           {navigation.map((item) => (

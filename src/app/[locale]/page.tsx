@@ -37,7 +37,7 @@ export default function Home({ params }: { params: Promise<{ locale: string }> }
       <nav className="flex items-center justify-between p-6 relative z-10">
         <div className="flex items-center gap-2 text-white">
           <QrCode className="h-8 w-8" />
-          <span className="text-2xl font-bold">QFlow</span>
+          <span className="logo-stitch text-2xl !text-white">Qflow</span>
         </div>
         <div className="flex items-center gap-2 sm:gap-4">
           <button

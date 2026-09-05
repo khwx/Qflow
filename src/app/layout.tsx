@@ -1,10 +1,26 @@
 import type { Metadata, Viewport } from "next";
-import { Geist } from "next/font/google";
+import { Source_Serif_4, Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 
-const geist = Geist({
-  variable: "--font-geist-sans",
+const sourceSerif = Source_Serif_4({
+  weight: ["600", "700"],
   subsets: ["latin"],
+  variable: "--font-source-serif",
+  display: "swap",
+});
+
+const inter = Inter({
+  weight: ["400", "600"],
+  subsets: ["latin"],
+  variable: "--font-inter",
+  display: "swap",
+});
+
+const jetbrainsMono = JetBrains_Mono({
+  weight: ["500"],
+  subsets: ["latin"],
+  variable: "--font-jetbrains-mono",
+  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -36,7 +52,7 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  themeColor: "#0f172a",
+  themeColor: "#6C63FF",
 };
 
 export default function RootLayout({
@@ -45,8 +61,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${geist.variable} h-full antialiased`}>
-      <body className="min-h-full">{children}</body>
+    <html
+      lang="en"
+      className={`${sourceSerif.variable} ${inter.variable} ${jetbrainsMono.variable} h-full antialiased`}
+    >
+      <body className="min-h-full font-sans">{children}</body>
     </html>
   );
 }
