@@ -711,3 +711,15 @@ Log de execuções autónomas do Bot Orquestrador (cada 12h).
   - A subscrição só ativa quando há `selectedQueue` + `establishment` (evita subscrições desnecessárias no estado inicial).
 - **Decisão**: reutilizar `loadData()` existente (que já faz `fetch` para `/api/public/establishments/...`) em vez de duplicar lógica; `current_number` vem da API pública e reflete o estado real da fila. Overhead mínimo (uma chamada fetch por evento de ticket na fila).
 - **Verificação**: `tsc --noEmit` ✓, `eslint` ✓ (0 erros, 0 warnings), `vitest run` ✓ (124/124), `next build` ✓.
+
+## 2026-09-05 — Páginas Stitch prioritárias: Operator, TV Config, Kiosk
+
+- **Pedido**: criar 3 páginas Stitch prioritárias usando design system atual (Tailwind 4, dark, i18n, Supabase realtime).
+- **Solução**:
+  - `src/app/admin/operator/page.tsx` — Painel do Operador/Guichê minimalista: `?est=slug`, seletor fila + guichê, listas waiting (ordenada por prioridade urgent/elderly/pregnant) e called/serving em destaque gigante, realtime `tickets`/`queues`, ações chamar (F1) / concluir (F2) / rechamar (F3) com voz `speechSynthesis` + chime `AudioContext`, cancelamento, dicas operação. Skeleton + dark mode.
+  - `src/app/admin/tv-display-config/page.tsx` — Configurador TV Display WYSIWYG: controles layout (grid/single/split), cores primary/secondary (color picker), logo URL, voz toggle + teste, mensagem rodapé, ticker, preview mock com gradient + iframe ao vivo para `/[locale]/tv-display?code=SLUG`, persistência `localStorage` por estabelecimento + `supabase.update` em `primary_color/secondary_color/logo_url/description`.
+  - `src/app/[locale]/kiosk/[code]/page.tsx` — Totem/Kiosk fullscreen tablet: 3 botões filas gigantes (touch 1.75rem radius), QR code (`qrcode.react`) para levar no celular, fluxo selecionar fila → nome/telefone opcional → `POST /api/public/tickets` (reuse rateLimit), tela sucesso com ticket gigante + QR waiting room + barra auto-reset 30s (progress + countdown + botão voltar), realtime queues.
+  - `src/components/admin/AdminShell.tsx` — navegação atualizada (Operador, TV) com ícones `Headset`/`Monitor`, Shadcn/Tailwind 4 consistente.
+  - `src/i18n/messages/{pt,en}.json` — chaves `operator`/`tv_config`/`kiosk` adicionadas (compatível, fallback default).
+- **Decisões**: sem MCP Google Stitch disponível, implementação manual Stitch-like fiel ao design system (Tailwind 4, `cn`, `Skeleton`, `DarkModeProvider`, `next-intl`). Operator mantém-se dentro do `AdminShell` mas com barra sticky própria para uso em guichê. Kiosk usa `fetch` público existente para evitar duplicar lógica de criação atômica (`create_ticket` RPC). TV Config usa `localStorage` para campos sem coluna DB.
+- **Verificação**: `next build` ✓ (108/108 páginas, rotas `/admin/operator`, `/admin/tv-display-config`, `/[locale]/kiosk/[code]` presentes), `tsc` sem erros relevantes. Commit `32aa76b`.

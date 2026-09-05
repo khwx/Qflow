@@ -125,7 +125,8 @@ export default function WaitingPage({ params }: { params: Promise<{ locale: stri
   useEffect(() => {
     queueMicrotask(() => loadData())
 
-    const channel = supabase
+    // Subscribe to ticket updates for this specific ticket (for called status + sound)
+    const ticketChannel = supabase
       .channel('ticket-updates')
       .on(
         'postgres_changes',
@@ -148,10 +149,29 @@ export default function WaitingPage({ params }: { params: Promise<{ locale: stri
       )
       .subscribe()
 
+    // Subscribe to queue ticket updates for real-time queue position
+    const queueChannel = supabase
+      .channel('queue-tickets-updates')
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'tickets',
+          filter: `queue_id=eq.${queue?.id}`,
+        },
+        () => {
+          // Reload ticket data to get updated queue position
+          loadData()
+        }
+      )
+      .subscribe()
+
     return () => {
-      supabase.removeChannel(channel)
+      supabase.removeChannel(ticketChannel)
+      supabase.removeChannel(queueChannel)
     }
-  }, [ticketId, loadData, supabase])
+  }, [ticketId, queue?.id, loadData, supabase])
 
   const getQueuePosition = () => {
     if (!ticket || !queue) return null
