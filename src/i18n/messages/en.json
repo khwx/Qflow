@@ -319,5 +319,51 @@
     "reset_title": "Reset Password",
     "reset_subtitle": "Enter your new password below.",
     "update_password": "Update Password"
+  },
+  "operator": {
+    "title": "Operator Panel",
+    "subtitle": "Minimal counter — F1 call, F2 complete",
+    "queue": "Queue",
+    "counter": "Counter",
+    "call_next": "Call next",
+    "complete": "Complete",
+    "recall": "Recall",
+    "waiting": "Waiting",
+    "called": "Called",
+    "serving": "Serving",
+    "next": "Next",
+    "empty_queue": "Empty queue",
+    "no_ticket_serving": "No ticket serving"
+  },
+  "tv_config": {
+    "title": "TV Display Config",
+    "subtitle": "WYSIWYG preview + controls (layout, colors, logo, voice, message)",
+    "layout": "Layout",
+    "colors": "Colors & Brand",
+    "voice": "Voice & Message",
+    "primary": "Primary",
+    "secondary": "Secondary",
+    "logo_url": "Logo URL",
+    "message": "Message",
+    "preview": "WYSIWYG Preview",
+    "live_preview": "Live preview (iframe)",
+    "open_tv": "Open TV",
+    "save": "Save",
+    "voice_enabled": "Voice on call",
+    "test_voice": "Test voice"
+  },
+  "kiosk": {
+    "title": "Self-service Kiosk",
+    "subtitle": "Tap to get your ticket",
+    "select_queue": "Select queue",
+    "name": "Name (optional)",
+    "phone": "Phone (optional)",
+    "take_ticket": "Get giant ticket",
+    "generating": "Generating...",
+    "your_ticket": "Your ticket",
+    "scan_to_track": "Scan to track queue on your phone",
+    "how_it_works": "How it works?",
+    "back": "Back",
+    "restart_in": "Restarting in {seconds}s"
   }
 }

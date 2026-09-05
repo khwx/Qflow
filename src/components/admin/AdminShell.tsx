@@ -17,7 +17,9 @@ import {
   X,
   Menu,
   Sun,
-  Moon
+  Moon,
+  Monitor,
+  Headset
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { createClientComponentClient } from '@/lib/supabase'
@@ -28,9 +30,11 @@ import { useDarkMode } from '@/contexts/DarkModeContext'
 const navigation = [
   { name: 'Estabelecimentos', href: '/admin/establishments', icon: Building2 },
   { name: 'Dashboard', href: '/admin/dashboard', icon: LayoutDashboard },
+  { name: 'Operador', href: '/admin/operator', icon: Headset },
   { name: 'Filas', href: '/admin/queues', icon: Users },
   { name: 'Senhas', href: '/admin/tickets', icon: Ticket },
   { name: 'Pedidos', href: '/admin/orders', icon: Package },
+  { name: 'TV', href: '/admin/tv-display-config', icon: Monitor },
   { name: 'Jogos', href: '/admin/games', icon: Gamepad2 },
   { name: 'Clientes', href: '/admin/customers', icon: Users },
   { name: 'Configurações', href: '/admin/settings', icon: Settings },

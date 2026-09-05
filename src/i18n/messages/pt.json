@@ -316,5 +316,51 @@
     "reset_title": "Redefinir Senha",
     "reset_subtitle": "Digite sua nova senha abaixo.",
     "update_password": "Atualizar Senha"
+  },
+  "operator": {
+    "title": "Painel do Operador",
+    "subtitle": "Guichê minimalista — F1 chamar, F2 concluir",
+    "queue": "Fila",
+    "counter": "Guichê",
+    "call_next": "Chamar próximo",
+    "complete": "Concluir",
+    "recall": "Rechamar",
+    "waiting": "Aguardando",
+    "called": "Chamados",
+    "serving": "Em atendimento",
+    "next": "Próximo",
+    "empty_queue": "Fila vazia",
+    "no_ticket_serving": "Nenhuma senha em atendimento"
+  },
+  "tv_config": {
+    "title": "Configurar TV Display",
+    "subtitle": "Preview WYSIWYG + controles (layout, cores, logo, voz, mensagem)",
+    "layout": "Layout",
+    "colors": "Cores & Marca",
+    "voice": "Voz & Mensagem",
+    "primary": "Primária",
+    "secondary": "Secundária",
+    "logo_url": "Logo URL",
+    "message": "Mensagem",
+    "preview": "Preview WYSIWYG",
+    "live_preview": "Preview ao vivo (iframe)",
+    "open_tv": "Abrir TV",
+    "save": "Salvar",
+    "voice_enabled": "Voz ao chamar senha",
+    "test_voice": "Testar voz"
+  },
+  "kiosk": {
+    "title": "Totem de Autoatendimento",
+    "subtitle": "Toque para retirar sua senha",
+    "select_queue": "Selecione a fila",
+    "name": "Nome (opcional)",
+    "phone": "Telefone (opcional)",
+    "take_ticket": "Retirar senha gigante",
+    "generating": "Gerando...",
+    "your_ticket": "Sua senha",
+    "scan_to_track": "Escaneie para acompanhar a fila no celular",
+    "how_it_works": "Como funciona?",
+    "back": "Voltar",
+    "restart_in": "Reiniciando em {seconds}s"
   }
 }
