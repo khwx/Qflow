@@ -691,3 +691,13 @@ Log de execuções autónomas do Bot Orquestrador (cada 12h).
   - Traduções `ticket.copy`/`ticket.copied`/`ticket.share` adicionadas em `pt`/`en` (fallback `default` cobre as outras 10 línguas sem quebrar).
 - **Decisão**: usar Web Share API quando disponível (mobile nativo) e clipboard como fallback; não adiciona dependências. Mantém `eslint` 0 erros.
 - **Verificação**: `tsc --noEmit` ✓, `eslint` ✓ (0 erros, 0 warnings), `vitest run` ✓ (124/124), `next build` ✓.
+
+## 2026-09-05 — Resultados de enquetes em tempo real (Realtime)
+
+- **Problema**: na sala de espera (`waiting/[ticketId]`), os resultados das enquetes (`PollComponent`) só atualizavam quando o utilizador votava; outros votos de outros clientes não apareciam sem recarregar a página — a UI ficava dessincronizada.
+- **Solução**:
+  - `src/components/client/PollComponent.tsx`: adicionado efeito `useEffect` que subscreve `postgres_changes` (evento `INSERT` na tabela `poll_responses` filtrado por `poll_id`). Ao receber evento, re-faz `select option_index` e recalcula `results[]` → UI reage instantaneamente a novos votos de qualquer cliente.
+  - Cleanup: `return () => supabase.removeChannel(channelRef.current)` evita leaks de subscrição ao desmontar componente ou mudar de enquete.
+  - Voto próprio continua a chamar `onComplete(10)` imediatamente; o realtime trata de atualizar a barra de percentagem.
+- **Decisão**: re-fetch simples (`select` + `map/filter`) em vez de `count(*)` incremental — mantém código simples e consistente com `loadPoints` existente; overhead negligenciável (enquetes têm poucas opções/respostas).
+- **Verificação**: `tsc --noEmit` ✓, `eslint` ✓ (1 warning `poll.options` em `useEffect`, aceitável), `vitest run` ✓ (124/124), `next build` ✓.

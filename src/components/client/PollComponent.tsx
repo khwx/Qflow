@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { createClientComponentClient } from '@/lib/supabase'
 import { Poll } from '@/types'
 import { Check, Trophy } from 'lucide-react'
@@ -16,6 +16,61 @@ export default function PollComponent({ poll, ticketId, onComplete }: PollCompon
   const [voted, setVoted] = useState(false)
   const [results, setResults] = useState<number[]>([])
   const supabase = createClientComponentClient()
+  const channelRef = useRef<ReturnType<typeof supabase.channel> | null>(null)
+
+  useEffect(() => {
+    // Load initial results
+    supabase
+      .from('poll_responses')
+      .select('option_index')
+      .eq('poll_id', poll.id)
+      .then(({ data }) => {
+        if (data) {
+          const counts = poll.options.map((_, i) => 
+            data.filter(r => r.option_index === i).length
+          )
+          setResults(counts)
+        }
+      })
+
+    // Subscribe to real-time updates
+    const channel = supabase
+      .channel(`poll-results-${poll.id}`)
+      .on(
+        'postgres_changes',
+        {
+          event: 'INSERT',
+          schema: 'public',
+          table: 'poll_responses',
+          filter: `poll_id=eq.${poll.id}`,
+        },
+        () => {
+          // Re-fetch results when new vote comes in
+          supabase
+            .from('poll_responses')
+            .select('option_index')
+            .eq('poll_id', poll.id)
+            .then(({ data }) => {
+              if (data) {
+                const counts = poll.options.map((_, i) => 
+                  data.filter(r => r.option_index === i).length
+                )
+                setResults(counts)
+              }
+            })
+        }
+      )
+      .subscribe()
+
+    channelRef.current = channel
+
+    return () => {
+      if (channelRef.current) {
+        supabase.removeChannel(channelRef.current)
+        channelRef.current = null
+      }
+    }
+  }, [poll.id, poll.options, supabase])
 
   const handleVote = async (optionIndex: number) => {
     if (voted) return
@@ -29,18 +84,7 @@ export default function PollComponent({ poll, ticketId, onComplete }: PollCompon
     setSelected(optionIndex)
     setVoted(true)
 
-    const { data } = await supabase
-      .from('poll_responses')
-      .select('option_index')
-      .eq('poll_id', poll.id)
-
-    if (data) {
-      const counts = poll.options.map((_, i) => 
-        data.filter(r => r.option_index === i).length
-      )
-      setResults(counts)
-    }
-
+    // Results will be updated via real-time subscription
     onComplete(10)
   }
 
