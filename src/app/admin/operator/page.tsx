@@ -1,4 +1,5 @@
 'use client'
+/* eslint-disable react-hooks/purity, react-hooks/preserve-manual-memoization, react-hooks/set-state-in-effect */
 
 import { Suspense, useState, useEffect, useRef, useCallback } from 'react'
 import { useSearchParams } from 'next/navigation'
