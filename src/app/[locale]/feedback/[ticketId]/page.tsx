@@ -25,7 +25,7 @@ export default function FeedbackPage({params}:{params: Promise<{locale:string; t
     if(fb) setDone(true)
     setLoading(false)
   },[ticketId,supabase])
-  useEffect(()=>{load()},[load])
+  useEffect(()=>{queueMicrotask(load)},[load])
 
   const submit=async()=>{
     if(rating<1||rating>5){toast.error('Escolha 1-5 estrelas');return}

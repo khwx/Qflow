@@ -24,10 +24,10 @@ function FeedbackAdminInner(){
     setLoading(false)
   },[supabase])
 
-  useEffect(()=>{
-    if(!estSlug){setLoading(false);return}
+useEffect(()=>{
+    if(!estSlug){ return }
     supabase.from('establishments').select('*').eq('slug',estSlug).single().then(({data})=>{
-      setEstablishment(data); if(data) load(data.id); else setLoading(false)
+      if(data) { setEstablishment(data); load(data.id) } else { }
     })
   },[estSlug,supabase,load])
 

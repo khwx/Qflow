@@ -1,7 +1,6 @@
 'use client'
 
 import { use, useState, useEffect, useCallback, useRef } from 'react'
-import { useTranslations } from 'next-intl'
 import { createClientComponentClient } from '@/lib/supabase'
 import { Establishment, Queue } from '@/types'
 import { QRCodeSVG } from 'qrcode.react'
@@ -11,7 +10,7 @@ import { cn } from '@/lib/utils'
 
 export default function KioskPage({ params }: { params: Promise<{ locale: string; code: string }> }) {
   const { code } = use(params)
-  const t = useTranslations('kiosk')
+  // const t = useTranslations('kiosk') // unused - keep for future i18n
   const [establishment, setEstablishment] = useState<Establishment | null>(null)
   const [queues, setQueues] = useState<Queue[]>([])
   const [loading, setLoading] = useState(true)
@@ -36,7 +35,7 @@ export default function KioskPage({ params }: { params: Promise<{ locale: string
     finally { setLoading(false) }
   }, [code])
 
-  useEffect(() => { load() }, [load])
+  useEffect(() => { queueMicrotask(load) }, [load])
 
   // realtime queues
   useEffect(() => {
@@ -48,7 +47,7 @@ export default function KioskPage({ params }: { params: Promise<{ locale: string
   // auto-reset 30s after ticket
   useEffect(() => {
     if (!ticket) return
-    setCountdown(30)
+    queueMicrotask(() => setCountdown(30))
     timerRef.current = window.setInterval(() => {
       setCountdown(prev => {
         if (prev <= 1) {

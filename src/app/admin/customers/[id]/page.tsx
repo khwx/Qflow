@@ -29,7 +29,7 @@ export default function CustomerDetailPage({params}:{params: Promise<{id:string}
     setLoading(false)
   },[id,supabase])
 
-  useEffect(()=>{load()},[load])
+  useEffect(()=>{queueMicrotask(load)},[load])
 
   const savePoints=async()=>{
     if(!customer) return
@@ -41,8 +41,6 @@ export default function CustomerDetailPage({params}:{params: Promise<{id:string}
 
   if(loading) return <div className="p-6 space-y-4"><Skeleton className="h-32"/><Skeleton className="h-64"/></div>
   if(!customer) return <div className="text-center py-12 text-gray-500">Cliente não encontrado</div>
-
-  const maxP=Math.max(...tickets.map((_,i)=> tickets.slice(0,i+1).length),1)
 
   return <div className="animate-fade-in space-y-6">
     <Link href={estSlug?`/admin/customers?est=${estSlug}`:'/admin/customers'} className="inline-flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400"><ArrowLeft className="h-4 w-4"/>Voltar</Link>

@@ -72,7 +72,7 @@ function TvConfigInner() {
     setLoading(false)
   }, [estSlug, supabase, storageKey])
 
-  useEffect(() => { load() }, [load])
+  useEffect(() => { queueMicrotask(load) }, [load])
   useEffect(() => {
     if (!storageKey) return
     try { localStorage.setItem(storageKey, JSON.stringify(config)) } catch {}

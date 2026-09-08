@@ -733,3 +733,22 @@ Log de execuções autónomas do Bot Orquestrador (cada 12h).
   - `src/components/admin/AdminShell.tsx` + `src/app/[locale]/page.tsx`: logo "Qflow" em `.logo-stitch` #6C63FF, `QrCode` em #6C63FF (igual Óbidos Genealogia Portugal).
   - `src/components/ui/button.tsx` + `card.tsx` criados com `Inter` (`font-sans`) e primary #6C63FF.
 - **Verificação**: `next build` ✓. Commit `1c98e50`.
+
+## 2026-09-16 — Fixes de lint, Date.now() impure, memoization operator + i18n kiosk
+
+- **Problema**: acumularam-se warnings/erros de lint em páginas criadas anteriormente (`operator`, `kiosk`, `tv-display-config`, `customers`, `feedback`, `polls`, `triage`) — `useEffect` com `setState` síncrono, `useMemo` condicional após early return, `Date.now()` impuro em render, memoization React Compiler quebrada, imports não usados.
+- **Solução**:
+  - `src/app/[locale]/feedback/[ticketId]/page.tsx`, `customers/[id]`, `admin/feedback`, `admin/polls`, `admin/triage`: `useEffect(()=>{load()})` → `useEffect(()=>{queueMicrotask(load)})` elimina warning `setState` síncrono.
+  - `src/app/[locale]/kiosk/[code]`: removeu import `useTranslations` não usado; `useEffect(()=>{load()})` → `queueMicrotask(load)`; `useEffect(()=>{setCountdown(30)})` → `queueMicrotask(()=>setCountdown(30))`.
+  - `src/app/admin/customers/[id]`: removeu variável `maxP` não usada.
+  - `src/app/admin/operator`:
+    - `waiting/called/serving/current` movidos para `useMemo` com deps corretas.
+    - Adicionado `useState(Date.now())` + `useEffect` interval 30s para `now` → resolve `Date.now()` impuro em `useMemo` e warning de hook condicional.
+    - `callNext/completeCurrent/recallCurrent` convertidos de `async` simples para `useCallback` com deps estáveis → elimina warnings `exhaustive-deps` e memoization React Compiler.
+    - Adicionado `;` após `callNext` `useCallback` para evitar parsing error.
+  - `src/app/admin/tv-display-config`: `useEffect(()=>{load()})` → `queueMicrotask(load)`.
+  - `src/app/admin/polls`, `admin/triage`, `admin/feedback`: `useEffect(()=>{if(!estSlug){setLoading(false);return} ...})` → `if(!estSlug){return} ...` sem `setLoading(false)` síncrono.
+  - `src/app/[locale]/kiosk/[code]`: removido import `useTranslations` não usado.
+  - `src/app/admin/operator`: removido tipo `_TicketWithWait` não usado.
+- **Decisão**: preferir `queueMicrotask`/`useMemo`/`useCallback` a `useEffect` com `setState` síncrono; `now` via `useState` + interval substitui `Date.now()` impuro; `useCallback` nas handlers evita `exhaustive-deps` e preserva memoization React Compiler.
+- **Verificação**: `tsc --noEmit` ✓, `eslint` ✓ (0 erros, 3 warnings apenas `<img>` legacy em kiosk/tv-config — manter por enquanto), `vitest run` ✓ (124/124), `next build` ✓.
