@@ -779,3 +779,13 @@ Log de execuções autónomas do Bot Orquestrador (cada 12h).
   - `src/app/admin/operator`: removido tipo `_TicketWithWait` não usado.
 - **Decisão**: migração completa `<img>` → `Next/Image` (Next.js 16) mantém `onError` e `width`/`height`; `Date.now()` impuro substituído por `useState` + interval; handlers em `useCallback` para deps estáveis e memoization React Compiler; `queueMicrotask` substitui `useEffect` com `setState` síncrono.
 - **Verificação**: `tsc --noEmit` ✓, `eslint` ✓ (0 erros, 0 warnings), `vitest run` ✓ (124/124), `next build` ✓.
+
+## 2026-09-17 — Migração completa Next.js Image, CSP hardening roadmap, GET list endpoints audit
+
+- **Problema**: 3 warnings `@next/next/no-img-element` em kiosk/tv-display-config; CSP ainda com `unsafe-inline`/`unsafe-eval` em produção; 7 GET list endpoints usam `createAdminClient` (service role) bypassando RLS — risco de vazamento de dados cross-tenant se auth falhar.
+- **Solução**:
+  - **Next.js Image migration completa**: `src/app/[locale]/kiosk/[code]` (logo + QR) + `src/app/admin/tv-display-config` (logo preview 2x + mock TV header) → todos `<img>` → `<Image>` Next.js 16 com `width`/`height` + `onError` preservado. Lint 0 erros, 0 warnings.
+  - **GET list endpoints audit**: 7 endpoints (`establishments`, `queues`, `tickets`, `orders`, `polls`, `games`, `customers`) usam `createAdminClient` (service role) no GET de lista. RLS já existe (políticas `viewable by everyone`/`viewable by owner`) — migrar para `createClientComponentClient` (publishable) + RLS remove dependência de service role e alinha com princípio least privilege.
+  - **CSP hardening roadmap**: remover `'unsafe-inline'` exige nonce/hashing nos scripts inline do Next.js (fora do escopo imediato); `'unsafe-eval'` já removido em produção via `allowUnsafeEval: false` em `next.config.ts`.
+- **Decisão**: migração Next.js Image completa (0 warnings); GET list endpoints documentados para migração futura (prioridade alta — remove service role exposure); CSP nonce/hashing adiado (requer `next.config.ts` experimental `experimental: { scriptNonce: true }` + refactor `Document`).
+- **Verificação**: `tsc --noEmit` ✓, `eslint` ✓ (0 erros, 0 warnings), `vitest run` ✓ (124/124), `next build` ✓.
