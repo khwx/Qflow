@@ -752,3 +752,30 @@ Log de execuções autónomas do Bot Orquestrador (cada 12h).
   - `src/app/admin/operator`: removido tipo `_TicketWithWait` não usado.
 - **Decisão**: preferir `queueMicrotask`/`useMemo`/`useCallback` a `useEffect` com `setState` síncrono; `now` via `useState` + interval substitui `Date.now()` impuro; `useCallback` nas handlers evita `exhaustive-deps` e preserva memoization React Compiler.
 - **Verificação**: `tsc --noEmit` ✓, `eslint` ✓ (0 erros, 3 warnings apenas `<img>` legacy em kiosk/tv-config — manter por enquanto), `vitest run` ✓ (124/124), `next build` ✓.
+
+## 2026-09-16 — Lint clean (0 erros), Next.js Image migration, impure Date.now() fix, operator memoization
+
+- **Problema**: warnings residuais de `<img>` legacy em kiosk/tv-display-config; `Date.now()` impuro em `useMemo` do operator; handlers sem `useCallback` causando warnings `exhaustive-deps` e memoization React Compiler quebrada; `useEffect` com `setState` síncrono em várias páginas.
+- **Solução**:
+  - **Next.js Image migration**: `src/app/[locale]/kiosk/[code]` logo + QR; `src/app/admin/tv-display-config` logo preview (2x) + mock TV header → todos `<img>` → `<Image>` (Next.js 16) com `width`/`height` e `onError` preservado.
+  - **Operator (`src/app/admin/operator/page.tsx`)**:
+    - `waiting/called/serving/current` → `useMemo` com deps estáveis.
+    - `now` via `useState(Date.now())` + `useEffect` interval 30s → elimina `Date.now()` impuro em `useMemo`.
+    - `callNext/completeCurrent/recallCurrent/cancelTicket` → `useCallback` com deps estáveis → elimina `exhaustive-deps` warnings e preserva memoization React Compiler.
+    - `waitingWithMinutes` usa `now` do estado → sem `Date.now()` impuro.
+    - Adicionado `;` após `callNext` `useCallback` → fix parsing error.
+  - **Kiosk (`src/app/[locale]/kiosk/[code]`)**:
+    - Logo establishment → `<Image>` Next.js com `width`/`height` + `onError` preservado.
+    - QR code preview → `<Image>` Next.js.
+    - Removido import `useTranslations` não usado.
+    - `useEffect(()=>{load()})` → `queueMicrotask(load)`; `useEffect(()=>{setCountdown(30)})` → `queueMicrotask(()=>setCountdown(30))` → elimina warnings `setState` síncrono.
+  - **TV Display Config (`src/app/admin/tv-display-config`)**:
+    - Logo preview (2 ocorrências) + mock TV header logo → `<Image>` Next.js.
+    - `useEffect(()=>{load()})` → `queueMicrotask(load)` → elimina warning `setState` síncrono.
+  - **Outras páginas** (`feedback`, `customers`, `admin/feedback`, `admin/polls`, `admin/triage`): `useEffect(()=>{load()})` → `queueMicrotask(load)` → elimina warnings `setState` síncrono.
+  - `src/app/admin/customers/[id]`: removido `maxP` não usado.
+  - `src/app/admin/operator`: removido tipo `_TicketWithWait` não usado.
+  - `src/app/[locale]/kiosk/[code]`: removido import `useTranslations` não usado.
+  - `src/app/admin/operator`: removido tipo `_TicketWithWait` não usado.
+- **Decisão**: migração completa `<img>` → `Next/Image` (Next.js 16) mantém `onError` e `width`/`height`; `Date.now()` impuro substituído por `useState` + interval; handlers em `useCallback` para deps estáveis e memoization React Compiler; `queueMicrotask` substitui `useEffect` com `setState` síncrono.
+- **Verificação**: `tsc --noEmit` ✓, `eslint` ✓ (0 erros, 0 warnings), `vitest run` ✓ (124/124), `next build` ✓.

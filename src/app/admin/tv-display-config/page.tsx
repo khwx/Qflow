@@ -8,6 +8,7 @@ import { Establishment } from '@/types'
 import { Skeleton } from '@/components/ui/Skeleton'
 import toast from 'react-hot-toast'
 import { Monitor, Palette, Type, Volume2, Image as ImageIcon, LayoutGrid, Save, ExternalLink, Eye, Settings2, MessageSquare } from 'lucide-react'
+import Image from 'next/image'
 
 type LayoutMode = 'grid' | 'single' | 'split'
 type TvConfig = {
@@ -171,7 +172,7 @@ function TvConfigInner() {
               <span className="text-xs font-medium text-gray-600 dark:text-gray-300 flex items-center gap-1"><ImageIcon className="h-4 w-4" /> Logo URL (opcional)</span>
               <input value={config.logoUrl} onChange={e=>setConfig(c=>({...c, logoUrl:e.target.value}))} placeholder="https://..." className="w-full px-3 py-2 rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-sm text-gray-900 dark:text-white" />
             </label>
-            {config.logoUrl ? <div className="h-14 bg-gray-50 dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-700 flex items-center justify-center overflow-hidden p-2"><img src={config.logoUrl} alt="Logo preview" className="max-h-10 object-contain" onError={e=>((e.target as HTMLImageElement).style.display='none')} /></div> : null}
+            {config.logoUrl ? <div className="h-14 bg-gray-50 dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-700 flex items-center justify-center overflow-hidden p-2"><Image src={config.logoUrl} alt="Logo preview" width={56} height={56} className="max-h-10 object-contain" onError={e=>((e.target as HTMLImageElement).style.display='none')} /></div> : null}
           </div>
 
           <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 shadow-sm p-5 space-y-4">
@@ -216,7 +217,7 @@ function TvConfigInner() {
                 {/* Mock TV header */}
                 <div className="p-4 sm:p-6 flex justify-between items-start text-white">
                   <div className="flex items-center gap-3">
-                    {config.logoUrl ? <img src={config.logoUrl} alt="logo" className="h-10 w-10 rounded-xl bg-white/20 object-cover p-1" onError={e=>((e.target as HTMLImageElement).style.display='none')} /> : <div className="h-10 w-10 rounded-xl bg-white/20 flex items-center justify-center"><Monitor className="h-6 w-6" /></div>}
+                    {config.logoUrl ? <Image src={config.logoUrl} alt="logo" width={40} height={40} className="rounded-xl bg-white/20 object-cover p-1" onError={e=>((e.target as HTMLImageElement).style.display='none')} /> : <div className="h-10 w-10 rounded-xl bg-white/20 flex items-center justify-center"><Monitor className="h-6 w-6" /></div>}
                     <div>
                       <div className="font-bold text-lg leading-none">{establishment.name}</div>
                       <div className="text-white/70 text-xs mt-0.5">{config.message.slice(0,48)}{config.message.length>48?'…':''}</div>

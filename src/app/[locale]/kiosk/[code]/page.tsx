@@ -6,6 +6,7 @@ import { Establishment, Queue } from '@/types'
 import { QRCodeSVG } from 'qrcode.react'
 import toast from 'react-hot-toast'
 import { Clock, Users, Ticket as TicketIcon, QrCode, AlertCircle, CheckCircle2, RefreshCw, TabletSmartphone } from 'lucide-react'
+import Image from 'next/image'
 import { cn } from '@/lib/utils'
 
 export default function KioskPage({ params }: { params: Promise<{ locale: string; code: string }> }) {
@@ -155,7 +156,7 @@ export default function KioskPage({ params }: { params: Promise<{ locale: string
       {/* Header */}
       <header className="px-6 sm:px-8 py-5 flex items-center justify-between border-b border-white/10" style={{ background: `linear-gradient(135deg, ${primary}, ${secondary})` }}>
         <div className="flex items-center gap-4">
-          {establishment.logo_url ? <img src={establishment.logo_url} alt={establishment.name} className="h-12 w-12 rounded-2xl bg-white/20 object-cover p-1" /> : <div className="h-12 w-12 rounded-2xl bg-white/20 flex items-center justify-center text-xl font-black">{establishment.name[0]}</div>}
+          {establishment.logo_url ? <Image src={establishment.logo_url} alt={establishment.name} width={48} height={48} className="rounded-2xl bg-white/20 object-cover p-1" /> : <div className="h-12 w-12 rounded-2xl bg-white/20 flex items-center justify-center text-xl font-black">{establishment.name[0]}</div>}
           <div>
             <h1 className="text-2xl sm:text-3xl font-black leading-none tracking-tight">{establishment.name}</h1>
             <p className="text-white/80 text-sm mt-1 flex items-center gap-2"><TabletSmartphone className="h-4 w-4" /> Totem de autoatendimento • Toque para retirar sua senha</p>
