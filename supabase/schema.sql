@@ -559,5 +559,25 @@ create policy "Feedback updatable by owner" on public.feedback for update using 
 );
 alter publication supabase_realtime add table public.feedback;
 
+-- Rate limit table (shared store for production)
+create table if not exists public.rate_limits (
+  key text primary key,
+  count integer not null default 1,
+  reset_at timestamp with time zone not null,
+  created_at timestamp with time zone not null default timezone('utc'::text, now())
+);
+
+create index if not exists rate_limits_reset_at_idx
+  on public.rate_limits (reset_at);
+
+-- Drop rows whose window has already elapsed. Safe to run frequently.
+create or replace function public.rate_limit_cleanup()
+returns integer
+language sql
+as $$
+  delete from public.rate_limits where reset_at <= timezone('utc'::text, now());
+  select 0;
+$$;
+
 -- Schedule rate limit cleanup hourly (runs at minute 0 of every hour)
 select cron.schedule('rate-limit-cleanup-hourly', '0 * * * *', 'select public.rate_limit_cleanup()');

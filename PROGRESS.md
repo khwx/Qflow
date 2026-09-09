@@ -811,3 +811,15 @@ Log de execuções autónomas do Bot Orquestrador (cada 12h).
   - RLS policies já existiam (`viewable by everyone`/`viewable by owner`) → migração transparente, sem mudança de comportamento visível.
 - **Decisão**: manter `createAdminClient` para mutações (ownership check server-side) e usar `createServerClient` para leituras (RLS enforced). Princípio least privilege aplicado.
 - **Verificação**: `tsc --noEmit` ✓, `eslint` ✓ (0 erros, 0 warnings), `vitest run` ✓ (124/124), `next build` ✓.
+
+## 2026-09-18 — Rate limiter shared store em produção (Supabase-backed)
+
+- **Problema**: o rate limiter usava `MemoryRateLimitStore` (in-memory, por-instância) em todos os ambientes. Em produção serverless (Vercel) com múltiplas réplicas, cada instância mantinha o seu próprio contador — a quota não era aplicada globalmente, permitindo que um atacante contornasse o limite distribuindo pedidos pelas instâncias.
+- **Solução**:
+  - Tabela `rate_limits` em `supabase/schema.sql` (key, count, reset_at, created_at + índice em `reset_at`).
+  - Função `rate_limit_cleanup()` para remover linhas expiradas.
+  - Cron job `pg_cron` agendado hourly (`0 * * * *`) para executar `rate_limit_cleanup()`.
+  - `SupabaseRateLimitStore` em `src/lib/rateLimitStore.ts`: lê/escreve linha por chave via upsert; usado automaticamente quando credenciais de service-role estão disponíveis (produção), com **fallback gracioso** para `MemoryRateLimitStore` se o backend falhar (nunca bloqueia tráfego legítimo).
+  - `MemoryRateLimitStore` mantido como default em dev/testes/CI (sem credenciais de produção).
+- **Decisão**: consistência eventual aceitável para throttling (diferente da geração atómica de senhas `create_ticket` que usa transação DB). Fallback gracioso garante que falha do store partilhado nunca bloqueia tráfego legítimo.
+- **Verificação**: `tsc --noEmit` ✓, `eslint` ✓ (0 erros, 0 warnings), `vitest run` ✓ (124/124), `next build` ✓.
