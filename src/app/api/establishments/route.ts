@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server'
-import { createAdminClient } from '@/lib/supabase'
+import { createServerClient, createAdminClient } from '@/lib/supabase'
 import { rateLimit } from '@/lib/rateLimit'
 import { authenticateRequest } from '@/lib/auth'
 import { jsonWithPagination, parsePagination } from '@/lib/pagination'
@@ -15,7 +15,7 @@ export async function GET(request: Request) {
       return NextResponse.json({ error: pagination.error }, { status: 400 })
     }
 
-    const { data, error, count } = await createAdminClient()
+    const { data, error, count } = await createServerClient()
       .from('establishments')
       .select('*', { count: 'exact' })
       .eq('is_active', true)

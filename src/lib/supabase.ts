@@ -1,6 +1,7 @@
 import { createClient, type SupabaseClient } from '@supabase/supabase-js'
 
 let clientInstance: SupabaseClient | null = null
+let serverInstance: SupabaseClient | null = null
 
 export function createClientComponentClient(): SupabaseClient {
   if (clientInstance) return clientInstance
@@ -17,6 +18,28 @@ export function createClientComponentClient(): SupabaseClient {
   }
   clientInstance = createClient(url, key, { auth: { persistSession: true, autoRefreshToken: true } })
   return clientInstance
+}
+
+/**
+ * Server-side client using the publishable key (anon key).
+ * Use this in API routes for read operations where RLS should apply.
+ * Unlike createAdminClient, this respects RLS policies.
+ */
+export function createServerClient(): SupabaseClient {
+  if (serverInstance) return serverInstance
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.SUPABASE_URL
+  const key =
+    process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY ||
+    process.env.SUPABASE_PUBLISHABLE_KEY ||
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
+    process.env.SUPABASE_ANON_KEY
+  if (!url || !key) {
+    throw new Error(
+      'Missing Supabase env vars: NEXT_PUBLIC_SUPABASE_URL + NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY (ou NEXT_PUBLIC_SUPABASE_ANON_KEY)'
+    )
+  }
+  serverInstance = createClient(url, key, { auth: { persistSession: false } })
+  return serverInstance
 }
 
 export function createAdminClient(): SupabaseClient {

@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server'
-import { createAdminClient } from '@/lib/supabase'
+import { createServerClient, createAdminClient } from '@/lib/supabase'
 import { rateLimit } from '@/lib/rateLimit'
 import { authenticateRequest } from '@/lib/auth'
 import { assertOwnership } from '@/lib/ownership'
@@ -18,7 +18,7 @@ export async function GET(request: Request) {
       return NextResponse.json({ error: pagination.error }, { status: 400 })
     }
 
-    let query = createAdminClient()
+    let query = createServerClient()
       .from('polls')
       .select('*', { count: 'exact' })
       .order('created_at', { ascending: false })

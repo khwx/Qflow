@@ -789,3 +789,14 @@ Log de execuções autónomas do Bot Orquestrador (cada 12h).
   - **CSP hardening roadmap**: remover `'unsafe-inline'` exige nonce/hashing nos scripts inline do Next.js (fora do escopo imediato); `'unsafe-eval'` já removido em produção via `allowUnsafeEval: false` em `next.config.ts`.
 - **Decisão**: migração Next.js Image completa (0 warnings); GET list endpoints documentados para migração futura (prioridade alta — remove service role exposure); CSP nonce/hashing adiado (requer `next.config.ts` experimental `experimental: { scriptNonce: true }` + refactor `Document`).
 - **Verificação**: `tsc --noEmit` ✓, `eslint` ✓ (0 erros, 0 warnings), `vitest run` ✓ (124/124), `next build` ✓.
+
+## 2026-09-17 — Migração GET list endpoints para publishable client + RLS
+
+- **Problema**: 7 endpoints GET de lista (`establishments`, `queues`, `tickets`, `orders`, `polls`, `games`, `customers`) usavam `createAdminClient` (service role) — bypassando RLS e expondo dados cross-tenant se auth falhasse.
+- **Solução**:
+  - Criado `createServerClient()` em `src/lib/supabase.ts`: client server-side com chave publishable (anon key) que **respeita RLS**.
+  - Substituído `createAdminClient` → `createServerClient` em todos os 7 GET de lista: `establishments`, `queues`, `tickets`, `orders`, `polls`, `games`, `customers`.
+  - POST/PATCH/DELETE mantêm `createAdminClient` (service role) pois exigem ownership check via `assertOwnership` antes de escrita.
+  - RLS policies já existiam (`viewable by everyone`/`viewable by owner`) → migração transparente, sem mudança de comportamento visível.
+- **Decisão**: manter `createAdminClient` para mutações (ownership check server-side) e usar `createServerClient` para leituras (RLS enforced). Princípio least privilege aplicado.
+- **Verificação**: `tsc --noEmit` ✓, `eslint` ✓ (0 erros, 0 warnings), `vitest run` ✓ (124/124), `next build` ✓.
