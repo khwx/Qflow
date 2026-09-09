@@ -812,6 +812,35 @@ Log de execuções autónomas do Bot Orquestrador (cada 12h).
 - **Decisão**: manter `createAdminClient` para mutações (ownership check server-side) e usar `createServerClient` para leituras (RLS enforced). Princípio least privilege aplicado.
 - **Verificação**: `tsc --noEmit` ✓, `eslint` ✓ (0 erros, 0 warnings), `vitest run` ✓ (124/124), `next build` ✓.
 
+## 2026-09-09 — Triage: tempo de espera em tempo real (fecha UI stale)
+
+- **Problema**: na página de triagem (`admin/triage`), o tempo de espera de cada
+  senha era calculado com `Date.now()` diretamente no render — o valor só era
+  recomputado quando o componente re-renderizava por outro motivo (novo ticket
+  via Realtime, mudança de filtro). Entre renders, o tempo mostrado ("3m", "5m")
+  ficava desatualizado, comprometendo a decisão de re-priorização no Kanban.
+  O painel do operador (`admin/operator`) já resolveu este problema com
+  `useState(Date.now)` + interval, mas o triage não foi atualizado.
+- **Solução**:
+  - Adicionado `const [now, setNow] = useState(Date.now)` no estado do
+    `TriageInner`.
+  - Adicionado `useEffect` com `setInterval(() => setNow(Date.now()), 30000)`
+    (30s) para manter o timestamp fresco.
+  - Substituído `Date.now()` no cálculo de elapsed minutes por `now`.
+- **Decisão**: padrão idêntico ao `operator/page.tsx` (consistência); intervalo
+  de 30s é suficiente para deciding-time em triagem (não é display de contagem
+  regressiva). O Realtime já causa re-renders quando tickets mudam, pelo que o
+  `now` é atualizado naturalmente em ambos os caminhos.
+- **Verificação**: `tsc --noEmit` ✓, `eslint` ✓ (0 erros, 0 warnings),
+  `vitest run` ✓ (124/124), `next build` ✓.
+
+## Pendente / próximas ideias
+- Reforçar a CSP com nonce/hashing para remover `'unsafe-inline'` (bloqueado
+  pelo facto de o framework Next.js injetar scripts inline sem nonce).
+- Menu de encomendas configurável por estabelecimento (atualmente hardcoded).
+- UI de configuração de jogos (perguntas quiz, segmentos roleta, pares memória).
+- Acessibilidade: ARIA tabs, modal focus trap, skip navigation.
+
 ## 2026-09-18 — Rate limiter shared store em produção (Supabase-backed)
 
 - **Problema**: o rate limiter usava `MemoryRateLimitStore` (in-memory, por-instância) em todos os ambientes. Em produção serverless (Vercel) com múltiplas réplicas, cada instância mantinha o seu próprio contador — a quota não era aplicada globalmente, permitindo que um atacante contornasse o limite distribuindo pedidos pelas instâncias.

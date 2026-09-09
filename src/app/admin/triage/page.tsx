@@ -24,6 +24,7 @@ function TriageInner(){
   const [filter,setFilter]=useState<string>('all')
   const [loading,setLoading]=useState(!!estSlug)
   const [dragId,setDragId]=useState<string|null>(null)
+  const [now,setNow]=useState(Date.now)
   const supabase=createClientComponentClient()
   const chRef=useRef<ReturnType<typeof supabase.channel>|null>(null)
 
@@ -52,6 +53,11 @@ function TriageInner(){
     chRef.current=ch
     return()=>{ if(chRef.current) supabase.removeChannel(chRef.current)}
   },[establishment,supabase,load])
+
+  useEffect(()=>{
+    const id=setInterval(()=>setNow(Date.now()),30000)
+    return()=>clearInterval(id)
+  },[])
 
   const patchPriority=async(id:string, priority: Ticket['priority'])=>{
     const {error}=await supabase.from('tickets').update({priority}).eq('id',id)
@@ -93,7 +99,7 @@ function TriageInner(){
                   <div className="flex items-center gap-2">
                     <GripVertical className="h-4 w-4 text-gray-400 shrink-0"/>
                     <span className="font-mono font-black text-indigo-600 dark:text-indigo-400">{t.ticket_number}</span>
-                    <span className="ml-auto inline-flex items-center gap-1 text-[11px] px-2 py-1 rounded-full bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300"><Clock3 className="h-3 w-3"/>{Math.round((Date.now()-new Date(t.created_at).getTime())/60000)}m</span>
+                    <span className="ml-auto inline-flex items-center gap-1 text-[11px] px-2 py-1 rounded-full bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300"><Clock3 className="h-3 w-3"/>{Math.round((now-new Date(t.created_at).getTime())/60000)}m</span>
                   </div>
                   <div className="text-sm text-gray-700 dark:text-gray-300 truncate">{t.customer_name||'—'}</div>
                   <div className="flex gap-1 flex-wrap">
