@@ -1,3 +1,10 @@
+export interface MenuItem {
+  id: string
+  name: string
+  price: number
+  category: string | null
+}
+
 export interface Establishment {
   id: string
   name: string
@@ -9,6 +16,7 @@ export interface Establishment {
   logo_url: string | null
   primary_color: string
   secondary_color: string
+  menu_items: MenuItem[]
   is_active: boolean
   owner_id: string
   created_at: string

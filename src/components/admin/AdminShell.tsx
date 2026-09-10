@@ -23,7 +23,8 @@ import {
   BarChart3,
   HeartHandshake,
   Star,
-  ClipboardList
+  ClipboardList,
+  UtensilsCrossed
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { createClientComponentClient } from '@/lib/supabase'
@@ -39,6 +40,7 @@ const navigation = [
   { name: 'Filas', href: '/admin/queues', icon: Users },
   { name: 'Senhas', href: '/admin/tickets', icon: Ticket },
   { name: 'Pedidos', href: '/admin/orders', icon: Package },
+  { name: 'Cardápio', href: '/admin/menu', icon: UtensilsCrossed },
   { name: 'Enquetes', href: '/admin/polls', icon: BarChart3 },
   { name: 'Feedback', href: '/admin/feedback', icon: Star },
   { name: 'TV', href: '/admin/tv-display-config', icon: Monitor },

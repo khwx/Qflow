@@ -16,6 +16,7 @@ create table if not exists public.establishments (
   logo_url text,
   primary_color text default '#4f46e5',
   secondary_color text default '#7c3aed',
+  menu_items jsonb default '[]'::jsonb,
   is_active boolean default true,
   owner_id uuid references auth.users(id),
   created_at timestamp with time zone default timezone('utc'::text, now()) not null,
@@ -126,6 +127,9 @@ create table if not exists public.poll_responses (
   option_index integer not null,
   created_at timestamp with time zone default timezone('utc'::text, now()) not null
 );
+
+-- Migration: add menu_items to existing establishments tables
+alter table public.establishments add column if not exists menu_items jsonb default '[]'::jsonb;
 
 -- Row Level Security
 alter table public.establishments enable row level security;

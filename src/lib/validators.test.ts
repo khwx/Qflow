@@ -16,6 +16,7 @@ import {
   gamePatchSchema,
   forgotPasswordSchema,
   customerPatchSchema,
+  menuItemSchema,
   validateBody,
   sanitizeInput,
 } from './validators'
@@ -71,6 +72,38 @@ describe('establishmentSchema', () => {
       category: 'food',
     })
     expect(parsed.slug).toBe('cafe-sao-paulo')
+  })
+
+  it('accepts menu_items array', () => {
+    const parsed = establishmentSchema.parse({
+      name: 'Padaria',
+      slug: 'padaria',
+      category: 'food',
+      menu_items: [{ id: '1', name: 'Café', price: 5, category: null }],
+    })
+    expect(parsed.menu_items).toHaveLength(1)
+  })
+
+  it('rejects menu item with missing name', () => {
+    const result = establishmentSchema.safeParse({
+      name: 'Padaria',
+      slug: 'padaria',
+      category: 'food',
+      menu_items: [{ id: '1', price: 5 }],
+    })
+    expect(result.success).toBe(false)
+  })
+
+  it('rejects menu_items over 100 items', () => {
+    const result = establishmentSchema.safeParse({
+      name: 'Padaria',
+      slug: 'padaria',
+      category: 'food',
+      menu_items: Array.from({ length: 101 }, (_, i) => ({
+        id: String(i), name: 'Item', price: 5,
+      })),
+    })
+    expect(result.success).toBe(false)
   })
 })
 
@@ -411,6 +444,38 @@ describe('customerPatchSchema', () => {
 
   it('rejects empty body', () => {
     const result = customerPatchSchema.safeParse({})
+    expect(result.success).toBe(false)
+  })
+})
+
+describe('menuItemSchema', () => {
+  it('accepts valid menu item', () => {
+    const result = menuItemSchema.safeParse({ id: '1', name: 'Café', price: 5 })
+    expect(result.success).toBe(true)
+  })
+
+  it('accepts optional category', () => {
+    const result = menuItemSchema.safeParse({ id: '2', name: 'Suco', price: 7, category: 'Bebidas' })
+    expect(result.success).toBe(true)
+  })
+
+  it('accepts nullable category', () => {
+    const result = menuItemSchema.safeParse({ id: '3', name: 'Pão', price: 3, category: null })
+    expect(result.success).toBe(true)
+  })
+
+  it('rejects missing name', () => {
+    const result = menuItemSchema.safeParse({ id: '4', price: 5 })
+    expect(result.success).toBe(false)
+  })
+
+  it('rejects negative price', () => {
+    const result = menuItemSchema.safeParse({ id: '5', name: 'X', price: -1 })
+    expect(result.success).toBe(false)
+  })
+
+  it('rejects missing id', () => {
+    const result = menuItemSchema.safeParse({ name: 'Café', price: 5 })
     expect(result.success).toBe(false)
   })
 })

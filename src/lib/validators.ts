@@ -30,6 +30,13 @@ export const slugSchema = z
       .regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, 'Invalid slug format')
   )
 
+export const menuItemSchema = z.object({
+  id: z.string().min(1),
+  name: z.string().min(1, 'Name is required').max(120),
+  price: z.number().min(0).max(999999),
+  category: z.string().max(60).nullable().optional(),
+})
+
 export const establishmentSchema = z.object({
   name: z.string().min(1, 'Name is required').max(120),
   slug: slugSchema,
@@ -41,6 +48,7 @@ export const establishmentSchema = z.object({
     .string()
     .regex(/^#[0-9a-fA-F]{6}$/, 'Invalid color')
     .optional(),
+  menu_items: z.array(menuItemSchema).max(100).optional(),
 })
 
 export const establishmentPatchSchema = z
@@ -52,6 +60,7 @@ export const establishmentPatchSchema = z
     address: z.string().max(255).nullable().optional(),
     phone: z.string().max(30).nullable().optional(),
     primary_color: z.string().regex(/^#[0-9a-fA-F]{6}$/).optional(),
+    menu_items: z.array(menuItemSchema).max(100).optional(),
     is_active: z.boolean().optional(),
   })
   .refine((data) => Object.keys(data).length > 0, 'No valid fields to update')

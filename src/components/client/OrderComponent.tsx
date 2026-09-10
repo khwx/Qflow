@@ -1,9 +1,9 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { createClientComponentClient } from '@/lib/supabase'
-import { OrderItem } from '@/types'
-import { Plus, Minus, ShoppingCart, CheckCircle2 } from 'lucide-react'
+import { OrderItem, MenuItem } from '@/types'
+import { Plus, Minus, ShoppingCart, CheckCircle2, UtensilsCrossed } from 'lucide-react'
 
 interface OrderComponentProps {
   ticketId: string
@@ -15,18 +15,29 @@ export default function OrderComponent({ ticketId, establishmentId }: OrderCompo
   const [notes, setNotes] = useState('')
   const [submitted, setSubmitted] = useState(false)
   const [loading, setLoading] = useState(false)
+  const [menuItems, setMenuItems] = useState<MenuItem[]>([])
+  const [menuLoading, setMenuLoading] = useState(true)
   const supabase = createClientComponentClient()
 
-  const menuItems = [
-    { id: '1', name: 'Água Mineral', price: 3.00 },
-    { id: '2', name: 'Refrigerante', price: 5.00 },
-    { id: '3', name: 'Suco Natural', price: 7.00 },
-    { id: '4', name: 'Café', price: 4.00 },
-    { id: '5', name: 'Pão de Queijo', price: 3.50 },
-    { id: '6', name: 'Bolo', price: 6.00 },
-  ]
+  useEffect(() => {
+    async function loadMenu() {
+      try {
+        const { data } = await supabase
+          .from('establishments')
+          .select('menu_items')
+          .eq('id', establishmentId)
+          .single()
+        if (data?.menu_items) setMenuItems(data.menu_items as MenuItem[])
+      } catch (error) {
+        console.error('Load menu error:', error)
+      } finally {
+        setMenuLoading(false)
+      }
+    }
+    loadMenu()
+  }, [establishmentId, supabase])
 
-  const addItem = (item: typeof menuItems[0]) => {
+  const addItem = (item: MenuItem) => {
     const existing = items.find(i => i.name === item.name)
     if (existing) {
       setItems(items.map(i => 
@@ -87,8 +98,18 @@ export default function OrderComponent({ ticketId, establishmentId }: OrderCompo
       <div className="grid md:grid-cols-2 gap-6">
         <div>
           <h3 className="font-semibold text-gray-900 dark:text-white mb-4">Cardápio</h3>
-          <div className="space-y-2">
-            {menuItems.map((item) => (
+          {menuLoading ? (
+            <div className="space-y-2">
+              {[1,2,3].map(i=><div key={i} className="h-16 bg-gray-100 dark:bg-gray-700 rounded-xl animate-pulse"/>)}
+            </div>
+          ) : menuItems.length === 0 ? (
+            <div className="text-center py-10 bg-gray-50 dark:bg-gray-700/50 rounded-2xl">
+              <UtensilsCrossed className="h-8 w-8 text-gray-400 dark:text-gray-500 mx-auto mb-2" />
+              <p className="text-gray-500 dark:text-gray-400 text-sm">Cardápio não configurado</p>
+            </div>
+          ) : (
+            <div className="space-y-2">
+              {menuItems.map((item) => (
               <button
                 key={item.id}
                 onClick={() => addItem(item)}
@@ -106,6 +127,7 @@ export default function OrderComponent({ ticketId, establishmentId }: OrderCompo
               </button>
             ))}
           </div>
+          )}
         </div>
 
         <div>
@@ -138,7 +160,7 @@ export default function OrderComponent({ ticketId, establishmentId }: OrderCompo
                     </button>
                     <span className="w-8 text-center font-medium text-gray-900 dark:text-white">{item.quantity}</span>
                     <button
-                      onClick={() => addItem({ id: item.id, name: item.name, price: item.price })}
+                      onClick={() => addItem({ id: item.id, name: item.name, price: item.price, category: null })}
                       className="p-1.5 rounded-full bg-indigo-100 dark:bg-indigo-900/30 hover:bg-indigo-200 dark:hover:bg-indigo-800/50 transition-colors"
                     >
                       <Plus className="h-4 w-4 text-indigo-600 dark:text-indigo-400" />

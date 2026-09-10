@@ -837,7 +837,6 @@ Log de execuções autónomas do Bot Orquestrador (cada 12h).
 ## Pendente / próximas ideias
 - Reforçar a CSP com nonce/hashing para remover `'unsafe-inline'` (bloqueado
   pelo facto de o framework Next.js injetar scripts inline sem nonce).
-- Menu de encomendas configurável por estabelecimento (atualmente hardcoded).
 - UI de configuração de jogos (perguntas quiz, segmentos roleta, pares memória).
 - Acessibilidade: ARIA tabs, modal focus trap, skip navigation.
 
@@ -852,3 +851,35 @@ Log de execuções autónomas do Bot Orquestrador (cada 12h).
   - `MemoryRateLimitStore` mantido como default em dev/testes/CI (sem credenciais de produção).
 - **Decisão**: consistência eventual aceitável para throttling (diferente da geração atómica de senhas `create_ticket` que usa transação DB). Fallback gracioso garante que falha do store partilhado nunca bloqueia tráfego legítimo.
 - **Verificação**: `tsc --noEmit` ✓, `eslint` ✓ (0 erros, 0 warnings), `vitest run` ✓ (124/124), `next build` ✓.
+
+## 2026-09-09 — Menu de encomendas configurável por estabelecimento (fecha feature gap crítica)
+
+- **Problema**: o `OrderComponent` (sala de espera) tinha um menu hardcoded com 6
+  itens fixos ("Água Mineral R$3", "Refrigerante R$5", etc.) — não era possível
+  para um estabelecimento definir os seus próprios itens de cardápio. A feature
+  de encomendas era um shell de demonstração inutilizável em produção.
+- **Solução**:
+  - **Schema**: coluna `menu_items jsonb default '[]'::jsonb` adicionada à tabela
+    `establishments` em `supabase/schema.sql` (create table + `ALTER TABLE ...
+    ADD COLUMN IF NOT EXISTS` idempotente para DBs existentes).
+  - **Types**: nova interface `MenuItem` (`id`, `name`, `price`, `category?`) em
+    `src/types/index.ts`; `Establishment.menu_items: MenuItem[]`.
+  - **Validators**: `menuItemSchema` em `src/lib/validators.ts` (valida id,
+    name 1-120, price 0-999999, category opcional) + integrado em
+    `establishmentSchema.menu_items` e `establishmentPatchSchema.menu_items`
+    (max 100 itens). +9 testes em `validators.test.ts`.
+  - **Admin page** `src/app/admin/menu/page.tsx`: página completa de gestão do
+    cardápio — lista com drag (up/down), formulário add (nome/preço/categoria),
+    remoção com confirmação, loading states, categoria badges, formatação BRL.
+  - **AdminShell**: novo item de navegação "Cardápio" (ícone `UtensilsCrossed`).
+  - **OrderComponent**: removido array hardcoded; agora carrega `menu_items` do
+    estabelecimento via Supabase; states `menuLoading` + empty state
+    ("Cardápio não configurado"); fallback gracioso se vazio.
+- **Decisão**: menu guardado como JSONB na própria tabela establishments (não
+  nova tabela) para manter consistência com `config jsonb` dos jogos e evitar
+  overhead de RLS policies adicionais. Admin usa cliente publishable + RLS
+  (updatable by owner). Backward compatible: establishments existentes sem menu
+  mostram empty state; estabelecimentos novos iniciam com `[]`.
+- **Verificação**: `tsc --noEmit` ✓, `eslint` ✓ (0 erros, 0 warnings),
+  `vitest run` ✓ (133/133 — +9 testes: menuItemSchema + establishmentSchema
+  menu), `next build` ✓.
