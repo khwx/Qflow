@@ -883,3 +883,32 @@ Log de execuções autónomas do Bot Orquestrador (cada 12h).
 - **Verificação**: `tsc --noEmit` ✓, `eslint` ✓ (0 erros, 0 warnings),
   `vitest run` ✓ (133/133 — +9 testes: menuItemSchema + establishmentSchema
   menu), `next build` ✓.
+
+## 2026-09-09 — UI de configuração de jogos e suporte a emojis dinâmicos
+
+- **Problema**: o admin de jogos (`admin/games`) criava quizzes com 2 perguntas
+  estáticas fixas e roleta/memória com `config: {}` vazio. Não havia interface
+  para editar perguntas, alternativas, segmentos da roleta ou emojis do jogo da
+  memória. Além disso, `MemoryGame` usava sempre uma lista hardcoded de emojis.
+- **Solução**:
+  - `src/app/admin/games/page.tsx`:
+    - Adicionado suporte a criação e edição completa de jogos (`editingGameId`).
+    - Editor de Quiz: perguntas dinâmicas, opções dinâmicas por pergunta, rádio
+      para marcar a alternativa correta e validação.
+    - Editor de Roleta: lista dinâmica de segmentos com rótulos e pontuação.
+    - Editor de Memória: configuração de emojis/símbolos personalizados com
+      presets rápidos (Clássico, Comida, Prêmios).
+    - Cards de listagem exibem resumo do conteúdo configurado e botão "Editar".
+  - `src/components/client/GameModal.tsx`:
+    - `MemoryGame` passa a respeitar `game.config.emojis` quando configurado no
+      admin, com fallback para os emojis padrão.
+- **Decisão**: manter compatibilidade com schema SQL (`config jsonb`) sem quebrar
+  jogos já criados.
+- **Verificação**: `tsc --noEmit` ✓, `eslint` ✓ (0 erros, 0 warnings),
+  `vitest run` ✓ (133/133), `next build` ✓.
+
+## Pendente / próximas ideias
+- Reforçar a CSP com nonce/hashing para remover `'unsafe-inline'` (bloqueado
+  pelo facto de o framework Next.js injetar scripts inline sem nonce).
+- Acessibilidade: ARIA tabs, modal focus trap, skip navigation.
+- Notificações por som e Web Push na chamada de senhas.

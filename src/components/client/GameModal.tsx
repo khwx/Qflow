@@ -74,7 +74,9 @@ function MemoryGame({ game, onComplete, onClose }: {
   onClose: () => void
 }) {
   const t = useTranslations('games')
-  const emojis = ['🎮', '🎯', '🎨', '🎭', '🎪', '🎬']
+  const defaultEmojis = ['🎮', '🎯', '🎨', '🎭', '🎪', '🎬']
+  const configEmojis = (game.config as { emojis?: string[] })?.emojis
+  const emojis = Array.isArray(configEmojis) && configEmojis.length >= 4 ? configEmojis : defaultEmojis
   const [cards] = useState(() => shuffleArray([...emojis, ...emojis]).slice(0, 8))
   const [flipped, setFlipped] = useState<number[]>([])
   const [matched, setMatched] = useState<number[]>([])
