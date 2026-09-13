@@ -1,16 +1,27 @@
-'use client'
-
 import { use, useState, useEffect, useRef, useCallback } from 'react'
 import { useTranslations } from 'next-intl'
 import { createClientComponentClient } from '@/lib/supabase'
 import { Ticket, Game, Poll, Queue, Establishment } from '@/types'
-import { Gamepad2, ClipboardList, ShoppingCart, Trophy, Star, Clock, Users, Volume2, VolumeX } from 'lucide-react'
+import { Gamepad2, ClipboardList, ShoppingCart, Trophy, Star, Clock, Users, Volume2, VolumeX, Bell, BellOff } from 'lucide-react'
 import GameModal from '@/components/client/GameModal'
 import PollComponent from '@/components/client/PollComponent'
 import OrderComponent from '@/components/client/OrderComponent'
 import { cn } from '@/lib/utils'
 
 type Tab = 'games' | 'polls' | 'orders'
+
+const VAPID_PUBLIC_KEY = process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY || ''
+
+function urlBase64ToUint8Array(base64String: string): BufferSource {
+  const padding = '='.repeat((4 - (base64String.length % 4)) % 4)
+  const base64 = (base64String + padding).replace(/-/g, '+').replace(/_/g, '/')
+  const rawData = window.atob(base64)
+  const outputArray = new Uint8Array(rawData.length)
+  for (let i = 0; i < rawData.length; ++i) {
+    outputArray[i] = rawData.charCodeAt(i)
+  }
+  return outputArray.buffer
+}
 
 export default function WaitingPage({ params }: { params: Promise<{ locale: string; ticketId: string }> }) {
   const { ticketId } = use(params)
@@ -29,6 +40,8 @@ export default function WaitingPage({ params }: { params: Promise<{ locale: stri
   const [selectedGame, setSelectedGame] = useState<Game | null>(null)
   const [customerPoints, setCustomerPoints] = useState(0)
   const [soundEnabled, setSoundEnabled] = useState(true)
+  const [pushEnabled, setPushEnabled] = useState(false)
+  const [pushSupported, setPushSupported] = useState(false)
   const soundPlayedRef = useRef(false)
   const soundEnabledRef = useRef(true)
   useEffect(() => { soundEnabledRef.current = soundEnabled }, [soundEnabled])
@@ -124,6 +137,16 @@ export default function WaitingPage({ params }: { params: Promise<{ locale: stri
 
   useEffect(() => {
     queueMicrotask(() => loadData())
+
+    // Check push notification support
+    if ('serviceWorker' in navigator && 'PushManager' in window && VAPID_PUBLIC_KEY) {
+      queueMicrotask(() => setPushSupported(true))
+      navigator.serviceWorker.ready.then((registration) => {
+        registration.pushManager.getSubscription().then((subscription) => {
+          queueMicrotask(() => setPushEnabled(!!subscription))
+        })
+      })
+    }
 
     // Subscribe to ticket updates for this specific ticket (for called status + sound)
     const ticketChannel = supabase
@@ -246,6 +269,52 @@ export default function WaitingPage({ params }: { params: Promise<{ locale: stri
             >
               {soundEnabled ? <Volume2 className="h-5 w-5" /> : <VolumeX className="h-5 w-5" />}
             </button>
+            {pushSupported && (
+              <button
+                onClick={async () => {
+                  if (!pushEnabled) {
+                    // Subscribe
+                    try {
+                      const registration = await navigator.serviceWorker.ready
+                      const subscription = await registration.pushManager.subscribe({
+                        userVisibleOnly: true,
+                        applicationServerKey: urlBase64ToUint8Array(VAPID_PUBLIC_KEY),
+                      })
+                      await fetch('/api/push/subscribe', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                          endpoint: subscription.endpoint,
+                          keys: {
+                            p256dh: btoa(String.fromCharCode(...new Uint8Array(subscription.getKey('p256dh')!))),
+                            auth: btoa(String.fromCharCode(...new Uint8Array(subscription.getKey('auth')!))),
+                          },
+                          ticketId,
+                          establishmentId: ticket.establishment_id,
+                        }),
+                      })
+                      setPushEnabled(true)
+                    } catch (e) {
+                      console.error('Push subscribe error:', e)
+                    }
+                  } else {
+                    // Unsubscribe
+                    try {
+                      const registration = await navigator.serviceWorker.ready
+                      const subscription = await registration.pushManager.getSubscription()
+                      if (subscription) await subscription.unsubscribe()
+                      setPushEnabled(false)
+                    } catch (e) {
+                      console.error('Push unsubscribe error:', e)
+                    }
+                  }
+                }}
+                className="p-2 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors text-gray-600 dark:text-gray-400"
+                title={pushEnabled ? 'Desativar notificações push' : 'Ativar notificações push'}
+              >
+                {pushEnabled ? <Bell className="h-5 w-5 text-yellow-500" /> : <BellOff className="h-5 w-5" />}
+              </button>
+            )}
             <div className="bg-gradient-to-r from-yellow-400 to-orange-400 px-4 py-2 rounded-xl flex items-center gap-2 shadow-sm">
               <Trophy className="h-5 w-5 text-white" />
               <span className="font-bold text-white">{customerPoints} pts</span>

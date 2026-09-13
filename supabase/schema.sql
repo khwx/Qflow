@@ -128,6 +128,21 @@ create table if not exists public.poll_responses (
   created_at timestamp with time zone default timezone('utc'::text, now()) not null
 );
 
+-- Push Subscriptions (Web Push Notifications)
+create table if not exists public.push_subscriptions (
+  id uuid default uuid_generate_v4() primary key,
+  ticket_id uuid references public.tickets(id) on delete cascade not null,
+  establishment_id uuid references public.establishments(id) on delete cascade not null,
+  endpoint text not null,
+  p256dh text not null,
+  auth text not null,
+  created_at timestamp with time zone default timezone('utc'::text, now()) not null,
+  last_used_at timestamp with time zone
+);
+
+create index if not exists idx_push_subscriptions_ticket on public.push_subscriptions(ticket_id);
+create index if not exists idx_push_subscriptions_establishment on public.push_subscriptions(establishment_id);
+
 -- Migration: add menu_items to existing establishments tables
 alter table public.establishments add column if not exists menu_items jsonb default '[]'::jsonb;
 
@@ -141,6 +156,7 @@ alter table public.game_scores enable row level security;
 alter table public.customers enable row level security;
 alter table public.polls enable row level security;
 alter table public.poll_responses enable row level security;
+alter table public.push_subscriptions enable row level security;
 
 -- Policies para establishments
 drop policy if exists "Establishments are viewable by everyone" on public.establishments;
@@ -256,6 +272,31 @@ create policy "Poll responses are viewable by everyone" on public.poll_responses
 drop policy if exists "Poll responses are insertable by everyone" on public.poll_responses;
 create policy "Poll responses are insertable by everyone" on public.poll_responses
   for insert with check (true);
+
+-- Policies para push_subscriptions
+drop policy if exists "Push subscriptions are viewable by owner" on public.push_subscriptions;
+create policy "Push subscriptions are viewable by owner" on public.push_subscriptions
+  for select using (
+    exists (
+      select 1 from public.establishments
+      where establishments.id = push_subscriptions.establishment_id
+      and establishments.owner_id = auth.uid()
+    )
+  );
+
+drop policy if exists "Push subscriptions are insertable by everyone" on public.push_subscriptions;
+create policy "Push subscriptions are insertable by everyone" on public.push_subscriptions
+  for insert with check (true);
+
+drop policy if exists "Push subscriptions are updatable by owner" on public.push_subscriptions;
+create policy "Push subscriptions are updatable by owner" on public.push_subscriptions
+  for update using (
+    exists (
+      select 1 from public.establishments
+      where establishments.id = push_subscriptions.establishment_id
+      and establishments.owner_id = auth.uid()
+    )
+  );
 
 -- Policies para customers
 drop policy if exists "Customers are viewable by owner" on public.customers;
