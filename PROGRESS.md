@@ -41,6 +41,22 @@ Log de execuções autónomas do Bot Orquestrador (cada 12h).
   e configurar env vars `NEXT_PUBLIC_VAPID_PUBLIC_KEY` + `VAPID_PRIVATE_KEY`.
 - **Verificação**: `tsc --noEmit` ✓, `eslint` ✓ (0 erros), `vitest` ✓ (133/133).
 
+## 2026-09-13 — Web Push: web-push + ticket PATCH trigger
+
+- **Continuação do ciclo anterior**: instalado `web-push` npm package + `@types/web-push`,
+  e implementado envio real de push notifications no endpoint `/api/push/send`.
+- **web-push integration**:
+  - `webpush.setVapidDetails()` com env vars `NEXT_PUBLIC_VAPID_PUBLIC_KEY` + `VAPID_PRIVATE_KEY`.
+  - `webpush.sendNotification()` para cada subscription do ticket, com cleanup automático
+    de subscriptions expiradas (404 → delete).
+  - Endpoint retorna `{ sent, failed }` para debug.
+- **Ticket PATCH trigger**:
+  - Quando `status` muda para `"called"`, PATCH chama `fetch(origin/api/push/send)`
+    de forma non-blocking (erro de push não falha o PATCH).
+  - Select do ticket inclui `establishments(*)` para ter `establishment_id`.
+- **Verificação**: `tsc --noEmit` ✓, `eslint` ✓ (0 erros), `vitest` ✓ (133/133).
+- **Commits**: `5e7ed9e` (web-push + send route), `4474aca` (PATCH trigger).
+
 ## Decisões tomadas (sem pedir)
 - Manter compatibilidade: campos opcionais aceitam `null`/omissão, tal como o
   schema SQL. `config` dos jogos aceita `Record<string, unknown>`.
