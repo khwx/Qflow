@@ -1,12 +1,16 @@
+'use client'
+
 import { use, useState, useEffect, useRef, useCallback } from 'react'
 import { useTranslations } from 'next-intl'
+import dynamic from 'next/dynamic'
 import { createClientComponentClient } from '@/lib/supabase'
 import { Ticket, Game, Poll, Queue, Establishment } from '@/types'
 import { Gamepad2, ClipboardList, ShoppingCart, Trophy, Star, Clock, Users, Volume2, VolumeX, Bell, BellOff } from 'lucide-react'
-import GameModal from '@/components/client/GameModal'
-import PollComponent from '@/components/client/PollComponent'
-import OrderComponent from '@/components/client/OrderComponent'
 import { cn } from '@/lib/utils'
+
+const GameModal = dynamic(() => import('@/components/client/GameModal'), { ssr: false })
+const PollComponent = dynamic(() => import('@/components/client/PollComponent'))
+const OrderComponent = dynamic(() => import('@/components/client/OrderComponent'))
 
 type Tab = 'games' | 'polls' | 'orders'
 
