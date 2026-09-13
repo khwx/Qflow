@@ -49,11 +49,29 @@ export async function PATCH(
       .from('tickets')
       .update(result.data)
       .eq('id', id)
-      .select()
+      .select('*, establishments(*)')
       .single()
 
     if (error) {
       return NextResponse.json({ error: error.message }, { status: 500 })
+    }
+
+    // Trigger push notification when ticket is called
+    if (result.data.status === 'called' && data) {
+      try {
+        const origin = request.nextUrl.origin
+        await fetch(`${origin}/api/push/send`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            ticketId: data.id,
+            ticketNumber: data.ticket_number,
+            establishmentId: data.establishment_id,
+          }),
+        })
+      } catch (_pushError) {
+        // Non-blocking — push failure shouldn't fail the PATCH
+      }
     }
 
     return NextResponse.json(data)
