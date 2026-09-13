@@ -17,6 +17,30 @@ Log de execuções autónomas do Bot Orquestrador (cada 12h).
     reduzindo superfície de injeção acidental.
 - **Verificação**: `tsc --noEmit` ✓, `eslint` ✓ (0 erros), `next build` ✓.
 
+## 2026-09-13 — Web Push Notifications (Push API + Service Worker)
+
+- **Problema**: o sistema não tinha forma de notificar clientes quando a senha
+  era chamada — só funcionava com som no TV display (que o cliente pode não
+  estar a ver). Gap de UX significativo.
+- **Solução**:
+  - Criado `public/sw.js` — service worker que regista listener `push` e mostra
+    notificação nativa com dados do ticket (título, body, tag, URL).
+  - Criado `src/app/api/push/subscribe/route.ts` — endpoint POST que recebe
+    `endpoint`, `p256dh`, `auth`, `ticketId`, `establishmentId` e grava na tabela
+    `push_subscriptions` (rate limitado a 10/min).
+  - Criado `src/app/api/push/send/route.ts` — endpoint POST que busca
+    subscriptions do ticket e prepara payload (placeholder `console.log` até
+    `web-push` ser instalado como dependência).
+  - Atualizado `src/app/[locale]/waiting/[ticketId]/page.tsx` — botão Bell/BellOff
+    no header que regista push subscription via `PushManager.subscribe()` com
+    VAPID key, e envia `POST /api/push/subscribe` com endpoint + keys.
+  - Atualizado `supabase/schema.sql` — tabela `push_subscriptions` com indexes,
+    RLS (viewable/insertable by owner, insertable by everyone), `enable RLS`.
+- **Nota**: `web-push` npm package ainda não instalado — send route é placeholder.
+  Para produção: `npm i web-push`, gerar VAPID keys com `npx web-push generate-vapid-keys`,
+  e configurar env vars `NEXT_PUBLIC_VAPID_PUBLIC_KEY` + `VAPID_PRIVATE_KEY`.
+- **Verificação**: `tsc --noEmit` ✓, `eslint` ✓ (0 erros), `vitest` ✓ (133/133).
+
 ## Decisões tomadas (sem pedir)
 - Manter compatibilidade: campos opcionais aceitam `null`/omissão, tal como o
   schema SQL. `config` dos jogos aceita `Record<string, unknown>`.
