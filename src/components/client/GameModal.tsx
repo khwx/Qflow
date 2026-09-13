@@ -6,6 +6,47 @@ import { Game } from '@/types'
 import { X, Trophy } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 
+// Focus trap hook for modal accessibility
+function useFocusTrap(isActive: boolean) {
+  const containerRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    if (!isActive || !containerRef.current) return
+
+    const container = containerRef.current
+    const focusableElements = container.querySelectorAll<HTMLElement>(
+      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+    )
+    const firstElement = focusableElements[0]
+    const lastElement = focusableElements[focusableElements.length - 1]
+
+    const handleTab = (e: KeyboardEvent) => {
+      if (e.key !== 'Tab') return
+
+      if (e.shiftKey) {
+        if (document.activeElement === firstElement) {
+          e.preventDefault()
+          lastElement?.focus()
+        }
+      } else {
+        if (document.activeElement === lastElement) {
+          e.preventDefault()
+          firstElement?.focus()
+        }
+      }
+    }
+
+    container.addEventListener('keydown', handleTab)
+    firstElement?.focus()
+
+    return () => {
+      container.removeEventListener('keydown', handleTab)
+    }
+  }, [isActive])
+
+  return containerRef
+}
+
 function shuffleArray(array: string[]) {
   return [...array].sort(() => Math.random() - 0.5)
 }
@@ -20,6 +61,7 @@ interface GameModalProps {
 export default function GameModal({ game, ticketId, onClose, onComplete }: GameModalProps) {
   const t = useTranslations('games')
   const supabase = createClientComponentClient()
+  const modalRef = useFocusTrap(true)
 
   useEffect(() => {
     const handleEsc = (e: KeyboardEvent) => {
@@ -53,9 +95,9 @@ export default function GameModal({ game, ticketId, onClose, onComplete }: GameM
   }
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-6 z-50 animate-fade-in">
+    <div ref={modalRef} role="dialog" aria-modal="true" aria-labelledby="game-modal-title" className="fixed inset-0 bg-black/50 flex items-center justify-center p-6 z-50 animate-fade-in">
       <div className="bg-white dark:bg-gray-800 rounded-3xl shadow-2xl p-8 max-w-md w-full animate-scale-in">
-        <h2 className="text-2xl font-bold text-center mb-4 text-gray-900 dark:text-white">{game.name}</h2>
+        <h2 id="game-modal-title" className="text-2xl font-bold text-center mb-4 text-gray-900 dark:text-white">{game.name}</h2>
         <p className="text-center text-gray-600 dark:text-gray-400 mb-6">{game.description}</p>
         <button
           onClick={() => completeGame(100)}
@@ -81,6 +123,7 @@ function MemoryGame({ game, onComplete, onClose }: {
   const [flipped, setFlipped] = useState<number[]>([])
   const [matched, setMatched] = useState<number[]>([])
   const [moves, setMoves] = useState(0)
+  const modalRef = useFocusTrap(true)
 
   const handleCardClick = (index: number) => {
     if (flipped.length === 2 || flipped.includes(index) || matched.includes(index)) return
@@ -106,10 +149,10 @@ function MemoryGame({ game, onComplete, onClose }: {
   }
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-6 z-50 animate-fade-in">
+    <div ref={modalRef} role="dialog" aria-modal="true" aria-labelledby="memory-modal-title" className="fixed inset-0 bg-black/50 flex items-center justify-center p-6 z-50 animate-fade-in">
       <div className="bg-white dark:bg-gray-800 rounded-3xl shadow-2xl p-6 max-w-md w-full animate-scale-in">
         <div className="flex justify-between items-center mb-4">
-          <h2 className="text-xl font-bold text-gray-900 dark:text-white">{game.name}</h2>
+          <h2 id="memory-modal-title" className="text-xl font-bold text-gray-900 dark:text-white">{game.name}</h2>
           <button onClick={onClose} aria-label="Fechar" className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 p-1 rounded-lg transition-colors">
             <X className="h-6 w-6" />
           </button>
@@ -128,6 +171,7 @@ function MemoryGame({ game, onComplete, onClose }: {
                   : 'bg-gradient-to-br from-indigo-500 to-purple-600 rotate-180 hover:scale-105'
                 }
               `}
+              aria-label={flipped.includes(index) || matched.includes(index) ? `${emoji}, carta virada` : 'Carta virada para baixo'}
             >
               {(flipped.includes(index) || matched.includes(index)) ? emoji : '?'}
             </button>

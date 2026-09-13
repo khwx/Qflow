@@ -119,10 +119,18 @@ export default async function LocaleLayout({
         <script dangerouslySetInnerHTML={{ __html: `(function(){try{var s=localStorage.getItem('darkMode');var d=s!==null?s==='true':matchMedia('(prefers-color-scheme: dark)').matches;if(d)document.documentElement.classList.add('dark')}catch(e){}})()` }} suppressHydrationWarning />
       </head>
       <body className="min-h-full">
+        <a
+          href="#main-content"
+          className="sr-only focus:not-sr-only focus:absolute focus:z-50 focus:top-4 focus:left-4 bg-indigo-600 text-white px-4 py-2 rounded-lg font-medium"
+        >
+          Pular para o conteúdo principal
+        </a>
         <DarkModeProvider>
           <AuthProvider>
             <NextIntlClientProvider locale={locale} messages={messages}>
-              {children}
+              <main id="main-content" className="min-h-[calc(100vh-4rem)]">
+                {children}
+              </main>
             <Toaster
               position="top-center"
               toastOptions={{

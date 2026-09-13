@@ -335,7 +335,7 @@ export default function WaitingPage({ params }: { params: Promise<{ locale: stri
 
           <div className="lg:col-span-2">
               <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm overflow-hidden border border-gray-200 dark:border-gray-700">
-                <div className="flex border-b border-gray-200 dark:border-gray-700 overflow-x-auto">
+                <div role="tablist" className="flex border-b border-gray-200 dark:border-gray-700 overflow-x-auto" aria-label="Categorias de atividades">
                 <TabButton
                   icon={<Gamepad2 className="h-5 w-5" />}
                   label={t('games')}
@@ -360,7 +360,7 @@ export default function WaitingPage({ params }: { params: Promise<{ locale: stri
 
               <div className="p-6">
                 {activeTab === 'games' && (
-                  <div className="animate-fade-in">
+                  <div role="tabpanel" id="panel-games" aria-labelledby="tab-games" className="animate-fade-in">
                     {games.length === 0 ? (
                       <EmptyState
                         icon={<Gamepad2 className="h-12 w-12" />}
@@ -392,7 +392,7 @@ export default function WaitingPage({ params }: { params: Promise<{ locale: stri
                 )}
 
                 {activeTab === 'polls' && (
-                  <div className="animate-fade-in">
+                  <div role="tabpanel" id="panel-polls" aria-labelledby="tab-polls" className="animate-fade-in">
                     {polls.length === 0 ? (
                       <EmptyState
                         icon={<ClipboardList className="h-12 w-12" />}
@@ -418,7 +418,7 @@ export default function WaitingPage({ params }: { params: Promise<{ locale: stri
                 )}
 
                 {activeTab === 'orders' && (
-                  <div className="animate-fade-in">
+                  <div role="tabpanel" id="panel-orders" aria-labelledby="tab-orders" className="animate-fade-in">
                     <OrderComponent
                       ticketId={ticket.id}
                       establishmentId={ticket.establishment_id}
@@ -454,8 +454,16 @@ function TabButton({ icon, label, active, onClick, count }: {
   onClick: () => void
   count?: number
 }) {
+  const tabId = `tab-${label.toLowerCase().replace(/\s+/g, '-')}`
+  const panelId = `panel-${label.toLowerCase().replace(/\s+/g, '-')}`
+
   return (
     <button
+      role="tab"
+      id={tabId}
+      aria-controls={panelId}
+      aria-selected={active}
+      tabIndex={active ? 0 : -1}
       onClick={onClick}
       className={cn(
         'flex-1 flex items-center justify-center gap-2 px-4 py-4 font-medium transition-all',

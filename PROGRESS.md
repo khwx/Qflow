@@ -907,8 +907,38 @@ Log de execuções autónomas do Bot Orquestrador (cada 12h).
 - **Verificação**: `tsc --noEmit` ✓, `eslint` ✓ (0 erros, 0 warnings),
   `vitest run` ✓ (133/133), `next build` ✓.
 
+## 2026-09-09 — Acessibilidade WCAG 2.1 AA: ARIA tabs, focus trap, skip navigation
+
+- **Problema**: a UI do cliente (sala de espera, modais de jogos) não possuía
+  estrutura semântica acessível para usuários de leitores de tela e navegação
+  por teclado. Faltavam: papéis ARIA nos tabs (tablist/tab/tabpanel),
+  focus trap em modais (`role="dialog"`, `aria-modal="true"`, `Tab` cicla
+  apenas dentro do modal), e link "skip to main content" no topo da página.
+- **Solução**:
+  - `src/app/[locale]/waiting/[ticketId]/page.tsx`:
+    - Wrapper `<div role="tablist" aria-label="Categorias de atividades">`
+    - `TabButton` recebe `role="tab"`, `aria-selected`, `aria-controls`,
+      `id="tab-{name}"`, `tabIndex={active ? 0 : -1}`
+    - Painéis de conteúdo ganham `role="tabpanel"`,
+      `id="panel-{name}"`, `aria-labelledby="tab-{name}"`
+  - `src/components/client/GameModal.tsx`:
+    - Novo hook `useFocusTrap(active)` que foca no primeiro elemento
+      focável do modal e cicla `Tab`/`Shift+Tab` dentro do container.
+    - `GameModal` principal, `MemoryGame`, `QuizGame`, `SpinWheelGame`
+      envolvidos com `ref={modalRef}`, `role="dialog"`, `aria-modal="true"`,
+      `aria-labelledby="...-modal-title"`.
+    - Cartas de memória recebem `aria-label` descritivo (ex: "🎮, carta
+      virada" / "Carta virada para baixo").
+  - `src/app/[locale]/layout.tsx`:
+    - Link "Pular para o conteúdo principal" (`sr-only` que aparece no
+      `:focus`) apontando para `#main-content`.
+    - `<main id="main-content">` envolvendo `{children}`.
+- **Decisão**: implementação incremental sem quebrar UI existente.
+- **Verificação**: `tsc --noEmit` ✓, `eslint` ✓ (0 erros, 0 warnings),
+  `vitest run` ✓ (133/133), `next build` ✓.
+
 ## Pendente / próximas ideias
 - Reforçar a CSP com nonce/hashing para remover `'unsafe-inline'` (bloqueado
   pelo facto de o framework Next.js injetar scripts inline sem nonce).
-- Acessibilidade: ARIA tabs, modal focus trap, skip navigation.
 - Notificações por som e Web Push na chamada de senhas.
+- Otimização de performance: lazy-load de componentes pesados (gráficos, TV).
