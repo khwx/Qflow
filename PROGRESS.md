@@ -977,8 +977,30 @@ Log de execuções autónomas do Bot Orquestrador (cada 12h).
 - **Verificação**: `tsc --noEmit` ✓, `eslint` ✓ (0 erros, 0 warnings),
   `vitest run` ✓ (133/133), `next build` ✓.
 
+## 2026-09-13 — Performance: lazy-load de componentes pesados na sala de espera
+
+- **Tarefa pendente**: "Otimização de performance: lazy-load de componentes
+  pesados (gráficos, TV)".
+- **Problema**: a página `waiting/[ticketId]` importava estaticamente
+  `GameModal`, `PollComponent` e `OrderComponent` — componentes client pesados
+  que ficam no bundle inicial mesmo que o utilizador nunca abra um jogo, vote
+  numa enquete ou faça uma encomenda.
+- **Solução**:
+  - Convertidos os 3 imports estáticos para `next/dynamic`:
+    - `GameModal` → `dynamic(..., { ssr: false })` (modal só aparece ao clicar
+      num jogo; usa focus trap/DOM — client-only).
+    - `PollComponent` e `OrderComponent` → `dynamic(...)` (code-split; só são
+      fetched quando o tab respetivo está ativo).
+  - Corrigido bug antigo: a diretiva `'use client'` do ficheiro tinha sido
+    acidentalmente removida num edit anterior — reposta no topo. Sem ela, o
+    `build` falhava com "`ssr: false` is not allowed with `next/dynamic` in
+    Server Components".
+- **Benefício**: bundle inicial da sala de espera mais pequeno; os 3
+  componentes pesados só são descarregados on-demand.
+- **Verificação**: `tsc --noEmit` ✓, `eslint` ✓ (0 erros), `vitest` ✓ (133/133),
+  `next build` ✓.
+
 ## Pendente / próximas ideias
-- Reforçar a CSP com nonce/hashing para remover `'unsafe-inline'` (bloqueado
-  pelo facto de o framework Next.js injetar scripts inline sem nonce).
-- Notificações por som e Web Push na chamada de senhas.
-- Otimização de performance: lazy-load de componentes pesados (gráficos, TV).
+- Reforçar a CSP com nonce/hashing para remover `'unsafe-inline'`; bloqueado
+  pelo facto de o framework Next.js injetar scripts inline sem nonce.
+- Lazy-load restante: componentes de admin e TV display (gráficos pesados).
