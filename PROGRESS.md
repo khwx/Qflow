@@ -1000,7 +1000,24 @@ Log de execuções autónomas do Bot Orquestrador (cada 12h).
 - **Verificação**: `tsc --noEmit` ✓, `eslint` ✓ (0 erros), `vitest` ✓ (133/133),
   `next build` ✓.
 
+## 2026-09-13 — Performance: lazy-load do QRCode no kiosk
+
+- **Continuação do item pendente** "Lazy-load restante: componentes de admin e
+  TV display (gráficos pesados)".
+- **Problema**: a página `kiosk/[code]` importava estaticamente
+  `QRCodeSVG` de `qrcode.react` (lib pesada), mas o QR só é renderizado
+  DEPOIS de o cliente criar a senha (estado de sucesso). A lib entrava no
+  bundle inicial do quiosque desnecessariamente.
+- **Solução**:
+  - `next/dynamic` com named export (`then((mod) => mod.QRCodeSVG)`) +
+    `ssr: false` + loading fallback (placeholder animado 148×148).
+  - A lib `qrcode.react` deixa de ser descarregada até o utilizador realmente
+    emitir uma senha.
+- **Verificação**: `tsc --noEmit` ✓, `eslint` ✓ (0 erros), `vitest` ✓ (133/133),
+  `next build` ✓.
+
 ## Pendente / próximas ideias
 - Reforçar a CSP com nonce/hashing para remover `'unsafe-inline'`; bloqueado
   pelo facto de o framework Next.js injetar scripts inline sem nonce.
-- Lazy-load restante: componentes de admin e TV display (gráficos pesados).
+- Lazy-load restante: QRCode em `qr/[slug]` e `establishment` (páginas centradas
+  no QR), componentes pesados de admin/TV display.
