@@ -1016,6 +1016,23 @@ Log de execuções autónomas do Bot Orquestrador (cada 12h).
 - **Verificação**: `tsc --noEmit` ✓, `eslint` ✓ (0 erros), `vitest` ✓ (133/133),
   `next build` ✓.
 
+## 2026-09-13 — Web Push: registar service worker + fix subscribe por dispositivo
+
+- **Bug**: o service worker `public/sw.js` foi criado mas NUNCA era registado no
+  browser. A sala de espera chamava `navigator.serviceWorker.ready` três vezes,
+  mas essa promise só resolve depois de um SW ativo — sem `register()`, o push
+  nunca conseguia subscrever (feature silenciosamente morta).
+- **Solução**:
+  - `waiting/[ticketId]/page.tsx`: agora chama `navigator.serviceWorker.register('/sw.js')`
+    dentro do efeito de verificação de push, antes de `ready`/`getSubscription`.
+  - `api/push/subscribe/route.ts`: substituído `upsert({ onConflict: 'ticket_id' })`
+    por `insert()`. O upsert exigia UNIQUE em `ticket_id` (que não existe) e,
+    pior, impedia múltiplas subscrições (vários dispositivos por senha). Com
+    `insert`, cada endpoint/device fica registado; subscriptions expiradas são
+    limpas pelo cleanup do `/api/push/send` (404 → delete).
+- **Verificação**: `tsc --noEmit` ✓, `eslint` ✓ (0 erros), `vitest` ✓ (133/133),
+  `next build` ✓.
+
 ## Pendente / próximas ideias
 - Reforçar a CSP com nonce/hashing para remover `'unsafe-inline'`; bloqueado
   pelo facto de o framework Next.js injetar scripts inline sem nonce.
