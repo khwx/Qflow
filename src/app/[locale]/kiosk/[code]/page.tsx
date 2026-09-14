@@ -3,11 +3,16 @@
 import { use, useState, useEffect, useCallback, useRef } from 'react'
 import { createClientComponentClient } from '@/lib/supabase'
 import { Establishment, Queue } from '@/types'
-import { QRCodeSVG } from 'qrcode.react'
+import dynamic from 'next/dynamic'
 import toast from 'react-hot-toast'
 import { Clock, Users, Ticket as TicketIcon, QrCode, AlertCircle, CheckCircle2, RefreshCw, TabletSmartphone } from 'lucide-react'
 import Image from 'next/image'
 import { cn } from '@/lib/utils'
+
+const QRCodeSVG = dynamic(() => import('qrcode.react').then((mod) => mod.QRCodeSVG), {
+  ssr: false,
+  loading: () => <div className="w-[148px] h-[148px] rounded-xl bg-gray-100 dark:bg-gray-700 animate-pulse" />,
+})
 
 export default function KioskPage({ params }: { params: Promise<{ locale: string; code: string }> }) {
   const { code } = use(params)
