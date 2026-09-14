@@ -1049,6 +1049,18 @@ Log de execuções autónomas do Bot Orquestrador (cada 12h).
     `clients.openWindow(absoluteUrl)`.
 - **Verificação**: `tsc --noEmit` ✓, `eslint` ✓ (0 erros), `vitest` ✓ (133/133).
 
+## 2026-09-14 — Web Push: adicionar ícones de notificação (assets PNG)
+
+- **Bug**: o payload do `/api/push/send` e o fallback do `sw.js` referenciam
+  `/images/icon-192.png` e `/images/badge-72.png`, mas a pasta `public/images/`
+  estava vazia — os ícones resultavam em 404 silencioso nas notificações.
+- **Solução**:
+  - Criados `public/images/icon-192.png` (192×192, fundo roxo marca #6C63FF
+    com ícone de senha branca) e `public/images/badge-72.png` (72×72,
+    monotone branco para Chrome/Android badge), ambos via PIL/Pillow.
+- **Verificação**: `tsc --noEmit` ✓, `eslint` ✓ (0 erros), `vitest` ✓ (133/133),
+  `next build` ✓.
+
 ## Pendente / próximas ideias
 - Reforçar a CSP com nonce/hashing para remover `'unsafe-inline'`; bloqueado
   pelo facto de o framework Next.js injetar scripts inline sem nonce.
