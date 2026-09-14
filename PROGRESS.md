@@ -1033,6 +1033,22 @@ Log de execuções autónomas do Bot Orquestrador (cada 12h).
 - **Verificação**: `tsc --noEmit` ✓, `eslint` ✓ (0 erros), `vitest` ✓ (133/133),
   `next build` ✓.
 
+## 2026-09-13 — Web Push: fix notificationclick (clique no corpo + URL absoluta)
+
+- **Tarefa pendente**: "Verificar handler `push`/`notificationclick` no `sw.js`".
+- **Bugs encontrados**:
+  1. Clicar no **corpo** da notificação (`event.action === ''`) não fazia nada —
+     o handler só reagia à action `'view'`. Comportamento padrão esperado: abrir/
+     focar a sala de espera.
+  2. `data.url` é relativa (`/waiting/{ticketId}`), mas `clients.openWindow()`
+     exige URL absoluta — o clique abriria/redirecionaria incorretamente.
+- **Solução** (`public/sw.js` `notificationclick`):
+  - `dismiss` → apenas fecha (early return).
+  - Body click e `view` → fecha, resolve URL relativa para absoluta com
+    `self.location.origin + url`, tenta focar janela existente e, senão,
+    `clients.openWindow(absoluteUrl)`.
+- **Verificação**: `tsc --noEmit` ✓, `eslint` ✓ (0 erros), `vitest` ✓ (133/133).
+
 ## Pendente / próximas ideias
 - Reforçar a CSP com nonce/hashing para remover `'unsafe-inline'`; bloqueado
   pelo facto de o framework Next.js injetar scripts inline sem nonce.
