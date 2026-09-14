@@ -50,23 +50,24 @@ self.addEventListener('push', (event) => {
 self.addEventListener('notificationclick', (event) => {
   event.notification.close()
 
+  if (event.action === 'dismiss') return
+
   const data = event.notification.data || {}
   const url = data.url || '/'
+  const absoluteUrl = url.startsWith('/') ? self.location.origin + url : url
 
-  if (event.action === 'view') {
-    event.waitUntil(
-      clients.matchAll({ type: 'window', includeUncontrolled: true }).then((clientList) => {
-        // Try to focus existing window
-        for (const client of clientList) {
-          if (client.url.includes(url) && 'focus' in client) {
-            return client.focus()
-          }
+  event.waitUntil(
+    clients.matchAll({ type: 'window', includeUncontrolled: true }).then((clientList) => {
+      // Try to focus existing window
+      for (const client of clientList) {
+        if (client.url.includes(url) && 'focus' in client) {
+          return client.focus()
         }
-        // Open new window
-        return clients.openWindow(url)
-      })
-    )
-  }
+      }
+      // Open new window
+      return clients.openWindow(absoluteUrl)
+    })
+  )
 })
 
 // Background sync for offline support (optional)
