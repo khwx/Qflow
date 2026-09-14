@@ -1061,6 +1061,21 @@ Log de execuções autónomas do Bot Orquestrador (cada 12h).
 - **Verificação**: `tsc --noEmit` ✓, `eslint` ✓ (0 erros), `vitest` ✓ (133/133),
   `next build` ✓.
 
+## 2026-09-14 — PWA Manifest para Web Push (nome + ícone nas notificações Android)
+
+- **Problema**: o fluxo de Web Push estava tecnicamente completo mas sem
+  `manifest.json` — no Android/Chrome, as notificações mostravam o hostname
+  em vez do nome da app e sem ícone definido. Gap de UX importante para
+  uma feature mobile-first como Push.
+- **Solução**:
+  - `public/manifest.json`: `name`, `short_name`, `theme_color: #6C63FF`,
+    `icons` apontando para `icon-192.png` (com `purpose: any maskable` para
+    adaptive icons no Android), `start_url: /`.
+  - `src/app/[locale]/layout.tsx`: adicionados `<link rel="manifest">` e
+    `<meta name="theme-color">` no `<head>`.
+- **Verificação**: `tsc --noEmit` ✓, `eslint` ✓ (0 erros), `vitest` ✓ (133/133),
+  `next build` ✓.
+
 ## Pendente / próximas ideias
 - Reforçar a CSP com nonce/hashing para remover `'unsafe-inline'`; bloqueado
   pelo facto de o framework Next.js injetar scripts inline sem nonce.
