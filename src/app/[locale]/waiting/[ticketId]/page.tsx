@@ -145,10 +145,14 @@ export default function WaitingPage({ params }: { params: Promise<{ locale: stri
     // Check push notification support
     if ('serviceWorker' in navigator && 'PushManager' in window && VAPID_PUBLIC_KEY) {
       queueMicrotask(() => setPushSupported(true))
-      navigator.serviceWorker.ready.then((registration) => {
-        registration.pushManager.getSubscription().then((subscription) => {
-          queueMicrotask(() => setPushEnabled(!!subscription))
+      navigator.serviceWorker.register('/sw.js').then(() => {
+        navigator.serviceWorker.ready.then((registration) => {
+          registration.pushManager.getSubscription().then((subscription) => {
+            queueMicrotask(() => setPushEnabled(!!subscription))
+          })
         })
+      }).catch(() => {
+        // Service worker registration failed — push simply won't be available
       })
     }
 

@@ -15,14 +15,13 @@ export async function POST(request: Request) {
 
     const supabase = createAdminClient()
 
-    const { error } = await supabase.from('push_subscriptions').upsert({
+    const { error } = await supabase.from('push_subscriptions').insert({
       ticket_id: ticketId,
       establishment_id: establishmentId,
       endpoint,
       p256dh: keys.p256dh,
       auth: keys.auth,
-      created_at: new Date().toISOString(),
-    }, { onConflict: 'ticket_id' })
+    })
 
     if (error) {
       console.error('Push subscription error:', error)
