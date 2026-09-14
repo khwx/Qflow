@@ -116,6 +116,8 @@ export default async function LocaleLayout({
   return (
     <html lang={locale} className={`${geist.variable} h-full antialiased`}>
       <head>
+        <link rel="manifest" href="/manifest.json" />
+        <meta name="theme-color" content="#6C63FF" />
         <script dangerouslySetInnerHTML={{ __html: `(function(){try{var s=localStorage.getItem('darkMode');var d=s!==null?s==='true':matchMedia('(prefers-color-scheme: dark)').matches;if(d)document.documentElement.classList.add('dark')}catch(e){}})()` }} suppressHydrationWarning />
       </head>
       <body className="min-h-full">

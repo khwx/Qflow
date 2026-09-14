@@ -1,0 +1,22 @@
+{
+  "name": "QFlow - Sistema de Fila Virtual",
+  "short_name": "QFlow",
+  "description": "Fila virtual com QR Code e gamificação",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#6C63FF",
+  "theme_color": "#6C63FF",
+  "icons": [
+    {
+      "src": "/images/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/images/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    }
+  ]
+}
