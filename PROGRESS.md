@@ -1076,6 +1076,21 @@ Log de execuções autónomas do Bot Orquestrador (cada 12h).
 - **Verificação**: `tsc --noEmit` ✓, `eslint` ✓ (0 erros), `vitest` ✓ (133/133),
   `next build` ✓.
 
+## 2026-09-14 — .env.example: documentação de variáveis de ambiente
+
+- **Problema**: não havia `.env.example` no repositório. Desenvolvedores novos
+  (ou o próprio bot em deploys seguintes) não sabiam quais variáveis são
+  necessárias, nem quais os nomes corretos (o projeto aceita vários aliases
+  para a mesma variável, como `SUPABASE_PUBLISHABLE_KEY` / `SUPABASE_ANON_KEY`).
+- **Solução**:
+  - Criado `.env.example` documentando todas as variáveis de ambiente
+    organizadas por secção: Supabase (obrigatório), App URL, Web Push/VAPID
+    (opcional). Inclui instrução de geração de chaves VAPID.
+  - `.env.example` já não estava no `.gitignore` (regras ignoram `.env` e
+    `.env*.local`, mas não `.env.example`) — será commitado corretamente.
+- **Verificação**: `tsc --noEmit` ✓, `eslint` ✓ (0 erros), `vitest` ✓ (133/133),
+  `next build` ✓.
+
 ## Pendente / próximas ideias
 - Reforçar a CSP com nonce/hashing para remover `'unsafe-inline'`; bloqueado
   pelo facto de o framework Next.js injetar scripts inline sem nonce.
