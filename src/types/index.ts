@@ -5,6 +5,19 @@ export interface MenuItem {
   category: string | null
 }
 
+export type LayoutMode = 'grid' | 'single' | 'split'
+
+export interface TvConfig {
+  layout: LayoutMode
+  primary: string
+  secondary: string
+  logoUrl: string
+  voiceEnabled: boolean
+  message: string
+  showWaiting: boolean
+  tickerSpeed: number
+}
+
 export interface Establishment {
   id: string
   name: string
