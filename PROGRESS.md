@@ -1108,8 +1108,21 @@ Log de execuções autónomas do Bot Orquestrador (cada 12h).
 - **Verificação**: `tsc --noEmit` ✓, `eslint` ✓ (0 erros), `vitest` ✓ (133/133),
   `next build` ✓.
 
+## 2026-09-15 — Performance: lazy-load do QRCode nas páginas estáticas
+
+- **Tarefa pendente**: "Lazy-load restante: QRCode em `qr/[slug]` e `establishment`".
+- **Problema**: O pacote `qrcode.react` (e o fallback exportado `QRCodeSVG`) estava a ser
+  incluído no bundle inicial nas páginas `app/[locale]/qr/[slug]/page.tsx` e
+  `app/[locale]/establishment/page.tsx` (import estático). Em `establishment`,
+  o QR só é mostrado depois de criar uma conta/estabelicmento com sucesso, e em `qr/[slug]`
+  não precisa do SSR para renderizar do lado do cliente.
+- **Solução**: 
+  - Substituídos os `import { QRCodeSVG } from 'qrcode.react'` por imports dinâmicos:
+    `const QRCodeSVG = dynamic(() => import('qrcode.react').then((mod) => mod.QRCodeSVG), { ssr: false })`.
+  - Isto remove a parser pesada de SVG/QR de carregar o Main JS Thread no initial-load.
+- **Verificação**: `tsc --noEmit` ✓, `eslint` ✓ (0 erros), `vitest` ✓ (133/133), `next build` ✓.
+
 ## Pendente / próximas ideias
 - Reforçar a CSP com nonce/hashing para remover `'unsafe-inline'`; bloqueado
   pelo facto de o framework Next.js injetar scripts inline sem nonce.
-- Lazy-load restante: QRCode em `qr/[slug]` e `establishment` (páginas centradas
-  no QR), TV display config editor.
+- Lazy-load: TV display config editor (ou refatoração por secções no menu Admin para abas diferentes lazy-loadeds).

@@ -3,8 +3,10 @@
 import { use, useEffect, useRef, useState } from 'react'
 import { useTranslations } from 'next-intl'
 import { useRouter } from '@/i18n/navigation'
-import { QRCodeSVG } from 'qrcode.react'
+import dynamic from 'next/dynamic'
 import { ArrowLeft, Download, Printer } from 'lucide-react'
+
+const QRCodeSVG = dynamic(() => import('qrcode.react').then((mod) => mod.QRCodeSVG), { ssr: false })
 
 export default function QRCodePage({
   params,

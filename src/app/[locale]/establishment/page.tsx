@@ -5,8 +5,10 @@ import { useTranslations } from 'next-intl'
 import { Link, useRouter } from '@/i18n/navigation'
 import { createClientComponentClient } from '@/lib/supabase'
 import toast from 'react-hot-toast'
+import dynamic from 'next/dynamic'
 import { QrCode, Building2, CheckCircle2, ExternalLink } from 'lucide-react'
-import { QRCodeSVG } from 'qrcode.react'
+
+const QRCodeSVG = dynamic(() => import('qrcode.react').then((mod) => mod.QRCodeSVG), { ssr: false })
 
 interface CreatedEstablishment {
   id: string
