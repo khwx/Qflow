@@ -1144,4 +1144,5 @@ Log de execuções autónomas do Bot Orquestrador (cada 12h).
 ## Pendente / próximas ideias
 - Reforçar a CSP com nonce/hashing para remover `'unsafe-inline'`; bloqueado
   pelo facto de o framework Next.js injetar scripts inline sem nonce.
-- Lazy-load: TV display config editor (ou refatoração por secções no menu Admin para abas diferentes lazy-loadeds).
+- Refatorar AdminShell para code-split das abas do menu de navegação (cada secção
+  admin carregada sob demanda via next/dynamic).
