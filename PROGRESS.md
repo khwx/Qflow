@@ -1122,6 +1122,25 @@ Log de execuções autónomas do Bot Orquestrador (cada 12h).
   - Isto remove a parser pesada de SVG/QR de carregar o Main JS Thread no initial-load.
 - **Verificação**: `tsc --noEmit` ✓, `eslint` ✓ (0 erros), `vitest` ✓ (133/133), `next build` ✓.
 
+## 2026-09-16 — Funcional: TV Display consome configuração do admin
+
+- **Gap funcional descoberto**: a página `admin/tv-display-config` permitia configurar
+  cores, logo, mensagem, voz, etc., mas a página pública `/tv-display?code=...`
+  ignorava tudo — usava apenas o gradiente fixo `#4f46e5 → #7c3aed`,
+  sem logo, sem mensagem, voz hardcoded ativada.
+- **Solução** (`src/app/[locale]/tv-display/page.tsx`):
+  - Novo estado `tvConfig` com defaults iguais ao admin.
+  - `loadEstablishment` agora lê `localStorage.getItem(\`tv-config:\${slug}\`)`
+    (mesma chave usada pelo admin) e aplica overrides; fallback para
+    `primary_color` / `secondary_color` / `logo_url` / `description` do DB.
+  - Header usa gradiente dinâmico `linear-gradient(135deg, ${primary}, ${secondary})`,
+    mostra logo se `logoUrl`, e adiciona `message` como rodapé quando há senha chamada.
+  - Footer mostra status de voz; `playChimeAndAnnounce` continua respeitando
+    `soundEnabled` global, mas a flag `voiceEnabled` do config controla o botão
+    de teste no admin (o display global desliga som para ambas).
+- **Verificação**: `tsc --noEmit` ✓, `eslint` ✓ (2 warnings apenas: img element em URL
+  user-provided), `vitest` ✓ (133/133), `next build` ✓.
+
 ## Pendente / próximas ideias
 - Reforçar a CSP com nonce/hashing para remover `'unsafe-inline'`; bloqueado
   pelo facto de o framework Next.js injetar scripts inline sem nonce.
