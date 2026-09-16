@@ -4,7 +4,7 @@ import { useState, useEffect, useRef, useCallback } from 'react'
 import { useTranslations } from 'next-intl'
 import { createClientComponentClient } from '@/lib/supabase'
 import { Ticket, Establishment, Queue } from '@/types'
-import { Volume2, VolumeX, Clock, Users, CheckCircle } from 'lucide-react'
+import { Volume2, VolumeX, Clock, Users, CheckCircle, Monitor } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 export default function TVDisplayPage() {
@@ -17,6 +17,14 @@ export default function TVDisplayPage() {
   const [currentTime, setCurrentTime] = useState(new Date())
   const [notFound, setNotFound] = useState(false)
   const [connecting, setConnecting] = useState(false)
+  const [tvConfig, setTvConfig] = useState({
+    primary: '#4f46e5',
+    secondary: '#7c3aed',
+    logoUrl: '',
+    voiceEnabled: true,
+    message: 'Bem-vindo! Aguarde sua senha ser chamada no painel.',
+    showWaiting: true,
+  })
   const supabase = createClientComponentClient()
   const channelRef = useRef<ReturnType<typeof supabase.channel> | null>(null)
   const soundEnabledRef = useRef(soundEnabled)
@@ -82,6 +90,32 @@ export default function TVDisplayPage() {
       return null
     }
     setEstablishment(est)
+
+    // Load TV display config (localStorage overrides DB)
+    try {
+      const raw = localStorage.getItem(`tv-config:${slug.toLowerCase()}`)
+      if (raw) {
+        const parsed = JSON.parse(raw)
+        setTvConfig(c => ({ ...c, ...parsed, primary: parsed.primary || c.primary, secondary: parsed.secondary || c.secondary }))
+      } else {
+        setTvConfig(c => ({
+          ...c,
+          primary: est.primary_color || '#4f46e5',
+          secondary: est.secondary_color || '#7c3aed',
+          logoUrl: est.logo_url || '',
+          message: est.description || 'Bem-vindo! Aguarde sua senha ser chamada no painel.',
+        }))
+      }
+    } catch {
+      setTvConfig(c => ({
+        ...c,
+        primary: est.primary_color || '#4f46e5',
+        secondary: est.secondary_color || '#7c3aed',
+        logoUrl: est.logo_url || '',
+        message: est.description || 'Bem-vindo! Aguarde sua senha ser chamada no painel.',
+      }))
+    }
+
     return est
   }, [supabase])
 
@@ -257,11 +291,21 @@ export default function TVDisplayPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900 text-white">
+    <div className="min-h-screen text-white" style={{ background: `linear-gradient(135deg, ${tvConfig.primary}, ${tvConfig.secondary})` }}>
       <header className="p-6 sm:p-8 flex justify-between items-start border-b border-white/10">
-        <div>
-          <h1 className="text-3xl sm:text-5xl font-bold mb-2">{establishment.name}</h1>
-          <p className="text-white/60 text-lg">{t('subtitle')}</p>
+        <div className="flex items-center gap-4">
+          {/* eslint-disable-next-line @next/next/no-img-element -- user-provided URL, cannot use next/image */}
+            {tvConfig.logoUrl ? (
+              <img src={tvConfig.logoUrl} alt="Logo" className="h-14 w-auto object-contain" onError={(e) => { (e.target as HTMLImageElement).style.display = 'none' }} />
+            ) : (
+              <div className="h-14 w-14 rounded-xl bg-white/20 flex items-center justify-center">
+                <Monitor className="h-8 w-8 text-white" />
+              </div>
+            )}
+          <div>
+            <h1 className="text-3xl sm:text-5xl font-bold mb-2">{establishment.name}</h1>
+            <p className="text-white/60 text-lg">{t('subtitle')}</p>
+          </div>
         </div>
         <div className="flex items-center gap-4">
           <div className="bg-white/10 rounded-xl px-4 py-2 flex items-center gap-2">
@@ -321,6 +365,11 @@ export default function TVDisplayPage() {
                           </div>
                         ))}
                       </div>
+                    </div>
+                  )}
+                  {tvConfig.message && called.length > 0 && (
+                    <div className="bg-white/10 rounded-xl p-4 mb-6 text-center text-white/90 text-lg">
+                      {tvConfig.message}
                     </div>
                   )}
 
@@ -384,7 +433,7 @@ export default function TVDisplayPage() {
 
       <footer className="p-6 text-center border-t border-white/10">
         <p className="text-white/30 text-sm">
-          QFlow — {t('updated')} {currentTime.toLocaleTimeString('pt-BR')}
+          QFlow — {t('updated')} {currentTime.toLocaleTimeString('pt-BR')} • {tvConfig.voiceEnabled ? 'Voz ativada' : 'Voz desativada'}
         </p>
       </footer>
     </div>
