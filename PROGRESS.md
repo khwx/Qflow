@@ -1091,8 +1091,25 @@ Log de execuções autónomas do Bot Orquestrador (cada 12h).
 - **Verificação**: `tsc --noEmit` ✓, `eslint` ✓ (0 erros), `vitest` ✓ (133/133),
   `next build` ✓.
 
+## 2026-09-15 — Performance: lazy-load do editor de jogos (admin/games)
+
+- **Tarefa pendente**: "Lazy-load restante: componentes pesados de admin".
+- **Problema**: a página `admin/games` (702 linhas) importava estáticamente o
+  formulário editor de jogos (quiz/spin/memory) — cerca de 320 linhas de JSX
+  que só são necessárias quando o utilizador clica em "Novo Jogo" ou "Editar".
+  O editor ficava no bundle inicial do route, desnecessariamente.
+- **Solução**:
+  - Extraído o form inteiro para `src/components/admin/GameEditor.tsx`
+    (componente client com interface `GameEditorProps` tipada).
+  - Substituído o import estático por `next/dynamic`:
+    `const GameEditor = dynamic(() => import('@/components/admin/GameEditor'))`.
+  - O editor é descarregado sob demanda; o admin vê apenas a listagem de jogos
+    (leve) até abrir o form.
+- **Verificação**: `tsc --noEmit` ✓, `eslint` ✓ (0 erros), `vitest` ✓ (133/133),
+  `next build` ✓.
+
 ## Pendente / próximas ideias
 - Reforçar a CSP com nonce/hashing para remover `'unsafe-inline'`; bloqueado
   pelo facto de o framework Next.js injetar scripts inline sem nonce.
 - Lazy-load restante: QRCode em `qr/[slug]` e `establishment` (páginas centradas
-  no QR), componentes pesados de admin/TV display.
+  no QR), TV display config editor.
