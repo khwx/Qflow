@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { useTranslations } from 'next-intl'
+import Image from 'next/image'
 import { createClientComponentClient } from '@/lib/supabase'
 import { Ticket, Establishment, Queue } from '@/types'
 import { Volume2, VolumeX, Clock, Users, CheckCircle, Monitor } from 'lucide-react'
@@ -294,9 +295,8 @@ export default function TVDisplayPage() {
     <div className="min-h-screen text-white" style={{ background: `linear-gradient(135deg, ${tvConfig.primary}, ${tvConfig.secondary})` }}>
       <header className="p-6 sm:p-8 flex justify-between items-start border-b border-white/10">
         <div className="flex items-center gap-4">
-          {/* eslint-disable-next-line @next/next/no-img-element -- user-provided URL, cannot use next/image */}
             {tvConfig.logoUrl ? (
-              <img src={tvConfig.logoUrl} alt="Logo" className="h-14 w-auto object-contain" onError={(e) => { (e.target as HTMLImageElement).style.display = 'none' }} />
+              <Image src={tvConfig.logoUrl} alt="Logo" width={56} height={56} className="h-14 w-auto object-contain" unoptimized onError={(e) => { (e.target as HTMLImageElement).style.display = 'none' }} />
             ) : (
               <div className="h-14 w-14 rounded-xl bg-white/20 flex items-center justify-center">
                 <Monitor className="h-8 w-8 text-white" />
