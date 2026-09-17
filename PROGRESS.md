@@ -852,6 +852,20 @@ Log de execuções autónomas do Bot Orquestrador (cada 12h).
 - **Decisão**: manter `createAdminClient` para mutações (ownership check server-side) e usar `createServerClient` para leituras (RLS enforced). Princípio least privilege aplicado.
 - **Verificação**: `tsc --noEmit` ✓, `eslint` ✓ (0 erros, 0 warnings), `vitest run` ✓ (124/124), `next build` ✓.
 
+## 2026-09-17 — Lint clean: migrar <img> para next/image no TV Display
+
+- **Problema**: 2 warnings de lint no `tv-display/page.tsx` — um `eslint-disable` 
+  desalinhado (na linha errada) e um `<img>` para URL user-provided sem usar
+  `next/image` do Next.js 16.
+- **Solução**:
+  - Import `Image` de `next/image` adicionado.
+  - `<img>` substituído por `<Image>` com `unoptimized` (URL externa não otimizável)
+    + `width`/`height` + `onError` preservado.
+  - `eslint-disable` desalinhado removido (já não necessário).
+- **Verificação**: `tsc --noEmit` ✓, `eslint` ✓ (0 erros, 0 warnings),
+  `vitest run` ✓ (133/133), `next build` ✓.
+- **Commit**: `d1899fb`.
+
 ## 2026-09-09 — Triage: tempo de espera em tempo real (fecha UI stale)
 
 - **Problema**: na página de triagem (`admin/triage`), o tempo de espera de cada
