@@ -1160,3 +1160,29 @@ Log de execuções autónomas do Bot Orquestrador (cada 12h).
   pelo facto de o framework Next.js injetar scripts inline sem nonce.
 - Refatorar AdminShell para code-split das abas do menu de navegação (cada secção
   admin carregada sob demanda via next/dynamic).
+
+## 2026-09-18 — Fix dead UI no settings + error handling em feedback/triage
+
+- **Problema**: (a) a secção "Integrações" na página de configurações
+  (`admin/settings`) tinha inputs para WhatsApp Business API e SMS (Twilio)
+  que **não tinham state, nem onChange, nem eram gravados** — o utilizador
+  digitava um valor, clicava "Salvar", recebia toast de sucesso, e os dados
+  eram **silenciosamente descartados** (dead UI). (b) As páginas
+  `admin/feedback` e `admin/triage` não tinham tratamento de erros nas queries
+  Supabase — se a query falhasse, o utilizador via lista vazia sem qualquer
+  mensagem de erro.
+- **Solução**:
+  - `src/app/admin/settings/page.tsx`: removida toda a secção "Integrações"
+    (2 inputs + labels + container) — dados nunca eram gravados, UI enganosa.
+  - `src/app/admin/feedback/page.tsx`: adicionado estado `error`, `try/catch`
+    no `load()` e `loadEst()`, e display de erro com botão "Tentar novamente"
+    que refaz a query.
+  - `src/app/admin/triage/page.tsx`: mesma correção — `error` state,
+    `try/catch` em `load()` e `loadEst()`, display de erro com retry.
+- **Decisão**: remover a secção morta em vez de implementar integrações
+  incompletas (WhatsApp/Twilio exigem credenciais, schema de DB e lógica de
+  envio — fora do escopo de um fix). Error handling segue o padrão
+  `try/catch` + toast já existente no projeto.
+- **Verificação**: `tsc --noEmit` ✓, `eslint` ✓ (0 erros), `vitest` ✓
+  (133/133), `next build` ✓.
+- **Commit**: `130b868`.
