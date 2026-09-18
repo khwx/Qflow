@@ -15,20 +15,30 @@ function FeedbackAdminInner(){
   const [establishment,setEstablishment]=useState<Establishment|null>(null)
   const [items,setItems]=useState<FB[]>([])
   const [loading,setLoading]=useState(!!estSlug)
+  const [error,setError]=useState<string|null>(null)
   const supabase=createClientComponentClient()
   const chRef=useRef<ReturnType<typeof supabase.channel>|null>(null)
 
   const load=useCallback(async(estId:string)=>{
-    const {data}=await supabase.from('feedback').select('*, tickets(ticket_number)').eq('establishment_id',estId).order('created_at',{ascending:false}).limit(200)
-    if(data) setItems(data as unknown as FB[])
+    try{
+      const {data,error:loadErr}=await supabase.from('feedback').select('*, tickets(ticket_number)').eq('establishment_id',estId).order('created_at',{ascending:false}).limit(200)
+      if(loadErr){ setError('Erro ao carregar feedback: '+loadErr.message); setLoading(false); return }
+      if(data) setItems(data as unknown as FB[])
+      setError(null)
+    }catch{ setError('Falha ao conectar ao servidor') }
     setLoading(false)
   },[supabase])
 
 useEffect(()=>{
     if(!estSlug){ return }
-    supabase.from('establishments').select('*').eq('slug',estSlug).single().then(({data})=>{
-      if(data) { setEstablishment(data); load(data.id) } else { }
-    })
+    async function loadEst(){
+      try{
+        const {data,error:estErr}=await supabase.from('establishments').select('*').eq('slug',estSlug).single()
+        if(estErr){ setError('Erro ao carregar estabelecimento: '+estErr.message); setLoading(false); return }
+        if(data) { setEstablishment(data); load(data.id) } else { setLoading(false) }
+      }catch{ setError('Falha ao conectar ao servidor'); setLoading(false) }
+    }
+    loadEst()
   },[estSlug,supabase,load])
 
   useEffect(()=>{
@@ -41,6 +51,7 @@ useEffect(()=>{
 
   if(!estSlug) return <div className="text-center py-16"><p className="text-gray-500 dark:text-gray-400 mb-4">Selecione um estabelecimento</p><Link href="/admin/establishments" className="text-indigo-600 underline">Selecionar</Link></div>
   if(loading) return <div className="space-y-3"><Skeleton className="h-20"/><Skeleton className="h-64"/></div>
+  if(error) return <div className="text-center py-12"><p className="text-red-500 dark:text-red-400 mb-2">{error}</p><button onClick={()=>establishment&&load(establishment.id)} className="text-indigo-600 underline text-sm">Tentar novamente</button></div>
   if(!establishment) return <div className="text-center py-12 text-gray-500">Não encontrado</div>
 
   const avg = items.length? (items.reduce((s,x)=>s+x.rating,0)/items.length).toFixed(1): '—'

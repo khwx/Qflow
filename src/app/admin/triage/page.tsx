@@ -23,25 +23,36 @@ function TriageInner(){
   const [tickets,setTickets]=useState<Ticket[]>([])
   const [filter,setFilter]=useState<string>('all')
   const [loading,setLoading]=useState(!!estSlug)
+  const [error,setError]=useState<string|null>(null)
   const [dragId,setDragId]=useState<string|null>(null)
   const [now,setNow]=useState(Date.now)
   const supabase=createClientComponentClient()
   const chRef=useRef<ReturnType<typeof supabase.channel>|null>(null)
 
   const load=useCallback(async(estId:string)=>{
-    const {data:qs}=await supabase.from('queues').select('id').eq('establishment_id',estId)
-    if(!qs||qs.length===0){setTickets([]);setLoading(false);return}
-    const ids=qs.map(q=>q.id)
-    const {data}=await supabase.from('tickets').select('*').in('queue_id',ids).eq('status','waiting').order('created_at',{ascending:true})
-    if(data) setTickets(data as Ticket[])
+    try{
+      const {data:qs,error:qErr}=await supabase.from('queues').select('id').eq('establishment_id',estId)
+      if(qErr){ setError('Erro ao carregar filas: '+qErr.message); setLoading(false); return }
+      if(!qs||qs.length===0){setTickets([]);setLoading(false);return}
+      const ids=qs.map(q=>q.id)
+      const {data,error:tErr}=await supabase.from('tickets').select('*').in('queue_id',ids).eq('status','waiting').order('created_at',{ascending:true})
+      if(tErr){ setError('Erro ao carregar senhas: '+tErr.message); setLoading(false); return }
+      if(data) setTickets(data as Ticket[])
+      setError(null)
+    }catch{ setError('Falha ao conectar ao servidor') }
     setLoading(false)
   },[supabase])
 
   useEffect(()=>{
     if(!estSlug){ return }
-    supabase.from('establishments').select('*').eq('slug',estSlug).single().then(({data})=>{
-      if(data) { setEstablishment(data); load(data.id) }
-    })
+    async function loadEst(){
+      try{
+        const {data,error:estErr}=await supabase.from('establishments').select('*').eq('slug',estSlug).single()
+        if(estErr){ setError('Erro ao carregar estabelecimento: '+estErr.message); setLoading(false); return }
+        if(data) { setEstablishment(data); load(data.id) } else { setLoading(false) }
+      }catch{ setError('Falha ao conectar ao servidor'); setLoading(false) }
+    }
+    loadEst()
   },[estSlug,supabase,load])
 
   useEffect(()=>{
@@ -73,6 +84,7 @@ function TriageInner(){
 
   if(!estSlug) return <div className="text-center py-16"><p className="text-gray-500 dark:text-gray-400 mb-4">Selecione um estabelecimento</p><Link href="/admin/establishments" className="text-indigo-600 underline">Selecionar</Link></div>
   if(loading) return <div className="grid grid-cols-4 gap-4"><Skeleton className="h-64"/><Skeleton className="h-64"/><Skeleton className="h-64"/><Skeleton className="h-64"/></div>
+  if(error) return <div className="text-center py-12"><p className="text-red-500 dark:text-red-400 mb-2">{error}</p><button onClick={()=>establishment&&load(establishment.id)} className="text-indigo-600 underline text-sm">Tentar novamente</button></div>
   if(!establishment) return <div className="text-center py-12 text-gray-500">Não encontrado</div>
 
   const filtered= filter==='all'? tickets: tickets.filter(t=>t.priority===filter)
