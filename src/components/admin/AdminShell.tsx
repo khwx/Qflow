@@ -65,6 +65,9 @@ function AdminShellInner({
 
   useEffect(() => {
     if (estSlug) {
+      try {
+        localStorage.setItem('qflow_admin_est', estSlug)
+      } catch {}
       supabase
         .from('establishments')
         .select('*')
@@ -76,18 +79,23 @@ function AdminShellInner({
     }
   }, [estSlug, supabase])
 
+  const getHref = (href: string) => {
+    if (href === '/admin/establishments' || !estSlug) return href
+    return `${href}?est=${encodeURIComponent(estSlug)}`
+  }
+
   const sidebarContent = (
-    <>
+    <div className="flex flex-col min-h-full">
       <div className="flex items-center gap-2 p-6 border-b border-gray-200 dark:border-gray-700">
         <QrCode className="h-8 w-8" style={{ color: '#6C63FF' }} />
         <span className="logo-stitch text-xl">Qflow</span>
       </div>
 
-      <nav className="p-4 space-y-1">
+      <nav className="p-4 space-y-1 pb-48">
         {navigation.map((item) => (
           <Link
             key={item.name}
-            href={item.href}
+            href={getHref(item.href)}
             onClick={() => setSidebarOpen(false)}
             className={cn(
               'flex items-center gap-3 px-4 py-3 rounded-lg transition',
@@ -102,7 +110,7 @@ function AdminShellInner({
         ))}
       </nav>
 
-      <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-gray-200 dark:border-gray-700 space-y-2">
+      <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-gray-200 dark:border-gray-700 space-y-2 bg-white dark:bg-gray-800">
         <button
           onClick={toggleDarkMode}
           aria-label="Alternar modo escuro"
@@ -133,11 +141,11 @@ function AdminShellInner({
           <span className="font-medium">{user ? 'Sair' : 'Exit'}</span>
         </button>
       </div>
-    </>
+    </div>
   )
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 md:flex">
       <div className="md:hidden flex items-center gap-3 px-4 py-3 bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700 sticky top-0 z-50">
         <button
           onClick={() => setSidebarOpen(!sidebarOpen)}
@@ -161,7 +169,7 @@ function AdminShellInner({
 
       <aside
         className={cn(
-          'fixed inset-y-0 left-0 w-64 bg-white dark:bg-gray-800 shadow-lg z-50 transform transition-transform duration-300 ease-out',
+          'fixed inset-y-0 left-0 w-64 flex-shrink-0 bg-white dark:bg-gray-800 shadow-lg border-r border-gray-200 dark:border-gray-700 z-50 transform transition-transform duration-300 ease-out',
           'md:relative md:translate-x-0 md:z-auto md:block',
           sidebarOpen ? 'translate-x-0' : '-translate-x-full'
         )}
@@ -180,7 +188,7 @@ function AdminShellInner({
         </div>
       </aside>
 
-      <main className="md:ml-0 min-h-screen">
+      <main className="flex-1 min-w-0 min-h-screen">
         {establishment && (
           <div className="bg-indigo-50 dark:bg-indigo-900/30 border-b border-indigo-100 dark:border-indigo-800 px-4 sm:px-8 py-2 flex items-center gap-2 text-sm">
             <Building2 className="h-4 w-4 text-indigo-600 dark:text-indigo-400" />

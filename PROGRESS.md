@@ -1186,3 +1186,27 @@ Log de execuções autónomas do Bot Orquestrador (cada 12h).
 - **Verificação**: `tsc --noEmit` ✓, `eslint` ✓ (0 erros), `vitest` ✓
   (133/133), `next build` ✓.
 - **Commit**: `130b868`.
+
+## 2026-09-25 — Fix UX no Admin: persistência de estabelecimento + layout desktop + redirect de /admin
+
+- **Problema**:
+  1. No painel de administração (`AdminShell`), a navegação da barra lateral usava `href={item.href}`
+     sem preservar a query string `?est=${estSlug}`. Ao navegar entre abas (ex.: Dashboard → Filas → Senhas),
+     o contexto do estabelecimento selecionado era perdido, e todas as abas exibiam tela vazia exigindo
+     resselecionar o estabelecimento em `/admin/establishments`.
+  2. No layout desktop, a barra lateral e a área principal ficavam empilhadas verticalmente devido à falta
+     de `md:flex` no container pai do `AdminShell`. Além disso, a navegação longa cobria o rodapé de logout/tema.
+  3. A rota raiz `/admin` exibia abas placeholder com barra lateral duplicada em vez de redirecionar para o
+     estabelecimento ativo ou listagem.
+- **Solução**:
+  - `src/components/admin/AdminShell.tsx`:
+    - Adicionado helper `getHref` que propaga `?est=${encodeURIComponent(estSlug)}` para todas as ferramentas
+      (exceto a listagem geral `/admin/establishments`).
+    - Persistência automática do slug em `localStorage` (`qflow_admin_est`).
+    - Ajustado container com `md:flex` e `<main className="flex-1 min-w-0">` para layout em duas colunas responsivo.
+    - Adicionado `pb-48` no menu para permitir scroll completo acima do rodapé fixo.
+  - `src/app/admin/page.tsx`:
+    - Substituído componente com tabs mockadas por `AdminRedirect` com `Suspense`, direcionando para
+      `/admin/dashboard?est=...` (do slug na URL ou `qflow_admin_est` em `localStorage`) ou `/admin/establishments`.
+- **Verificação**: `tsc --noEmit` ✓, `eslint` ✓ (0 erros), `vitest` ✓ (133/133), `next build` ✓.
+
