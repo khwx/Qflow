@@ -358,9 +358,16 @@ create policy "Orders are insertable by everyone" on public.orders
 create index if not exists idx_tickets_queue_id on public.tickets(queue_id);
 create index if not exists idx_tickets_status on public.tickets(status);
 create index if not exists idx_tickets_establishment_id on public.tickets(establishment_id);
+create index if not exists idx_tickets_customer_id on public.tickets(customer_id);
 create index if not exists idx_queues_establishment_id on public.queues(establishment_id);
 create index if not exists idx_games_establishment_id on public.games(establishment_id);
 create index if not exists idx_polls_establishment_id on public.polls(establishment_id);
+create index if not exists idx_game_scores_game_id on public.game_scores(game_id);
+create index if not exists idx_game_scores_ticket_id on public.game_scores(ticket_id);
+create index if not exists idx_poll_responses_poll_id on public.poll_responses(poll_id);
+create index if not exists idx_poll_responses_ticket_id on public.poll_responses(ticket_id);
+create index if not exists idx_orders_establishment_id on public.orders(establishment_id);
+create index if not exists idx_orders_ticket_id on public.orders(ticket_id);
 
 -- Realtime
 alter publication supabase_realtime add table public.tickets;
