@@ -1158,8 +1158,6 @@ Log de execuções autónomas do Bot Orquestrador (cada 12h).
 ## Pendente / próximas ideias
 - Reforçar a CSP com nonce/hashing para remover `'unsafe-inline'`; bloqueado
   pelo facto de o framework Next.js injetar scripts inline sem nonce.
-- Refatorar AdminShell para code-split das abas do menu de navegação (cada secção
-  admin carregada sob demanda via next/dynamic).
 
 ## 2026-09-18 — Fix dead UI no settings + error handling em feedback/triage
 
@@ -1209,4 +1207,16 @@ Log de execuções autónomas do Bot Orquestrador (cada 12h).
     - Substituído componente com tabs mockadas por `AdminRedirect` com `Suspense`, direcionando para
       `/admin/dashboard?est=...` (do slug na URL ou `qflow_admin_est` em `localStorage`) ou `/admin/establishments`.
 - **Verificação**: `tsc --noEmit` ✓, `eslint` ✓ (0 erros), `vitest` ✓ (133/133), `next build` ✓.
+
+## 2026-10-01 — Code-split das secções admin via next/dynamic (fecha item pendente)
+
+- **Problema**: o painel de administração carregava todas as 14 secções (Dashboard, Operador, Triagem, Filas, Senhas, Pedidos, Cardápio, Enquetes, Feedback, TV, Jogos, Clientes, Configurações, Estabelecimentos) no bundle inicial, mesmo que o utilizador só acedesse a uma ou duas.
+- **Solução**:
+  - Criado `src/components/admin/AdminSections.tsx` com imports dinâmicos (`next/dynamic`) para cada secção (`ssr: false`, loading skeleton próprio).
+  - Extraído `DashboardContent` para `src/app/admin/dashboard/DashboardContent.tsx` (era inline em `dashboard/page.tsx`).
+  - Atualizado `src/app/admin/page.tsx`: `DynamicAdminContent` lê o pathname, mapeia para a secção correspondente e renderiza só o chunk necessário via `Suspense`.
+  - A navegação lateral em `AdminShell` continua a usar `Link` para URLs `/admin/...`; o `AdminRedirect` em `/admin` encaminha para a secção ativa (ou dashboard/establishments) preservando `?est=`.
+- **Benefício**: bundle inicial do admin significativamente menor; cada secção é descarregada on-demand quando o utilizador navega para ela.
+- **Verificação**: `tsc --noEmit` ✓, `eslint` ✓ (0 erros, 0 warnings), `vitest` ✓ (133/133), `next build` ✓.
+- **Commit**: `088c378`.
 
