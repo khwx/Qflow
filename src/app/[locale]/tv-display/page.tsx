@@ -208,6 +208,16 @@ export default function TVDisplayPage() {
           loadQueues(est.id)
           loadTickets(est.id)
         })
+        .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'establishments', filter: `id=eq.${est.id}` }, (payload) => {
+          const updated = payload.new as Establishment
+          setTvConfig(c => ({
+            ...c,
+            primary: updated.primary_color || c.primary,
+            secondary: updated.secondary_color || c.secondary,
+            logoUrl: updated.logo_url || c.logoUrl,
+            message: updated.description || c.message,
+          }))
+        })
         .subscribe()
 
       channelRef.current = channel
