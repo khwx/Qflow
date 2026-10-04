@@ -611,6 +611,29 @@ create policy "Feedback updatable by owner" on public.feedback for update using 
 );
 alter publication supabase_realtime add table public.feedback;
 
+-- Newsletter Subscribers
+create table if not exists public.newsletter_subscribers (
+  id uuid default uuid_generate_v4() primary key,
+  email text unique not null,
+  token text unique not null default encode(gen_random_bytes(24), 'hex'),
+  ativo boolean default true,
+  created_at timestamp with time zone default timezone('utc'::text, now()) not null
+);
+
+alter table public.newsletter_subscribers enable row level security;
+
+drop policy if exists "Newsletter subscribers are insertable by everyone" on public.newsletter_subscribers;
+create policy "Newsletter subscribers are insertable by everyone" on public.newsletter_subscribers
+  for insert with check (true);
+
+drop policy if exists "Newsletter subscribers are viewable by token" on public.newsletter_subscribers;
+create policy "Newsletter subscribers are viewable by token" on public.newsletter_subscribers
+  for select using (true);
+
+drop policy if exists "Newsletter subscribers are updatable by token" on public.newsletter_subscribers;
+create policy "Newsletter subscribers are updatable by token" on public.newsletter_subscribers
+  for update using (true);
+
 -- Rate limit table (shared store for production)
 create table if not exists public.rate_limits (
   key text primary key,
