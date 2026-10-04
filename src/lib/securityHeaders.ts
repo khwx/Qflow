@@ -12,6 +12,12 @@ export interface SecurityHeadersOptions {
    * Defaults to `true` so local dev keeps working unchanged.
    */
   allowUnsafeEval?: boolean
+  /**
+   * Nonce value for script-src. When provided, replaces 'unsafe-inline' with
+   * 'nonce-{value}' to allow inline scripts with matching nonce attribute.
+   * Requires Next.js `experimental.scriptNonce: true` and middleware to inject.
+   */
+  nonce?: string
 }
 
 /**
@@ -38,22 +44,29 @@ const BASE_HEADERS: SecurityHeader[] = [
  * Builds the security headers applied to every response. When `supabaseHost`
  * is provided the Content-Security-Policy allows the Supabase origin (HTTP +
  * WSS) so the publishable client, Auth and Realtime keep working.
+ * When `nonce` is provided, replaces 'unsafe-inline' in script-src with
+ * 'nonce-{value}' for stricter CSP (requires Next.js experimental.scriptNonce).
  */
 export function getSecurityHeaders(
   options: SecurityHeadersOptions = {}
 ): SecurityHeader[] {
-  const { supabaseHost, allowUnsafeEval = true } = options
+  const { supabaseHost, allowUnsafeEval = true, nonce } = options
   const connectSrc =
     supabaseHost && supabaseHost.length > 0
       ? `'self' https://${supabaseHost} wss://${supabaseHost}`
       : "'self'"
 
+  const hasNonce = nonce && nonce.length > 0
+  const scriptSrcInline = hasNonce ? `'nonce-${nonce}'` : "'unsafe-inline'"
+
   // `unsafe-inline` is kept because the Next.js framework injects inline
-  // bootstrap scripts that cannot carry a nonce. `unsafe-eval` is only needed
-  // by the dev runtime, so it is dropped in production builds.
+  // bootstrap scripts that cannot carry a nonce. When nonce is available (via
+  // experimental.scriptNonce + middleware), we use it instead.
+  // `unsafe-eval` is only needed by the dev runtime, so it is dropped in
+  // production builds.
   const scriptSrc = allowUnsafeEval
-    ? "'self' 'unsafe-inline' 'unsafe-eval'"
-    : "'self' 'unsafe-inline'"
+    ? `'self' ${scriptSrcInline} 'unsafe-eval'`
+    : `'self' ${scriptSrcInline}`
 
   const csp = [
     "default-src 'self'",
