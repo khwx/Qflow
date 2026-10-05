@@ -57,7 +57,9 @@ export function getSecurityHeaders(
       : "'self'"
 
   const hasNonce = nonce && nonce.length > 0
-  const scriptSrcInline = hasNonce ? `'nonce-${nonce}'` : "'unsafe-inline'"
+  const scriptSrcInline = hasNonce
+    ? `'nonce-${nonce}' 'unsafe-inline'`
+    : "'unsafe-inline'"
 
   // `unsafe-inline` is kept because the Next.js framework injects inline
   // bootstrap scripts that cannot carry a nonce. When nonce is available (via
