@@ -64,15 +64,15 @@ describe('getSecurityHeaders', () => {
     expect(csp).not.toContain('unsafe-eval')
   })
 
-  it('includes both nonce and unsafe-inline in script-src when nonce is provided', () => {
+  it('replaces unsafe-inline with nonce in script-src when nonce is provided', () => {
     const csp = headerValue(
       getSecurityHeaders({ nonce: 'abc123', allowUnsafeEval: false }),
       'Content-Security-Policy'
     )!
-    expect(csp).toContain("script-src 'self' 'nonce-abc123' 'unsafe-inline'")
+    expect(csp).toContain("script-src 'self' 'nonce-abc123'")
     const scriptSrc = csp.split('script-src ')[1].split(';')[0]
     expect(scriptSrc).toContain("'nonce-abc123'")
-    expect(scriptSrc).toContain("'unsafe-inline'")
+    expect(scriptSrc).not.toContain("'unsafe-inline'")
   })
 
   it('keeps unsafe-inline when nonce is empty string', () => {

@@ -32,7 +32,7 @@ export async function proxy(request: NextRequest) {
   const isApiRoute = pathname.startsWith('/api')
   const hasLocale = locales.some((locale) => pathname.startsWith(`/${locale}/`) || pathname === `/${locale}`)
 
-  // Generate nonce for CSP (Next.js experimental.scriptNonce not available in this version)
+  // Generate nonce for CSP (Next.js experimental.scriptNonce reads x-nonce header)
   const nonce = generateNonce()
   const allowUnsafeEval = process.env.NODE_ENV !== 'production'
 
@@ -48,8 +48,8 @@ export async function proxy(request: NextRequest) {
     securityHeaders.forEach((header) => {
       response.headers.set(header.key, header.value)
     })
-    // Pass nonce to response for inline scripts that need it
-    response.headers.set('x-csp-nonce', nonce)
+    // Pass nonce to Next.js for scriptNonce (reads x-nonce header)
+    response.headers.set('x-nonce', nonce)
     return response
   }
 
@@ -58,7 +58,7 @@ export async function proxy(request: NextRequest) {
     securityHeaders.forEach((header) => {
       response.headers.set(header.key, header.value)
     })
-    response.headers.set('x-csp-nonce', nonce)
+    response.headers.set('x-nonce', nonce)
     return response
   }
 
@@ -66,7 +66,7 @@ export async function proxy(request: NextRequest) {
   securityHeaders.forEach((header) => {
     response.headers.set(header.key, header.value)
   })
-  response.headers.set('x-csp-nonce', nonce)
+  response.headers.set('x-nonce', nonce)
   return response
 }
 

@@ -57,13 +57,13 @@ export function getSecurityHeaders(
       : "'self'"
 
   const hasNonce = nonce && nonce.length > 0
+  // When nonce is available (via experimental.scriptNonce + middleware),
+  // use it instead of 'unsafe-inline'. Next.js automatically adds the nonce
+  // to inline scripts. Without nonce, keep 'unsafe-inline' as fallback.
   const scriptSrcInline = hasNonce
-    ? `'nonce-${nonce}' 'unsafe-inline'`
+    ? `'nonce-${nonce}'`
     : "'unsafe-inline'"
 
-  // `unsafe-inline` is kept because the Next.js framework injects inline
-  // bootstrap scripts that cannot carry a nonce. When nonce is available (via
-  // experimental.scriptNonce + middleware), we use it instead.
   // `unsafe-eval` is only needed by the dev runtime, so it is dropped in
   // production builds.
   const scriptSrc = allowUnsafeEval
