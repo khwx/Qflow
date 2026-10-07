@@ -1,11 +1,11 @@
 import type { Metadata, Viewport } from "next";
-import { Source_Serif_4, Inter, JetBrains_Mono } from "next/font/google";
+import { Merriweather, Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 
-const sourceSerif = Source_Serif_4({
-  weight: ["600", "700"],
+const merriweather = Merriweather({
+  weight: ["700"],
   subsets: ["latin"],
-  variable: "--font-source-serif",
+  variable: "--font-merriweather",
   display: "swap",
 });
 
@@ -63,7 +63,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${sourceSerif.variable} ${inter.variable} ${jetbrainsMono.variable} h-full antialiased`}
+      className={`${merriweather.variable} ${inter.variable} ${jetbrainsMono.variable} h-full antialiased`}
     >
       <body className="min-h-full font-sans">{children}</body>
     </html>
