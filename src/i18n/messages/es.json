@@ -65,7 +65,10 @@
     "queue_position": "Posición en la cola",
     "waiting_room": "Entrar a la Sala de Espera",
     "min": "min",
-    "error_creating": "Error al crear la entrada. Por favor, inténtalo de nuevo."
+    "error_creating": "Error al crear la entrada. Por favor, inténtalo de nuevo.",
+    "copy": "Copiar",
+    "copied": "¡Copiado!",
+    "share": "Compartir"
   },
   "waiting": {
     "status": "Estado de la Cola",
@@ -257,13 +260,18 @@
     "cat_general": "General",
     "cat_restaurant": "Restaurante",
     "cat_clinic": "Clínica",
-    "cat_retail": "Retail",
+    "cat_retail": "Comercio",
     "cat_bank": "Banco",
     "cat_government": "Gobierno",
     "create": "Crear Establecimiento",
     "creating": "Creando...",
-    "qr_success": "¡Establecimiento creado con éxito!",
-    "show_qr": "Mostrar QR Code"
+    "success_title": "¡Establecimiento Creado!",
+    "success_desc": "Tu establecimiento está listo. Comparte el código QR con tus clientes.",
+    "show_qr": "Mostrar QR Code",
+    "go_dashboard": "Ir al Panel",
+    "slug_display": "Tu código",
+    "error_creating": "Error al crear establecimiento. Intenta con otro slug.",
+    "auth_required": "Necesitas iniciar sesión para crear un establecimiento"
   },
   "qr": {
     "title": "QR Code",
@@ -314,5 +322,51 @@
     "reset_title": "Restablecer Contraseña",
     "reset_subtitle": "Ingresa tu nueva contraseña a continuación.",
     "update_password": "Actualizar Contraseña"
+  },
+  "operator": {
+    "title": "Panel del Operador",
+    "subtitle": "Mostrador minimalista — F1 llamar, F2 completar",
+    "queue": "Fila",
+    "counter": "Mostrador",
+    "call_next": "Llamar siguiente",
+    "complete": "Completar",
+    "recall": "Re-llamar",
+    "waiting": "Esperando",
+    "called": "Llamados",
+    "serving": "En atención",
+    "next": "Siguiente",
+    "empty_queue": "Fila vacía",
+    "no_ticket_serving": "Ningún turno en atención"
+  },
+  "tv_config": {
+    "title": "Configurar Pantalla TV",
+    "subtitle": "Vista previa WYSIWYG + controles (diseño, colores, logo, voz, mensaje)",
+    "layout": "Diseño",
+    "colors": "Colores & Marca",
+    "voice": "Voz & Mensaje",
+    "primary": "Primario",
+    "secondary": "Secundario",
+    "logo_url": "URL del Logo",
+    "message": "Mensaje",
+    "preview": "Vista Previa WYSIWYG",
+    "live_preview": "Vista previa en vivo (iframe)",
+    "open_tv": "Abrir TV",
+    "save": "Guardar",
+    "voice_enabled": "Voz al llamar",
+    "test_voice": "Probar voz"
+  },
+  "kiosk": {
+    "title": "Kiosco de Autoservicio",
+    "subtitle": "Toca para obtener tu turno",
+    "select_queue": "Selecciona la fila",
+    "name": "Nombre (opcional)",
+    "phone": "Teléfono (opcional)",
+    "take_ticket": "Obtener turno gigante",
+    "generating": "Generando...",
+    "your_ticket": "Tu turno",
+    "scan_to_track": "Escanea para seguir la cola en tu móvil",
+    "how_it_works": "¿Cómo funciona?",
+    "back": "Volver",
+    "restart_in": "Reiniciando en {seconds}s"
   }
 }

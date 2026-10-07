@@ -65,7 +65,10 @@
     "queue_position": "Position dans la file",
     "waiting_room": "Entrer dans la Salle d'Attente",
     "min": "min",
-    "error_creating": "Erreur lors de la création du ticket. Veuillez réessayer."
+    "error_creating": "Erreur lors de la création du ticket. Veuillez réessayer.",
+    "copy": "Copier",
+    "copied": "Copié !",
+    "share": "Partager"
   },
   "waiting": {
     "status": "État de la File",
@@ -262,8 +265,13 @@
     "cat_government": "Gouvernement",
     "create": "Créer l'Établissement",
     "creating": "Création...",
-    "qr_success": "Établissement créé avec succès !",
-    "show_qr": "Afficher le QR Code"
+    "success_title": "Établissement Créé !",
+    "success_desc": "Votre établissement est prêt. Partagez le QR Code avec vos clients.",
+    "show_qr": "Afficher le QR Code",
+    "go_dashboard": "Aller au Tableau de Bord",
+    "slug_display": "Votre code",
+    "error_creating": "Erreur lors de la création de l'établissement. Essayez un autre slug.",
+    "auth_required": "Vous devez être connecté pour créer un établissement"
   },
   "qr": {
     "title": "QR Code",
@@ -282,7 +290,7 @@
   "footer": {
     "made_with": "Fait avec ❤️ pour éliminer les files dans le monde"
   },
-  "auth": {
+"auth": {
     "login_title": "Content de vous revoir",
     "login_subtitle": "Connectez-vous pour gérer vos files",
     "signup_title": "Créez votre compte",
@@ -314,5 +322,51 @@
     "reset_title": "Réinitialiser le mot de passe",
     "reset_subtitle": "Entrez votre nouveau mot de passe ci-dessous.",
     "update_password": "Mettre à jour le mot de passe"
+  },
+  "operator": {
+    "title": "Panneau de l'Opérateur",
+    "subtitle": "Guichet minimaliste — F1 appeler, F2 terminer",
+    "queue": "File",
+    "counter": "Guichet",
+    "call_next": "Appeler le suivant",
+    "complete": "Terminer",
+    "recall": "Rappeler",
+    "waiting": "En attente",
+    "called": "Appelés",
+    "serving": "En service",
+    "next": "Suivant",
+    "empty_queue": "File vide",
+    "no_ticket_serving": "Aucun ticket en service"
+  },
+  "tv_config": {
+    "title": "Configurer l'Écran TV",
+    "subtitle": "Aperçu WYSIWYG + contrôles (mise en page, couleurs, logo, voix, message)",
+    "layout": "Mise en page",
+    "colors": "Couleurs & Marque",
+    "voice": "Voix & Message",
+    "primary": "Primaire",
+    "secondary": "Secondaire",
+    "logo_url": "URL du Logo",
+    "message": "Message",
+    "preview": "Aperçu WYSIWYG",
+    "live_preview": "Aperçu en direct (iframe)",
+    "open_tv": "Ouvrir TV",
+    "save": "Enregistrer",
+    "voice_enabled": "Voix à l'appel",
+    "test_voice": "Tester la voix"
+  },
+  "kiosk": {
+    "title": "Borne en Libre-Service",
+    "subtitle": "Appuyez pour obtenir votre ticket",
+    "select_queue": "Sélectionnez la file",
+    "name": "Nom (facultatif)",
+    "phone": "Téléphone (facultatif)",
+    "take_ticket": "Obtenir un ticket géant",
+    "generating": "Génération...",
+    "your_ticket": "Votre ticket",
+    "scan_to_track": "Scannez pour suivre la file sur votre mobile",
+    "how_it_works": "Comment ça marche ?",
+    "back": "Retour",
+    "restart_in": "Redémarrage dans {seconds}s"
   }
 }
