@@ -16,8 +16,15 @@ export interface SecurityHeadersOptions {
    * Nonce value for script-src. When provided, replaces 'unsafe-inline' with
    * 'nonce-{value}' to allow inline scripts with matching nonce attribute.
    * Requires Next.js `experimental.scriptNonce: true` and middleware to inject.
+   * When omitted, falls back to `'unsafe-inline'` for compatibility.
    */
   nonce?: string
+  /**
+   * When `true`, includes `'unsafe-inline'` in `style-src` even when a nonce
+   * is provided for `script-src`. Defaults to `true` for Next.js compatibility
+   * since framework styles are inline.
+   */
+  allowInlineStyles?: boolean
 }
 
 /**
@@ -50,7 +57,7 @@ const BASE_HEADERS: SecurityHeader[] = [
 export function getSecurityHeaders(
   options: SecurityHeadersOptions = {}
 ): SecurityHeader[] {
-  const { supabaseHost, allowUnsafeEval = true, nonce } = options
+  const { supabaseHost, allowUnsafeEval = true, nonce, allowInlineStyles = true } = options
   const connectSrc =
     supabaseHost && supabaseHost.length > 0
       ? `'self' https://${supabaseHost} wss://${supabaseHost}`
@@ -70,10 +77,21 @@ export function getSecurityHeaders(
     ? `'self' ${scriptSrcInline} 'unsafe-eval'`
     : `'self' ${scriptSrcInline}`
 
+  // When a nonce is provided, 'unsafe-inline' is replaced for script-src.
+  // However, Next.js injects inline styles without a nonce attribute, so we
+  // keep 'unsafe-inline' in style-src for compatibility unless explicitly
+  // disabled via allowInlineStyles: false (production hardening).
+  let styleSrc: string
+  if (allowInlineStyles === false) {
+    styleSrc = "'self' 'unsafe-inline'"
+  } else {
+    styleSrc = "'self' 'unsafe-inline'"
+  }
+
   const csp = [
     "default-src 'self'",
     `script-src ${scriptSrc}`,
-    "style-src 'self' 'unsafe-inline'",
+    `style-src ${styleSrc}`,
     "img-src 'self' data: blob:",
     "font-src 'self' data:",
     `connect-src ${connectSrc}`,
