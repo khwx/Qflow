@@ -51,11 +51,27 @@ export function computeAvgServiceMinutes(
 
 export function timeAgo(dateStr: string): string {
   const seconds = Math.floor((Date.now() - new Date(dateStr).getTime()) / 1000)
-  if (seconds < 60) return `há ${seconds}s`
+  if (seconds < 0) return 'ainda agora'
+  if (seconds < 60) return seconds === 1 ? '1 segundo atrás' : `${seconds} segundos atrás`
   const minutes = Math.floor(seconds / 60)
-  if (minutes < 60) return `há ${minutes}min`
+  if (minutes < 60) return minutes === 1 ? '1 min atrás' : `${minutes} min atrás`
   const hours = Math.floor(minutes / 60)
-  if (hours < 24) return `há ${hours}h`
+  if (hours < 24) return hours === 1 ? '1 hora atrás' : `${hours} horas atrás`
   const days = Math.floor(hours / 24)
-  return `há ${days}d`
+  if (days < 7) return days === 1 ? '1 dia atrás' : `${days} dias atrás`
+  const weeks = Math.floor(days / 7)
+  return weeks === 1 ? '1 semana atrás' : `${weeks} semanas atrás`
+}
+
+export function formatDatePortuguese(dateStr: string): string {
+  const date = new Date(dateStr)
+  const options: Intl.DateTimeFormatOptions = {
+    day: '2-digit',
+    month: 'short',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+  }
+  const formatter = new Intl.DateTimeFormat('pt-BR', options)
+  return formatter.format(date)
 }
