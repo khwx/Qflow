@@ -25,5 +25,4 @@ $$;
 
 -- Enable pg_cron extension and schedule cleanup every hour.
 -- Requires: CREATE EXTENSION IF NOT EXISTS pg_cron; (run once in SQL editor)
--- Then uncomment and run the cron schedule lines below.
--- select cron.schedule('rate-limit-cleanup-hourly', '0 * * * *', 'select public.rate_limit_cleanup()');
+select cron.schedule('rate-limit-cleanup-hourly', '0 * * * *', 'select public.rate_limit_cleanup()');
