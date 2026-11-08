@@ -27,6 +27,11 @@ export interface SecurityHeadersOptions {
    * since framework styles are inline.
    */
   allowInlineStyles?: boolean
+  /**
+   * When `true` (default), includes `form-action 'self'` in the CSP. When
+   * `false`, the `form-action` directive is omitted from the policy.
+   */
+  includeFormAction?: boolean
 }
 
 /**
@@ -59,7 +64,7 @@ const BASE_HEADERS: SecurityHeader[] = [
 export function getSecurityHeaders(
   options: SecurityHeadersOptions = {}
 ): SecurityHeader[] {
-  const { supabaseHost, allowUnsafeEval = true, nonce, allowInlineStyles = true } = options
+  const { supabaseHost, allowUnsafeEval = true, nonce, allowInlineStyles = true, includeFormAction = true } = options
   const connectSrc =
     supabaseHost && supabaseHost.length > 0
       ? `'self' https://${supabaseHost} wss://${supabaseHost}`
@@ -90,7 +95,7 @@ export function getSecurityHeaders(
     styleSrc = "'self' 'unsafe-inline'"
   }
 
-  const csp = [
+  const cspDirectives: string[] = [
     "default-src 'self'",
     `script-src ${scriptSrc}`,
     `style-src ${styleSrc}`,
@@ -99,10 +104,16 @@ export function getSecurityHeaders(
     `connect-src ${connectSrc}`,
     "frame-ancestors 'self'",
     "base-uri 'self'",
-    "form-action 'self'",
-    "object-src 'none'",
-    'upgrade-insecure-requests',
-  ].join('; ')
+  ]
+
+  if (includeFormAction) {
+    cspDirectives.push("form-action 'self'")
+  }
+
+  cspDirectives.push("object-src 'none'")
+  cspDirectives.push('upgrade-insecure-requests')
+
+  const csp = cspDirectives.join('; ')
 
   return [
     ...BASE_HEADERS,
