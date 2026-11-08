@@ -21,7 +21,7 @@ function supabaseHost(): string | null {
 export default withNextIntl({
   // @ts-experimental: experimental.scriptNot in type definitions for Next.js
   experimental: {
-    // @ts-ignore: experimental.scriptNot available in type definitions
+    // @ts-expect-error: experimental.scriptNot available in type definitions
     scriptNonce: true,
   },
   async headers() {
