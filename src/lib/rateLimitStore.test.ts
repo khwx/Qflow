@@ -1,5 +1,10 @@
 import { describe, it, expect, beforeEach } from 'vitest'
-import { SupabaseRateLimitStore } from './rateLimitStore'
+import {
+  SupabaseRateLimitStore,
+  getRateLimitStoreType,
+  resetRateLimitStore,
+  getRateLimitStore,
+} from './rateLimitStore'
 
 // Minimal fake of the small slice of the Supabase query-builder API that
 // SupabaseRateLimitStore relies on. It keeps an in-memory `rate_limits` table
@@ -81,5 +86,18 @@ describe('SupabaseRateLimitStore', () => {
       FakeSupabaseClient.failRead() as never
     )
     await expect(failing.get('x')).rejects.toThrow('boom')
+  })
+})
+
+describe('getRateLimitStoreType', () => {
+  it('returns "memory" when no store is set (default)', () => {
+    resetRateLimitStore()
+    expect(getRateLimitStoreType()).toBe('memory')
+  })
+
+  it('returns "memory" when getRateLimitStore returns Memory store', () => {
+    resetRateLimitStore()
+    const _store = getRateLimitStore()
+    expect(getRateLimitStoreType()).toBe('memory')
   })
 })

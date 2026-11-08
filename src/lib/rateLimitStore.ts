@@ -123,7 +123,7 @@ export class SupabaseRateLimitStore implements RateLimitStore {
   }
 }
 
-let defaultStore: RateLimitStore | null = null
+export let defaultStore: RateLimitStore | null = null
 
 /**
  * Returns the store used by the rate limiter. When a Supabase service-role
