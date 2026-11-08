@@ -15,7 +15,9 @@ export interface SecurityHeadersOptions {
   /**
    * Nonce value for script-src. When provided, replaces 'unsafe-inline' with
    * 'nonce-{value}' to allow inline scripts with matching nonce attribute.
-   * Requires Next.js `experimental.scriptNonce: true` and middleware to inject.
+   * Requires Next.js `experimental.scriptNonce: true` (already set in
+   * next.config.ts). The nonce value is automatically injected by Next.js into
+   * inline <script> tags when this experimental flag is enabled.
    * When omitted, falls back to `'unsafe-inline'` for compatibility.
    */
   nonce?: string
@@ -63,11 +65,11 @@ export function getSecurityHeaders(
       ? `'self' https://${supabaseHost} wss://${supabaseHost}`
       : "'self'"
 
-  const hasNonce = nonce && nonce.length > 0
-  // When nonce is available (via experimental.scriptNonce + middleware),
-  // use it instead of 'unsafe-inline'. Next.js automatically adds the nonce
-  // to inline scripts. Without nonce, keep 'unsafe-inline' as fallback.
-  const scriptSrcInline = hasNonce
+  // When nonce is provided (via experimental.scriptNonce), replace
+  // 'unsafe-inline' in script-src with 'nonce-{value}'. Next.js automatically
+  // adds the nonce attribute to inline <script> tags when the experimental
+  // flag is enabled, so the CSP can whitelist it.
+  const scriptSrcInline = nonce && nonce.length > 0
     ? `'nonce-${nonce}'`
     : "'unsafe-inline'"
 
