@@ -160,3 +160,15 @@ export function getRateLimitStore(): RateLimitStore {
 export function resetRateLimitStore(): void {
   defaultStore = null
 }
+
+/** Returns the type of the currently active rate limit store. */
+export function getRateLimitStoreType(): 'memory' | 'supabase' {
+  if (!defaultStore) {
+    // initial call — memory store is the default
+    return 'memory'
+  }
+  // SupabaseRateLimitStore instances have a 'client' property;
+  // MemoryRateLimitStore does not.
+  const store = defaultStore as { client?: unknown }
+  return store.client != null ? 'supabase' : 'memory'
+}
