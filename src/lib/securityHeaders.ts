@@ -90,7 +90,7 @@ export function getSecurityHeaders(
   // disabled via allowInlineStyles: false (production hardening).
   let styleSrc: string
   if (allowInlineStyles === false) {
-    styleSrc = "'self' 'unsafe-inline'"
+    styleSrc = "'self'"
   } else {
     styleSrc = "'self' 'unsafe-inline'"
   }
