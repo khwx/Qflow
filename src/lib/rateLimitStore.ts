@@ -172,3 +172,19 @@ export function getRateLimitStoreType(): 'memory' | 'supabase' {
   const store = defaultStore as { client?: unknown }
   return store.client != null ? 'supabase' : 'memory'
 }
+
+/**
+ * Returns diagnostics about the currently active rate limit store.
+ * Useful for debugging and monitoring the store configuration in production.
+ */
+export function getRateLimitStoreInfo(): { type: 'memory' | 'supabase'; hasSupabaseEnv: boolean; defaultStoreClass: string } {
+  const type = getRateLimitStoreType()
+  const hasSupabaseEnv = !!(
+    process.env.SUPABASE_URL &&
+    (process.env.SUPABASE_SECRET_KEY ||
+      process.env.SUPABASE_SERVICE_ROLE_KEY ||
+      process.env.SUPABASE_SERVICE_KEY)
+  )
+  const defaultStoreClass = type === 'supabase' ? 'SupabaseRateLimitStore' : 'MemoryRateLimitStore'
+  return { type, hasSupabaseEnv, defaultStoreClass }
+}
